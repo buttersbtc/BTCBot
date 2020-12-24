@@ -26,6 +26,9 @@ for cog in cogs:
 	cog_name = cog.split(".py")[0]
 	bot.load_extension("cogs.{0}".format(cog_name))
 
+
+
+
 # Disables the default help command from discord.py
 bot.remove_command('help')
 # bot.run(username, password, bot=False)

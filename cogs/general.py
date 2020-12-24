@@ -28,8 +28,13 @@ class General(commands.Cog):
 	
 	# price also fetches USD
 	@commands.command()
-	async def price(self, ctx):
+	async def price(self, ctx, arg="noargs"):
 		api = "http://preev.com/pulse/units:btc+usd/sources:bitstamp+kraken"
+		arg = arg.lower()
+		func = getattr(self, arg , None)
+		if(callable(func)):
+			await func(ctx)
+			return
 
 		r = requests.get(api)
 		data = json.loads(r.text)
