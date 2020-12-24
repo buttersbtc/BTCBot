@@ -11,6 +11,7 @@ class General(commands.Cog):
 	async def on_ready(self):
 		print("General commands loaded")
 
+
 	# Fetch Bitcoin price
 	@commands.command()
 	async def btc(self, ctx):
