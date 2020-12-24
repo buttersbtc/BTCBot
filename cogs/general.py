@@ -145,6 +145,20 @@ class General(commands.Cog):
 		message_string = "**1 Bitcoin** is worth **" + price + "**"	
 		await ctx.send(message_string)	
 
+	# Fetches price in McRibs
+	@commands.command()
+	async def mcr(self, ctx):
+		api = "http://preev.com/pulse/units:btc+usd/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		price = round(float(price)/4.29)
+		price = ":pig2: {:,} McRibs".format(price)
+		message_string = "**1 Bitcoin** is worth **" + price + "**"	
+		await ctx.send(message_string)	
+
 	# Fetches price in Crunchwraps
 	@commands.command()
 	async def cru(self, ctx):
