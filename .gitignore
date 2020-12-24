@@ -4,3 +4,5 @@
 
 *.env
 /cogs/__pycache__
+/utils/__pycache__
+/__pycache__
