@@ -178,7 +178,21 @@ class General(commands.Cog):
 		price = ":taco: {:,} Crunchwraps Supreme".format(price)
 		message_string = "**1 Bitcoin** is worth **" + price + "**"	
 		await ctx.send(message_string)	
-		
+	
+	# Fetches price in Crunchwraps
+	@commands.command()
+	async def but(self, ctx):
+		api = "http://preev.com/pulse/units:btc+usd/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		price = round(float(price)/.5)
+		price = ":butter: {:,} Sticks of Butter".format(price)
+		message_string = "**1 Bitcoin** is worth **" + price + "**"	
+		await ctx.send(message_string)	
+
 	# Fetches price in Lambos
 	@commands.command()
 	async def lam(self, ctx):
