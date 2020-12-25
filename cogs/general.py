@@ -237,7 +237,7 @@ class General(commands.Cog):
 	# Fetches price in ILS
 	@commands.command()
 	async def ils(self, ctx):
-		api = "http://preev.com/pulse/units:btc+jpy/sources:bitstamp+kraken"
+		api = "http://preev.com/pulse/units:btc+ils/sources:bitstamp+kraken"
 
 		r = requests.get(api)
 		data = json.loads(r.text)
