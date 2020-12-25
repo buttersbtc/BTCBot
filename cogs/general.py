@@ -179,7 +179,7 @@ class General(commands.Cog):
 		message_string = "**1 Bitcoin** is worth **" + price + "**"	
 		await ctx.send(message_string)	
 	
-	# Fetches price in Crunchwraps
+	# Fetches price in Sticks of Butter
 	@commands.command()
 	async def but(self, ctx):
 		api = "http://preev.com/pulse/units:btc+usd/sources:bitstamp+kraken"
