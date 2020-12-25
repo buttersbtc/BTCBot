@@ -319,5 +319,19 @@ class General(commands.Cog):
 		message_string = "**1 Bitcoin** is worth **" + price + "**"
 		await ctx.send(message_string)	
 
+	# Fetches price in cats
+	@commands.command()
+	async def cat(self, ctx):
+		api = "http://preev.com/pulse/units:btc+ils/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		price = float(price)/7640
+		price = "{:,.2f} cats".format(float(price))
+		message_string = "**:black_cat: 1 Bitcoin** would buy 15 years of intimate care for  **" + price + "** (according to insurers)"
+		await ctx.send(message_string)	
+
 def setup(bot):
 	bot.add_cog(General(bot))
