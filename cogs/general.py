@@ -150,7 +150,7 @@ class General(commands.Cog):
 		conversion = data["jpy"]["usd"]["other"]["last"]
 		price = float(price)/float(conversion)
 		price = round(float(price))
-		price = "B${:,.0f} JPY".format(float(price))
+		price = "¥{:,.0f} JPY".format(float(price))
 		message_string = "**1 Bitcoin** is worth **" + price + "**"
 		await ctx.send(message_string)	
 
@@ -166,7 +166,7 @@ class General(commands.Cog):
 		conversion = data["aud"]["usd"]["other"]["last"]
 		price = float(price)/float(conversion)
 		price = round(float(price))
-		price = "B${:,.0f} Brass Razoos".format(float(price))
+		price = "${:,.2f} Brass Razoos".format(float(price))
 		message_string = "**1 Bitcoin** is worth **" + price + "**"
 		await ctx.send(message_string)
 
@@ -182,7 +182,7 @@ class General(commands.Cog):
 		conversion = data["chf"]["usd"]["other"]["last"]
 		price = float(price)/float(conversion)
 		price = round(float(price))
-		price = "B${:,.0f} CHF".format(float(price))
+		price = "{:,.2f} CHF".format(float(price))
 		message_string = "**1 Bitcoin** is worth **" + price + "**"
 		await ctx.send(message_string)
 
@@ -198,7 +198,7 @@ class General(commands.Cog):
 		conversion = data["cny"]["usd"]["other"]["last"]
 		price = float(price)/float(conversion)
 		price = round(float(price))
-		price = "B${:,.0f} CNY".format(float(price))
+		price = "¥{:,.0f} CNY".format(float(price))
 		message_string = "**1 Bitcoin** is worth **" + price + "**"
 		await ctx.send(message_string)
 
@@ -214,7 +214,7 @@ class General(commands.Cog):
 		conversion = data["hkd"]["usd"]["other"]["last"]
 		price = float(price)/float(conversion)
 		price = round(float(price))
-		price = "B${:,.0f} HKD".format(float(price))
+		price = "${:,.2f} HKD".format(float(price))
 		message_string = "**1 Bitcoin** is worth **" + price + "**"
 		await ctx.send(message_string)
 
@@ -230,7 +230,7 @@ class General(commands.Cog):
 		conversion = data["nzd"]["usd"]["other"]["last"]
 		price = float(price)/float(conversion)
 		price = round(float(price))
-		price = "B${:,.0f} NZD".format(float(price))
+		price = "${:,.2f} NZD".format(float(price))
 		message_string = "**1 Bitcoin** is worth **" + price + "**"
 		await ctx.send(message_string)
 
@@ -246,7 +246,7 @@ class General(commands.Cog):
 		conversion = data["ils"]["usd"]["other"]["last"]
 		price = float(price)/float(conversion)
 		price = round(float(price))
-		price = "B${:,.0f} Shekels".format(float(price))
+		price = "₪{:,.0f} Shekels".format(float(price))
 		message_string = "**1 Bitcoin** is worth **" + price + "**"
 		await ctx.send(message_string)	
 # END proposed change
