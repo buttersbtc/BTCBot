@@ -207,5 +207,117 @@ class General(commands.Cog):
 		message_string = "**:race_car: 1 Lamborghini Aventador SVJ** costs **" + price + " BTC**"		
 		await ctx.send(message_string)
 
+	# Fetches price in JPY
+	@commands.command()
+	async def jpy(self, ctx):
+		api = "http://preev.com/pulse/units:btc+jpy/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["jpy"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price))
+		price = "¥{:,.0f} JPY".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)	
+
+	# Fetches price in AUD
+	@commands.command()
+	async def aud(self, ctx):
+		api = "http://preev.com/pulse/units:btc+aud/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["aud"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price))
+		price = "${:,.2f} Brass Razoos".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)
+
+	# Fetches price in CHF
+	@commands.command()
+	async def chf(self, ctx):
+		api = "http://preev.com/pulse/units:btc+chf/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["chf"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price))
+		price = "{:,.2f} CHF".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)
+
+	# Fetches price in CNY
+	@commands.command()
+	async def cny(self, ctx):
+		api = "http://preev.com/pulse/units:btc+cny/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["cny"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price))
+		price = "¥{:,.0f} CNY".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)
+
+	# Fetches price in HKD
+	@commands.command()
+	async def hkd(self, ctx):
+		api = "http://preev.com/pulse/units:btc+hkd/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["hkd"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price))
+		price = "${:,.2f} HKD".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)
+
+	# Fetches price in NZD
+	@commands.command()
+	async def nzd(self, ctx):
+		api = "http://preev.com/pulse/units:btc+nzd/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["nzd"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price))
+		price = "${:,.2f} NZD".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)
+
+	# Fetches price in ILS
+	@commands.command()
+	async def ils(self, ctx):
+		api = "http://preev.com/pulse/units:btc+ils/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["ils"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price))
+		price = "₪{:,.0f} Shekels".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)	
+
 def setup(bot):
 	bot.add_cog(General(bot))
