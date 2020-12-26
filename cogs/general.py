@@ -79,7 +79,6 @@ class General(commands.Cog):
 			currencyStr = itemDic[item]["formatStr"]
 		else:
 			currencyStr = currencyFormatDic["default"] + arg.upper()
-			print(currencyStr)
 		
 		price = currencyStr.format(float(price))
 		message_string = ""
