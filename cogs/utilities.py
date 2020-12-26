@@ -3,20 +3,21 @@ from discord.ext import commands
 import requests
 import json
 import os
+from dotenv import load_dotenv
 
 class Utilities(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	
-
 	# Report to r/bitcoin mod-log. Subsitute other channel ID's as necessary
 	#todo get channel by ID
 	@commands.command()
 	async def report(self, ctx):
+		load_dotenv()
+		reportChannel = os.getenv('REPORT_CHANNEL')
 		for guild in self.bot.guilds:
 			for channel in guild.channels:
-				if channel.name == "mod-log":
+				if channel.name == reportChannel:
 					msg = ctx.author.mention + " reporting: " + ctx.message.content.replace("!report ", "")
 					if ctx.message.reference is not None:
 						reply = await ctx.channel.fetch_message(ctx.message.reference.message_id)
