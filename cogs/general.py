@@ -248,7 +248,83 @@ class General(commands.Cog):
 		price = round(float(price))
 		price = "₪{:,.0f} Shekels".format(float(price))
 		message_string = "**1 Bitcoin** is worth **" + price + "**"
-		await ctx.send(message_string)	
+		await ctx.send(message_string)
+		
+	# Fetches price in inr
+	@commands.command()
+	async def inr(self, ctx):
+		api = "http://preev.com/pulse/units:btc+inr/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["inr"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price),2)
+		price = "₹{:,.2f} INR".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)
+
+	# Fetches price in zar
+	@commands.command()
+	async def zar(self, ctx):
+		api = "http://preev.com/pulse/units:btc+zar/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["zar"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price),2)
+		price = "R{:,.2f} ZAR".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)
+
+	# Fetches price in rub
+	@commands.command()
+	async def rub(self, ctx):
+		api = "http://preev.com/pulse/units:btc+rub/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		conversion = data["rub"]["usd"]["other"]["last"]
+		price = float(price)/float(conversion)
+		price = round(float(price),2)
+		price = "₽{:,.2f} RUB".format(float(price))
+		message_string = "**1 Bitcoin** is worth **" + price + "**"
+		await ctx.send(message_string)
+
+	# Fetches price in Strong
+	@commands.command()
+	async def strong(self, ctx):
+		api = "http://preev.com/pulse/units:btc+usd/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		price = round(float(price)/50)
+		price = "{:,} hours with @strongcryptographer".format(price)
+		message_string = "**1 Bitcoin** is worth **" + price + "**"	
+		await ctx.send(message_string)
+
+	# Fetches price in coldcards
+	@commands.command()
+	async def coldcard(self, ctx):
+		api = "http://preev.com/pulse/units:btc+usd/sources:bitstamp+kraken"
+
+		r = requests.get(api)
+		data = json.loads(r.text)
+
+		price = data["btc"]["usd"]["bitstamp"]["last"]
+		price = round(float(price)/119.27)
+		price = "{:,} Coldcards".format(price)
+		message_string = "**1 Bitcoin** is worth **" + price + "**"	
+		await ctx.send(message_string)
 # END proposed change
 
 	# Fetches price in BigMacs
