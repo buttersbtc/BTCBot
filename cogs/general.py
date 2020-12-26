@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import requests
 import json
+from random import randrange
 
 class General(commands.Cog):
 	"""General commands"""
@@ -102,12 +103,10 @@ class General(commands.Cog):
 		message_string = "**:black_cat: stop trying to price cats!"
 		await ctx.send(message_string)
 
-	str = 0
 	# Fetches price in Strong
 	@commands.command()
 	async def strong(self, ctx):
-		str=str+1
-		if str % 25 == 0:
+		if randrange(25) == 1:
 			await ctx.send("oh. that guy.")
 		else:
 			await ctx.send("who?")
