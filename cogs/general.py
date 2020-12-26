@@ -2,6 +2,7 @@ import discord
 from discord.ext import commands
 import requests
 import json
+from random import randrange
 
 class General(commands.Cog):
 	"""General commands"""
@@ -27,15 +28,16 @@ class General(commands.Cog):
 			"ils":"₪{:,.0f} ILS",
 			"inr":"₹{:,.2f} INR",
 			"zar":"R{:,.2f} ZAR",
-			"rub":"₽{:,.2f} RUB"
+			"rub":"₽{:,.2f} RUB",
+			"xau":"{:,.2f} ounces of gold"
 			}
 		itemDic = {
-			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:.2f} Big Macs**"},
-			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:.2f} McRibs**"},
-			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:.2f} Crunchwraps Supreme**"},
-			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:.2f} Sticks of Butter**"},
+			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:.0f} Big Macs**"},
+			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:.0f} McRibs**"},
+			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:.0f} Crunchwraps Supreme**"},
+			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:.0f} Sticks of Butter**"},
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
-			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.2f} Coldcards**"}
+			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"}
 			}
 
 		arg = arg.lower()
@@ -99,15 +101,13 @@ class General(commands.Cog):
 	# Fetches price in cats
 	@commands.command()
 	async def cat(self, ctx):
-		message_string = "**:black_cat: stop trying to price cats!**"
+		message_string = "**:black_cat: stop trying to price cats!"
 		await ctx.send(message_string)
 
-	str = 0
 	# Fetches price in Strong
 	@commands.command()
 	async def strong(self, ctx):
-		str=str+1
-		if str % 25 == 0:
+		if randrange(25) == 1:
 			await ctx.send("oh. that guy.")
 		else:
 			await ctx.send("who?")
