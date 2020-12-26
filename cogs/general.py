@@ -34,7 +34,7 @@ class General(commands.Cog):
 			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:.2f} McRibs**"},
 			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:.2f} Crunchwraps Supreme**"},
 			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:.2f} Sticks of Butter**"},
-			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs {:.2f} Bitcoin**"},
+			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
 			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **{:.2f} Coldcards"}
 			}
 
@@ -55,9 +55,12 @@ class General(commands.Cog):
 		if arg == "noargs" or isItem:
 			arg = "usd"
 		
-		api = "http://preev.com/pulse/units:btc+" + arg + "/sources:bitstamp+kraken"
-		r = requests.get(api)
-		data = json.loads(r.text)
+		try:
+			api = "http://preev.com/pulse/units:btc+" + arg + "/sources:bitstamp+kraken"
+			r = requests.get(api)
+			data = json.loads(r.text)
+		except:
+			return
 
 		price = data["btc"]["usd"]["bitstamp"]["last"]
 		if arg != "usd":
@@ -76,8 +79,9 @@ class General(commands.Cog):
 			currencyStr = itemDic[item]["formatStr"]
 		else:
 			currencyStr = currencyFormatDic["default"] + arg.upper()
+			print(currencyStr)
 		
-		price = currencyStr.format(round(price, 2))
+		price = currencyStr.format(float(price))
 		message_string = ""
 		if isItem:
 			message_string = price
