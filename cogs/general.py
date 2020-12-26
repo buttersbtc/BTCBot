@@ -63,9 +63,17 @@ class General(commands.Cog):
 			data = json.loads(r.text)
 		except:
 			return
-
-		price = data["btc"]["usd"]["bitstamp"]["last"]
-		if arg != "usd":
+		skipConvert = False
+		try:
+			price = data["btc"]["usd"]["bitstamp"]["last"]
+		except:
+			try:
+				price = data["btc"][arg]["bitstamp"]["last"]
+				skipConvert = True
+			except:
+				price = data["btc"][arg]["kraken"]["last"]
+				skipConvert = True
+		if arg != "usd" and not skipConvert:
 			conversion = data[arg]["usd"]["other"]["last"]
 			price = float(price)/float(conversion)
 		if isItem:
@@ -101,7 +109,7 @@ class General(commands.Cog):
 	# Fetches price in cats
 	@commands.command()
 	async def cat(self, ctx):
-		message_string = "**:black_cat: stop trying to price cats!"
+		message_string = "**:black_cat:** stop trying to price cats!"
 		await ctx.send(message_string)
 
 	# Fetches price in Strong
