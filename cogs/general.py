@@ -37,7 +37,7 @@ class General(commands.Cog):
 			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:.0f} Crunchwraps Supreme**"},
 			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:.0f} Sticks of Butter**"},
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
-			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **{:.0f} Coldcards**"}
+			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"}
 			}
 
 		arg = arg.lower()
@@ -111,8 +111,6 @@ class General(commands.Cog):
 			await ctx.send("oh. that guy.")
 		else:
 			await ctx.send("who?")
-
-	
 
 def setup(bot):
 	bot.add_cog(General(bot))

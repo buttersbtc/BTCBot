@@ -9,9 +9,6 @@ class Utilities(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	load_dotenv()
-	reportChannel = os.getenv('REPORT_CHANNEL')
-
 	# Report to r/bitcoin mod-log. Subsitute other channel ID's as necessary
 	#todo get channel by ID
 	@commands.command()
