@@ -28,15 +28,16 @@ class General(commands.Cog):
 			"ils":"₪{:,.0f} ILS",
 			"inr":"₹{:,.2f} INR",
 			"zar":"R{:,.2f} ZAR",
-			"rub":"₽{:,.2f} RUB"
+			"rub":"₽{:,.2f} RUB",
+			"xau":"{:,.2f} ounces of gold"
 			}
 		itemDic = {
-			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:.2f} Big Macs**"},
-			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:.2f} McRibs**"},
-			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:.2f} Crunchwraps Supreme**"},
-			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:.2f} Sticks of Butter**"},
+			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:.0f} Big Macs**"},
+			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:.0f} McRibs**"},
+			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:.0f} Crunchwraps Supreme**"},
+			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:.0f} Sticks of Butter**"},
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
-			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **{:.2f} Coldcards"}
+			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **{:.0f} Coldcards**"}
 			}
 
 		arg = arg.lower()
@@ -110,6 +111,8 @@ class General(commands.Cog):
 			await ctx.send("oh. that guy.")
 		else:
 			await ctx.send("who?")
+
+	
 
 def setup(bot):
 	bot.add_cog(General(bot))
