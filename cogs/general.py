@@ -99,7 +99,7 @@ class General(commands.Cog):
 	# Fetches price in cats
 	@commands.command()
 	async def cat(self, ctx):
-		message_string = "**:black_cat: stop trying to price cats!"
+		message_string = "**:black_cat: stop trying to price cats!**"
 		await ctx.send(message_string)
 
 	str = 0
