@@ -29,7 +29,8 @@ class General(commands.Cog):
 			"inr":"₹{:,.2f} INR",
 			"zar":"R{:,.2f} ZAR",
 			"rub":"₽{:,.2f} RUB",
-			"xau":"{:,.2f} ounces of gold"
+			"xau":"{:,.2f} ounces of gold",
+			"xag":"{:,.2f} ounces of silver"
 			}
 		itemDic = {
 			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:.0f} Big Macs**"},
@@ -39,8 +40,18 @@ class General(commands.Cog):
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
 			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"}
 			}
+		blacklist = {
+			"xdg":True,
+			"ltc":True,
+			"eth":True,
+			"xrp":True,
+			"bch":True
+			}
 
 		arg = arg.lower()
+
+		if arg in blacklist:
+			return
 
 		#route to other func if exists
 		func = getattr(self, arg , None)
