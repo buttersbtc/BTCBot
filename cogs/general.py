@@ -33,10 +33,10 @@ class General(commands.Cog):
 			"xag":"{:,.2f} ounces of silver"
 			}
 		itemDic = {
-			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:.0f} Big Macs**"},
-			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:.0f} McRibs**"},
-			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:.0f} Crunchwraps Supreme**"},
-			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:.0f} Sticks of Butter**"},
+			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:,.0f} Big Macs**"},
+			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:,.0f} McRibs**"},
+			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:,.0f} Crunchwraps Supreme**"},
+			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:,.0f} Sticks of Butter**"},
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
 			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"}
 			}
@@ -130,6 +130,41 @@ class General(commands.Cog):
 			await ctx.send("oh. that guy.")
 		else:
 			await ctx.send("who?")
+
+	# Fetches I don't even know, plus's stuff.
+	@commands.command()
+	async def wage(self, ctx, *args):
+
+		if len(args) != 2:
+			return
+
+		arg = args[1].lower()
+		wage = args[0]
+
+		try:
+			api = "http://preev.com/pulse/units:btc+" + arg + "/sources:bitstamp+kraken"
+			r = requests.get(api)
+			data = json.loads(r.text)
+		except:
+			return
+		skipConvert = False
+		try:
+			price = data["btc"]["usd"]["bitstamp"]["last"]
+		except:
+			try:
+				price = data["btc"][arg]["bitstamp"]["last"]
+				skipConvert = True
+			except:
+				price = data["btc"][arg]["kraken"]["last"]
+				skipConvert = True
+		if arg != "usd":
+			conversion = data[arg]["usd"]["other"]["last"]
+			price = float(price)/float(conversion)
+
+		price = float(price)/float(wage)
+		message_string = "**1 Bitcoin** costs **{:,.0f}** hours".format(float(price))
+
+		await ctx.send(message_string)
 
 def setup(bot):
 	bot.add_cog(General(bot))
