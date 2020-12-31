@@ -16,6 +16,7 @@ class General(commands.Cog):
 	#To add a new item to the price call make a new entry in the itemDic with the cost and formatStr, the key being the string  used to call that item
 	@commands.command()
 	async def price(self, ctx, arg="noargs"):
+		print("in price");
 		#Price string details
 		currencyFormatDic = {
 			"default":"${:,.2f} ",
@@ -110,6 +111,11 @@ class General(commands.Cog):
 		
 		await ctx.send(message_string)
 
+	# price synonym
+	@commands.command()
+	async def p(self, ctx, arg="noargs"):
+		await General(self).price(self, ctx, arg)
+
 	# Bitcoin is a btc
 	@commands.command()
 	async def btc(self, ctx):
@@ -126,10 +132,8 @@ class General(commands.Cog):
 	# Fetches price in Strong
 	@commands.command()
 	async def strong(self, ctx):
-		if randrange(25) == 1:
-			await ctx.send("oh. that guy.")
-		else:
-			await ctx.send("who?")
+		if randrange(5) == 1:
+			await ctx.send("no one cares.")
 
 	# Fetches I don't even know, plus's stuff.
 	@commands.command()
