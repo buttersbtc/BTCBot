@@ -19,7 +19,7 @@ class General(commands.Cog):
 		#Price string details
 		currencyFormatDic = {
 			"default":"${:,.2f} ",
-			"gbp":"£{:,.2f} GBP",
+			"gbp":"£{:,.2f} quid",
 			"eur":"€{:,.2f} EUR",
 			"brl":"R${:,.2f} BRL",
 			"vef":"B${:,.0f} Venezuelan Bolívar",
