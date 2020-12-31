@@ -5,3 +5,4 @@ Create a new file named .env in the same directory as btcbot.py with the followi
 
 DISCORD_TOKEN=YouBotTokenHere
 REPORT_CHANNEL=channel-name
+BLACKLIST=word1,website2,word3
