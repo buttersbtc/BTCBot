@@ -20,16 +20,16 @@ class General(commands.Cog):
 		#Price string details
 		currencyFormatDic = {
 			"default":"${:,.2f} ",
-			"gbp":"£{:,.2f} GBP",
-			"eur":"€{:,.2f} EUR",
-			"brl":"R${:,.2f} BRL",
+			"gbp":"£{:,.2f} British Pounds",
+			"eur":"€{:,.2f} Euros",
+			"brl":"R${:,.2f} Brazillian Reais",
 			"vef":"B${:,.0f} Venezuelan Bolívar",
-			"jpy":"¥{:,.0f} JPY",
-			"cny":"¥{:,.0f} CNY",
-			"ils":"₪{:,.0f} ILS",
-			"inr":"₹{:,.2f} INR",
-			"zar":"R{:,.2f} ZAR",
-			"rub":"₽{:,.2f} RUB",
+			"jpy":"¥{:,.0f} Japanese Yen",
+			"cny":"¥{:,.0f} Chinese Renminbi",
+			"ils":"₪{:,.0f} Israeli Shekalim",
+			"inr":"₹{:,.2f} Indian Rupees",
+			"zar":"R{:,.2f} South African Rands",
+			"rub":"₽{:,.2f} Russian Rubles",
 			"xau":"{:,.2f} ounces of gold",
 			"xag":"{:,.2f} ounces of silver"
 			}
