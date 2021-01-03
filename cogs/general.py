@@ -68,13 +68,14 @@ class General(commands.Cog):
 
 		if arg == "noargs" or isItem:
 			arg = "usd"
-		
+		#call the api for our currency
 		try:
 			api = "http://preev.com/pulse/units:btc+" + arg + "/sources:bitstamp+kraken"
 			r = requests.get(api)
 			data = json.loads(r.text)
 		except:
 			return
+		#look through the response for anything we can use, thanks for the consistent response format preev
 		skipConvert = False
 		try:
 			price = data["btc"]["usd"]["bitstamp"]["last"]
@@ -85,6 +86,8 @@ class General(commands.Cog):
 			except:
 				price = data["btc"][arg]["kraken"]["last"]
 				skipConvert = True
+
+		#convert if necessary or do item calcs.
 		if arg != "usd" and not skipConvert:
 			conversion = data[arg]["usd"]["other"]["last"]
 			price = float(price)/float(conversion)
@@ -134,6 +137,7 @@ class General(commands.Cog):
 	async def strong(self, ctx):
 		if randrange(5) == 1:
 			await ctx.send("no one cares.")
+		await ctx.message.delete()
 
 	# Fetches I don't even know, plus's stuff.
 	@commands.command()
