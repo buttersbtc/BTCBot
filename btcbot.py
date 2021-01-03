@@ -10,7 +10,7 @@ from pricewatch import pricewatch
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 
-bot = commands.Bot(command_prefix="?", description="BTC Bot")
+bot = commands.Bot(command_prefix="!", description="BTC Bot")
 
 @bot.event
 async def on_ready():
