@@ -16,7 +16,6 @@ class General(commands.Cog):
 	#To add a new item to the price call make a new entry in the itemDic with the cost and formatStr, the key being the string  used to call that item
 	@commands.command()
 	async def price(self, ctx, arg="noargs"):
-		print("in price");
 		#Price string details
 		currencyFormatDic = {
 			"default":"${:,.2f} ",
@@ -39,7 +38,8 @@ class General(commands.Cog):
 			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:,.0f} Crunchwraps Supreme**"},
 			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:,.0f} Sticks of Butter**"},
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
-			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"}
+			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"},
+			"egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**"},
 			}
 		blacklist = {
 			"xdg":True,
