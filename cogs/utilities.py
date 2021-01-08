@@ -14,17 +14,18 @@ class Utilities(commands.Cog):
 	@commands.command()
 	async def report(self, ctx):
 		load_dotenv()
-		reportChannel = os.getenv('REPORT_CHANNEL')
-		for guild in self.bot.guilds:
-			for channel in guild.channels:
-				if channel.name == reportChannel:
-					msg = ctx.author.mention + " reporting: " + ctx.message.content.replace("!report ", "")
-					if ctx.message.reference is not None:
-						reply = await ctx.channel.fetch_message(ctx.message.reference.message_id)
-						msg += " - " + reply.author.mention + ": " + reply.content + " - " + reply.jump_url
-					await channel.send(msg);
+		if os.getenv('ENABLE_REPORTS') == "1":
+			reportChannel = os.getenv('REPORT_CHANNEL')
+			for guild in self.bot.guilds:
+				for channel in guild.channels:
+					if channel.name == reportChannel:
+						msg = ctx.author.mention + " reporting: " + ctx.message.content.replace("!report ", "")
+						if ctx.message.reference is not None:
+							reply = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+							msg += " - " + reply.author.mention + ": " + reply.content + " - " + reply.jump_url
+						await channel.send(msg);
 
-		await ctx.message.delete()
+			await ctx.message.delete()
 
 
 	@commands.command()
