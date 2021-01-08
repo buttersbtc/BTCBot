@@ -39,7 +39,6 @@ async def on_message(message):
 			if message.content.lower().find(item) != -1:
 				print("Deleting Message: " + message.author.mention + " - "+ message.content)
 				await message.delete()
-	print(os.getenv('ENABLE_IMAGEONLY'))
 	if os.getenv('ENABLE_IMAGEONLY') == "1" and message.channel.name == os.getenv('IMAGEONLY_CHANNEL'):
 		imageFound = True
 		for a in message.attachments:
