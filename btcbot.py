@@ -9,8 +9,9 @@ from pricewatch import pricewatch
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
+PREFIX = os.getenv('BOT_PREFIX')
 
-bot = commands.Bot(command_prefix="!", description="BTC Bot")
+bot = commands.Bot(command_prefix=PREFIX, description="BTC Bot")
 
 @bot.event
 async def on_ready():
@@ -29,11 +30,8 @@ for cog in cogs:
 #URL blacklist
 @bot.event
 async def on_message(message):
-	if not any(role.name == "mod" for role in message.author.roles):
-		
-
+	if os.getenv('ENABLE_BLACKLIST') == "1" and not any(role.name == "mod" for role in message.author.roles):
 		blacklist = list(filter(None, os.getenv('BLACKLIST').split(",")))
-
 		if len(blacklist) == 0:
 			return
 
@@ -41,9 +39,20 @@ async def on_message(message):
 			if message.content.lower().find(item) != -1:
 				print("Deleting Message: " + message.author.mention + " - "+ message.content)
 				await message.delete()
-
-	await bot.process_commands(message)
+	print(os.getenv('ENABLE_IMAGEONLY'))
+	if os.getenv('ENABLE_IMAGEONLY') == "1" and message.channel.name == os.getenv('IMAGEONLY_CHANNEL'):
+		imageFound = True
+		for a in message.attachments:
+			if not isinstance(a.width, int):
+				imageFound = False
+				break
+		try:
+			if(len(message.attachments) < 1 or not imageFound ):
+				await message.delete()
+		except:
+			await message.delete()
 			
+	await bot.process_commands(message)
 
 # Disables the default help command from discord.py
 bot.remove_command('help')
