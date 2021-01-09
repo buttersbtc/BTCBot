@@ -90,12 +90,47 @@ class Utilities(commands.Cog):
 			await ctx.channel.send("Available options: " + keys)
 
 	@commands.command()
+	async def exchange(self, ctx, *args):
+		await Utilities(self).exchanges(self, ctx, args)
+
+	@commands.command()
 	async def ex(self, ctx, *args):
 		await Utilities(self).exchanges(self, ctx, args)
 
 	@commands.command()
 	async def x(self, ctx, *args):
 		await Utilities(self).exchanges(self, ctx, args)
+
+	@commands.command()
+	async def wallets(self, ctx, *args):
+		walletDic = {
+			"electrum": {"tags": ["pc", "windows", "linux", "mac", "ios", "android", "hot", "advanced", "lightning", "2fa"], "link":"https://electrum.org/"},
+			"core": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoincore.org/"},
+			"knots": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoinknots.org/"},
+			"wasabi": {"tags": ["pc", "windows", "hot", "privacy"], "link":"https://wasabiwallet.io/"},
+			"coldcard": {"tags": ["hardware", "cold", "requires-wallet"], "link":"https://coldcardwallet.com/"},
+			"green": {"tags": ["android", "ios", "2fa", "pc", "windows", "linux", "mac", "hot", "node"], "link":"https://blockstream.com/green/"},
+			"phoenix": {"tags": ["android", "hot", "lightning", "lightning-node", "easy"], "link":"https://phoenix.acinq.co/"},
+			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "advanced"], "link":"https://github.com/lightningnetwork/lnd/releases"}
+			}
+		resp = "\n"
+		for wallet in walletDic:
+			if args[0][0].lower() == wallet:
+				await ctx.channel.send(wallet[0].upper() + wallet[1:len(wallet)] + ": " + walletDic[wallet]["link"] + " tags: " + ", ".join(walletDic[wallet]["tags"]))
+				return
+			overlap = list(set(walletDic[wallet]["tags"]) & set(args[0]))
+			if len(overlap) > 0:
+				resp += wallet[0].upper() + wallet[1:len(wallet)] + ": " + walletDic[wallet]["link"] + " tags: " + ", ".join(walletDic[wallet]["tags"]) + "\n"
+
+		await ctx.channel.send(resp)
+
+	@commands.command()
+	async def wallet(self, ctx, *args):
+		await Utilities(self).wallets(self, ctx, args)
+
+	@commands.command()
+	async def w(self, ctx, *args):
+		await Utilities(self).wallets(self, ctx, args)
 
 def setup(bot):
 	bot.add_cog(Utilities(bot))
