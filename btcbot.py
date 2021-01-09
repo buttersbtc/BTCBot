@@ -40,6 +40,9 @@ async def on_message(message):
 				print("Deleting Message: " + message.author.mention + " - "+ message.content)
 				await message.delete()
 	if os.getenv('ENABLE_IMAGEONLY') == "1" and message.channel.name == os.getenv('IMAGEONLY_CHANNEL') and not any(role.name == "mod" for role in message.author.roles):
+		if message.content.find("https://tenor.com") != -1 or message.content.find("https://youtube.com") != -1 or message.content.find("https://youtu.be.com") != -1 or message.content.find("https://m.youtube.com") != -1:
+			await bot.process_commands(message)
+			return
 		imageFound = True
 		for a in message.attachments:
 			if not isinstance(a.width, int):
