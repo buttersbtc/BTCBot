@@ -33,6 +33,7 @@ class General(commands.Cog):
 			"xag":"{:,.2f} ounces of silver"
 			}
 		itemDic = {
+			"fox": {"cost": 1, "formatStr":"**1 Fox** is worth **:tail: {:,.0f} Tail of a Bear**"},
 			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:,.0f} Big Macs**"},
 			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:,.0f} McRibs**"},
 			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:,.0f} Crunchwraps Supreme**"},
