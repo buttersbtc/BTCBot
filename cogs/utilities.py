@@ -60,11 +60,11 @@ class Utilities(commands.Cog):
 			"netherlands": "Bitvavo",
 			"poland": "BitBay",
 			"ukraine": "Kuna",
-			"uk": "Binance, Bittylicious, CoinCorner, Coinfloor",
+			"uk": "Bitstamp, Coinbase, Gemini, Kraken, OKCoin, Binance, Bittylicious, CoinCorner, Coinfloor, CoinJar",
 			"nigeria": "Luno, BuyCoins",
 			"south africa": "Luno",
 			"uganda": "Binance",
-			"canada": "BullBitcoin, Newton, Kraken, Shakepay, Bitbuy, Canadian Bitcoins, Coinberry, Coinsmart",
+			"canada": "BullBitcoin, Newton, Kraken, Shakepay, Bitbuy, Bisq, Canadian Bitcoins, Coinberry, Coinsmart",
 			"mexico": "Bitso, Volabit",
 			"usa": "Kraken, Coinbase, CEX IO, Bitstamp, bitFlyer, Bittrex, Gemini, itBit, River Financial, Swan Bitcoin, eToro, Binance, LocalBitcoins, Changelly, Coinmama, Bitpanda, Blockchain, BitcoinIRA, CoinSwitch, KuCoin, CashApp, Bisq, Paxful",
 			"argentina": "ArgenBTC, SatoshiTango",
@@ -109,11 +109,15 @@ class Utilities(commands.Cog):
 			"knots": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoinknots.org/"},
 			"wasabi": {"tags": ["pc", "windows", "hot", "privacy"], "link":"https://wasabiwallet.io/"},
 			"coldcard": {"tags": ["hardware", "cold", "requires-wallet"], "link":"https://coldcardwallet.com/"},
-			"green": {"tags": ["android", "ios", "2fa", "pc", "windows", "linux", "mac", "hot", "node"], "link":"https://blockstream.com/green/"},
+			"green": {"tags": ["android", "ios", "2fa", "pc", "windows", "linux", "mac", "hot"], "link":"https://blockstream.com/green/"},
 			"phoenix": {"tags": ["android", "hot", "lightning", "lightning-node", "easy"], "link":"https://phoenix.acinq.co/"},
-			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "advanced"], "link":"https://github.com/lightningnetwork/lnd/releases"}
+			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "advanced", "partial-custody"], "link":"https://github.com/lightningnetwork/lnd/releases"},
+			"c-lightning": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "advanced"], "link":"https://github.com/ElementsProject/lightning/releases"},
+			"blue": {"tags": ["android", "ios", "hot", "lightning", "partial-custody"], "link":"https://bluewallet.io/"},
+			"mycelium": {"tags": ["android", "ios", "hot", "local-trader"], "link":"https://wallet.mycelium.com/"},
+			"trezor": {"tags": ["hardware", "hot"], "link":"https://trezor.io/"},
 			}
-		resp = "\n"
+		resp = " \n"
 		for wallet in walletDic:
 			if args[0][0].lower() == wallet:
 				await ctx.channel.send(wallet[0].upper() + wallet[1:len(wallet)] + ": " + walletDic[wallet]["link"] + " tags: " + ", ".join(walletDic[wallet]["tags"]))
@@ -131,6 +135,11 @@ class Utilities(commands.Cog):
 	@commands.command()
 	async def w(self, ctx, *args):
 		await Utilities(self).wallets(self, ctx, args)
+
+	@commands.command()
+	async def dev(self, ctx, *args):
+		msg = "https://github.com/bitcoin/bitcoin <- the repo\nhttps://webchat.freenode.net/?channels=bitcoin-core-dev <- the irc\nhttps://bitcoin.stackexchange.com/ <- the stack exchange\nhttps://lists.linuxfoundation.org/pipermail/bitcoin-dev/ <- the general dev mailinglist\nhttps://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/ <- core dev mailinglist\nhttps://bitcoinops.org/en/newsletters/ <- optech newsletters dev summary\nhttps://bitcoincoreslack.herokuapp.com/ <- core slack"
+		await ctx.channel.send(msg)
 
 def setup(bot):
 	bot.add_cog(Utilities(bot))

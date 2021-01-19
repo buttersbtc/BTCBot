@@ -40,6 +40,7 @@ class General(commands.Cog):
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
 			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"},
 			"egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**"},
+			"f40": {"cost": 1350000, "formatStr":":race_car: 1 Ferrari F40 costs {:.2f} Bitcoin"}
 			}
 		blacklist = {
 			"xdg":True,
@@ -132,14 +133,12 @@ class General(commands.Cog):
 		message_string = "**:black_cat:** stop trying to price cats!"
 		await ctx.send(message_string)
 
-	# Fetches price in Strong
+	# old ester egg spam
 	@commands.command()
 	async def strong(self, ctx):
-		if randrange(5) == 1:
-			await ctx.send("no one cares.")
 		await ctx.message.delete()
 
-	# Fetches I don't even know, plus's stuff.
+	# Fetches hours worked for a bitcoin at a rate.
 	@commands.command()
 	async def wage(self, ctx, *args):
 

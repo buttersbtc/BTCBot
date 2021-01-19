@@ -18,3 +18,10 @@ Create a new file named .env in the same directory as btcbot.py with the followi
 >ENABLE_IMAGEONLY=1
 
 >ENABLE_REPORTS=1
+
+>EASTER_EGG_TRIGGER=keyword
+
+>EASTER_EGG_PERCENT_CHANCE=1-100
+
+>EASTER_EGG=Secret message
+
