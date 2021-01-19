@@ -40,7 +40,7 @@ class General(commands.Cog):
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
 			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"},
 			"egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**"},
-			"f40": {"cost": 1350000, "formatStr":":race_car: 1 Ferrari F40 costs {:.2f} Bitcoin"}
+			"f40": {"cost": 1350000, "formatStr":"**:race_car: 1 Ferrari F40** costs **{:.2f} Bitcoin**"}
 			}
 		blacklist = {
 			"xdg":True,
