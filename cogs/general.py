@@ -132,6 +132,13 @@ class General(commands.Cog):
 	async def cat(self, ctx):
 		message_string = "**:black_cat:** stop trying to price cats!"
 		await ctx.send(message_string)
+		
+	# Fox got bear's tail
+	@commands.command()
+	async def fox(self, ctx):
+		message_string = "**:fox:** 1 Fox is worth 1 Tail of a bear :polar_bear:"
+		await ctx.send(message_string)
+	
 
 	# old ester egg spam
 	@commands.command()
