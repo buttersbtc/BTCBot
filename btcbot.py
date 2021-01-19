@@ -6,6 +6,7 @@ import asyncio
 import requests
 import json
 from pricewatch import pricewatch
+from random import randrange
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -40,7 +41,7 @@ async def on_message(message):
 				print("Deleting Message: " + message.author.mention + " - "+ message.content)
 				await message.delete()
 	if os.getenv('ENABLE_IMAGEONLY') == "1" and message.channel.name == os.getenv('IMAGEONLY_CHANNEL') and not any(role.name == "mod" for role in message.author.roles):
-		if message.content.find("https://tenor.com") != -1 or message.content.find("https://youtube.com") != -1 or message.content.find("https://youtu.be.com") != -1 or message.content.find("https://m.youtube.com") != -1:
+		if message.content.find("https://tenor.com") != -1 or message.content.find("https://youtube.com") != -1 or message.content.find("reddit.com") != -1 or message.content.find("https://youtu.be.com") != -1 or message.content.find("https://m.youtube.com") != -1:
 			await bot.process_commands(message)
 			return
 		imageFound = True
@@ -53,7 +54,12 @@ async def on_message(message):
 				await message.delete()
 		except:
 			await message.delete()
-			
+	if message.content == os.getenv('EASTER_EGG_TRIGGER') and randrange(100) <= int(os.getenv('EASTER_EGG_PERCENT_CHANCE')):
+		await message.channel.send(os.getenv('EASTER_EGG'))
+		await message.delete()
+	elif message.content == os.getenv('EASTER_EGG_TRIGGER'):
+		await message.delete()
+
 	await bot.process_commands(message)
 
 # Disables the default help command from discord.py
