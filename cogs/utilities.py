@@ -64,7 +64,7 @@ class Utilities(commands.Cog):
 			"nigeria": "Luno, BuyCoins",
 			"south africa": "Luno",
 			"uganda": "Binance",
-			"canada": "BullBitcoin, Newton, Kraken, Shakepay, Bitbuy, Bisq, Canadian Bitcoins, Coinberry, Coinsmart",
+			"canada": "BullBitcoin, Newton, Kraken, Shakepay, Bitbuy, Bisq, Canadian Bitcoins, Coinberry, Coinsmart, NDAX",
 			"mexico": "Bitso, Volabit",
 			"usa": "Kraken, Coinbase, CEX IO, Bitstamp, bitFlyer, Bittrex, Gemini, itBit, River Financial, Swan Bitcoin, eToro, Binance, LocalBitcoins, Changelly, Coinmama, Bitpanda, Blockchain, BitcoinIRA, CoinSwitch, KuCoin, CashApp, Bisq, Paxful",
 			"argentina": "ArgenBTC, SatoshiTango",

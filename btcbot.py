@@ -54,10 +54,8 @@ async def on_message(message):
 				await message.delete()
 		except:
 			await message.delete()
-	if message.content == os.getenv('EASTER_EGG_TRIGGER') and randrange(100) <= int(os.getenv('EASTER_EGG_PERCENT_CHANCE')):
+	if message.content.find(os.getenv('EASTER_EGG_TRIGGER')) != -1 and randrange(100) <= int(os.getenv('EASTER_EGG_PERCENT_CHANCE')):
 		await message.channel.send(os.getenv('EASTER_EGG'))
-	elif message.content == os.getenv('EASTER_EGG_TRIGGER'):
-		await message.delete()
 
 	await bot.process_commands(message)
 
