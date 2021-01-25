@@ -104,18 +104,21 @@ class Utilities(commands.Cog):
 	@commands.command()
 	async def wallets(self, ctx, *args):
 		walletDic = {
-			"electrum": {"tags": ["pc", "windows", "linux", "mac", "ios", "android", "hot", "advanced", "lightning", "2fa"], "link":"https://electrum.org/"},
+			"electrum": {"tags": ["pc", "windows", "linux", "mac", "ios", "android", "hot", "advanced", "lightning", "2fa", "spv"], "link":"https://electrum.org/"},
 			"core": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoincore.org/"},
 			"knots": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoinknots.org/"},
 			"wasabi": {"tags": ["pc", "windows", "hot", "privacy"], "link":"https://wasabiwallet.io/"},
 			"coldcard": {"tags": ["hardware", "cold", "requires-wallet"], "link":"https://coldcardwallet.com/"},
-			"green": {"tags": ["android", "ios", "2fa", "pc", "windows", "linux", "mac", "hot"], "link":"https://blockstream.com/green/"},
-			"phoenix": {"tags": ["android", "hot", "lightning", "lightning-node", "easy"], "link":"https://phoenix.acinq.co/"},
+			"green": {"tags": ["android", "ios", "2fa", "pc", "windows", "linux", "mac", "hot", "spv"], "link":"https://blockstream.com/green/"},
+			"phoenix": {"tags": ["android", "hot", "lightning", "easy"], "link":"https://phoenix.acinq.co/"},
 			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "advanced", "partial-custody"], "link":"https://github.com/lightningnetwork/lnd/releases"},
 			"c-lightning": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "advanced"], "link":"https://github.com/ElementsProject/lightning/releases"},
-			"blue": {"tags": ["android", "ios", "hot", "lightning", "partial-custody"], "link":"https://bluewallet.io/"},
+			"blue": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://bluewallet.io/"},
 			"mycelium": {"tags": ["android", "ios", "hot", "local-trader"], "link":"https://wallet.mycelium.com/"},
 			"trezor": {"tags": ["hardware", "hot"], "link":"https://trezor.io/"},
+			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy"], "link":"https://breez.technology/"},
+			"wallet-of-satoshi": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://www.walletofsatoshi.com/"},
+			"blw": {"tags": ["android", "hot", "lightning", "node", "spv", "advanced"], "link":"https://www.walletofsatoshi.com/"},
 			}
 		resp = " \n"
 		for wallet in walletDic:
