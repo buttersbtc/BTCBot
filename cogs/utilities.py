@@ -104,7 +104,7 @@ class Utilities(commands.Cog):
 	@commands.command()
 	async def wallets(self, ctx, *args):
 		walletDic = {
-			"electrum": {"tags": ["pc", "windows", "linux", "mac", "ios", "android", "hot", "advanced", "lightning", "2fa", "spv"], "link":"https://electrum.org/"},
+			"electrum": {"tags": ["pc", "windows", "linux", "mac", "android", "hot", "advanced", "lightning", "2fa", "spv"], "link":"https://electrum.org/"},
 			"core": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoincore.org/"},
 			"knots": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoinknots.org/"},
 			"wasabi": {"tags": ["pc", "windows", "hot", "privacy"], "link":"https://wasabiwallet.io/"},
@@ -126,7 +126,7 @@ class Utilities(commands.Cog):
 				await ctx.channel.send(wallet[0].upper() + wallet[1:len(wallet)] + ": " + walletDic[wallet]["link"] + " tags: " + ", ".join(walletDic[wallet]["tags"]))
 				return
 			overlap = list(set(walletDic[wallet]["tags"]) & set(args[0]))
-			if len(overlap) > 0:
+			if len(overlap) == len(args[0]):
 				resp += wallet[0].upper() + wallet[1:len(wallet)] + ": " + walletDic[wallet]["link"] + " tags: " + ", ".join(walletDic[wallet]["tags"]) + "\n"
 
 		await ctx.channel.send(resp)
