@@ -118,7 +118,7 @@ class Utilities(commands.Cog):
 			"trezor": {"tags": ["hardware", "hot"], "link":"https://trezor.io/"},
 			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy"], "link":"https://breez.technology/"},
 			"wallet-of-satoshi": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://www.walletofsatoshi.com/"},
-			"blw": {"tags": ["android", "hot", "lightning", "node", "spv", "advanced"], "link":"https://www.walletofsatoshi.com/"},
+			"blw": {"tags": ["android", "hot", "lightning", "node", "spv", "advanced"], "link":"https://lightning-wallet.com/"},
 			}
 		resp = " \n"
 		for wallet in walletDic:
