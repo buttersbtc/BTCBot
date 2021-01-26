@@ -127,7 +127,7 @@ class Utilities(commands.Cog):
 				return
 			overlap = list(set(walletDic[wallet]["tags"]) & set(args[0]))
 			if len(overlap) == len(args[0]):
-				resp += wallet[0].upper() + wallet[1:len(wallet)] + ": " + walletDic[wallet]["link"] + " tags: " + ", ".join(walletDic[wallet]["tags"]) + "\n"
+				resp += wallet[0].upper() + wallet[1:len(wallet)] + ": <" + walletDic[wallet]["link"] + "> tags: " + ", ".join(walletDic[wallet]["tags"]) + "\n"
 
 		await ctx.channel.send(resp)
 
@@ -141,7 +141,7 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def dev(self, ctx, *args):
-		msg = "https://github.com/bitcoin/bitcoin <- the repo\nhttps://webchat.freenode.net/?channels=bitcoin-core-dev <- the irc\nhttps://bitcoin.stackexchange.com/ <- the stack exchange\nhttps://lists.linuxfoundation.org/pipermail/bitcoin-dev/ <- the general dev mailinglist\nhttps://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/ <- core dev mailinglist\nhttps://bitcoinops.org/en/newsletters/ <- optech newsletters dev summary\nhttps://bitcoincoreslack.herokuapp.com/ <- core slack"
+		msg = "<https://github.com/bitcoin/bitcoin> <- the repo\n<https://webchat.freenode.net/?channels=bitcoin-core-dev> <- the irc\nhttps://bitcoin.stackexchange.com/ <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack"
 		await ctx.channel.send(msg)
 
 def setup(bot):
