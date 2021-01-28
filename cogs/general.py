@@ -39,7 +39,7 @@ class General(commands.Cog):
 			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:,.0f} Sticks of Butter**"},
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
 			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"},
-            "egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**"},
+	"egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**"},
             "f40": {"cost": 1350000, "formatStr":"**:race_car: 1 Ferrari F40** costs **{:.2f} Bitcoin**"},
             "420": {"cost": 200, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} ounces of Marijuana**"},
             "rbx": {"cost": 0.0125, "formatStr":"**1 Bitcoin** is worth **:bricks: {:,.0f} Robux**"},
