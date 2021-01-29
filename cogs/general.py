@@ -39,15 +39,15 @@ class General(commands.Cog):
 			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:,.0f} Sticks of Butter**"},
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
 			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"},
-	"egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**"},
+            "egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**"},
             "f40": {"cost": 1350000, "formatStr":"**:race_car: 1 Ferrari F40** costs **{:.2f} Bitcoin**"},
             "420": {"cost": 200, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} ounces of Marijuana**"},
-            "rbx": {"cost": 0.0125, "formatStr":"**1 Bitcoin** is worth **:bricks: {:,.0f} Robux**"},
-            "thc": {"cost": 40, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} THC distillate cartridges (1 gram)**"}, # Based on pricing found in various internet forums where the topic is "how much do you pay for a 1 gram cart" or something along those lines.
-                "pod": {"cost": 5.2475, "formatStr":"**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**"},
-            "tm3": {"cost": 37990, "formatStr":"**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**"},
-                "rtx": {"cost": 1499, "formatStr":"**1 Bitcoin** is worth **:desktop_computer: {:,.0f} RTX 3090's**"},
-                "gum": {"cost": 8.37, "formatStr":"**1 Bitcoin** is worth **:teddy_bear: {:,.0f} kilograms of Gummie Bears**"}
+                "rbx": {"cost": 0.0125, "formatStr":"**1 Bitcoin** is worth **:bricks: {:,.0f} Robux**"},
+                    "thc": {"cost": 40, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} THC distillate cartridges (1 gram)**"}, # Based on pricing found in various internet forums where the topic is "how much do you pay for a 1 gram cart" or something along those lines.
+                        "pod": {"cost": 5.2475, "formatStr":"**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**"},
+                            "tm3": {"cost": 37990, "formatStr":"**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**"},
+                                "rtx": {"cost": 1499, "formatStr":"**1 Bitcoin** is worth **:desktop_computer: {:,.0f} RTX 3090's**"},
+                                    "gum": {"cost": 8.37, "formatStr":"**1 Bitcoin** is worth **:teddy_bear: {:,.0f} kilograms of Gummie Bears**"}
 			}
 		blacklist = {
 			"xdg":True,
