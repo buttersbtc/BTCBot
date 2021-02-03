@@ -47,9 +47,6 @@ class General(commands.Cog):
 			"thc": {"cost": 40, "formatStr": "**1 Bitcoin** is worth **:maple_leaf: {:,.0f} THC distillate cartridges (1 gram)**"},
 			"pod": {"cost": 5.2475, "formatStr": "**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**"},
 			"tm3": {"cost": 37990, "formatStr": "**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**"},
-			"rtx": {"cost": 1499, "formatStr": "**1 Bitcoin** is worth **:desktop_computer: {:,.0f} RTX 3090's**"},
-			"gfp": {"cost": 4980, "formatStr": "**1 Bitcoin** is worth **:fondue: {:,.0f} Golden Frying Pans**"},
-			"tcb": {"cost": 14229.67, "formatStr": "**1 Bitcoin** is worth **:fire: {:,.0f} Burning Flames Team Captains**"},
 			"act": {"cost": 32410, "formatStr": "**1 Bitcoin** is worth **:student: {:,.0f} average college tuitions (4 years)**"}
 			}
 		blacklist = {
