@@ -38,7 +38,7 @@ async def on_message(message):
 
 		for item in blacklist:
 			if message.content.lower().find(item) != -1:
-				print("Deleting Message: " + message.author.mention + " - "+ message.content)
+				print("Deleting Message: " + message.author.name + " - "+ message.content)
 				await message.delete()
 	if os.getenv('ENABLE_IMAGEONLY') == "1" and message.channel.name == os.getenv('IMAGEONLY_CHANNEL') and not any(role.name == "mod" for role in message.author.roles):
 		if message.content.find("https://tenor.com") != -1 or message.content.find("https://youtube.com") != -1 or message.content.find("reddit.com") != -1 or message.content.find("https://youtu.be.com") != -1 or message.content.find("https://m.youtube.com") != -1:
