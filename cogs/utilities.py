@@ -144,5 +144,12 @@ class Utilities(commands.Cog):
 		msg = "<https://github.com/bitcoin/bitcoin> <- the repo\n<https://webchat.freenode.net/?channels=bitcoin-core-dev> <- the irc\nhttps://bitcoin.stackexchange.com/ <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack"
 		await ctx.channel.send(msg)
 
+	@commands.command()
+	async def quantum(self, ctx, *args):
+		msg = "A general purpose and stable high qubit quantum computer (which doesn't exist and no one is sure if will ever exist) can run an algorithm called shor's. Shor's is used to factor numbers.  You can thus use shor's to derive a private key from a public key. Bitcoin exposes public keys in the scenarios of certain address reuse and when certain transactions are sitting in the mempool, as well as very old 2009 era pay to pubkey coinbases. What will happen if such a computer ever exists is slowly attempts to mine the most static of these coins, probably the old coinbases, will occur. Once this happens everyone will know there is a quantum actor and avoid address reuse or in the worst case just move to a new address format. It's also important to remember that a quantum attack takes considerable time, not dissimilar to mining, as it's the process for searching for a private key."
+		await ctx.channel.send(msg)
+
+		
+
 def setup(bot):
 	bot.add_cog(Utilities(bot))
