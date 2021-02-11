@@ -33,24 +33,26 @@ class General(commands.Cog):
 			"xag":"{:,.2f} ounces of silver"
 			}
 		itemDic = {
-			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:,.0f} Big Macs**"},
-			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:,.0f} McRibs**"},
-			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:,.0f} Crunchwraps Supreme**"},
-			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:,.0f} Sticks of Butter**"},
-			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**"},
-			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**"},
-			"egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**"},
-			"f40": {"cost": 1350000, "formatStr":"**:race_car: 1 Ferrari F40** costs **{:.2f} Bitcoin**"},
-			"tay": {"cost": 232904, "formatStr":"**:red_car: 1 Porche Taycan Turbo S** costs **{:.2f} Bitcoin**"},
-			"mus": {"cost": 75000, "formatStr":"**:blue_car: 1 Ford Mustang Shelby GT500 2020** costs **{:.2f} Bitcoin**"},
-			"lar": {"cost": 259000, "formatStr":"**:race_car: 1 McLaren 600LT 2020** costs **{:.2f} Bitcoin**"},
-			"420": {"cost": 200, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} ounces of Marijuana**"},
-			"gum": {"cost": 8.37, "formatStr":"**1 Bitcoin** is worth **:teddy_bear: {:,.0f} kilograms of Gummie Bears**"},
-			"rbx": {"cost": 0.0125, "formatStr": "**1 Bitcoin** is worth **:bricks: {:,.0f} Robux**"},
-			"thc": {"cost": 40, "formatStr": "**1 Bitcoin** is worth **:maple_leaf: {:,.0f} THC distillate cartridges (1 gram)**"},
-			"pod": {"cost": 5.2475, "formatStr": "**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**"},
-			"tm3": {"cost": 37990, "formatStr": "**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**"},
-			"act": {"cost": 32410, "formatStr": "**1 Bitcoin** is worth **:student: {:,.0f} average college tuitions (4 years)**"}
+			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:,.0f} Big Macs**","single":False},
+			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:,.0f} McRibs**","single":False},
+			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:,.0f} Crunchwraps Supreme**","single":False},
+			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:,.0f} Sticks of Butter**","single":False},
+			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**","single":False},
+			"egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**","single":False},
+			"420": {"cost": 200, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} ounces of Marijuana**","single":False},
+			"gum": {"cost": 8.37, "formatStr":"**1 Bitcoin** is worth **:teddy_bear: {:,.0f} kilograms of Gummie Bears**","single":False},
+			"rbx": {"cost": 0.0125, "formatStr": "**1 Bitcoin** is worth **:bricks: {:,.0f} Robux**","single":False},
+			"thc": {"cost": 40, "formatStr": "**1 Bitcoin** is worth **:maple_leaf: {:,.0f} THC distillate cartridges (1 gram)**","single":False},
+			"pod": {"cost": 5.2475, "formatStr": "**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**","single":False},
+
+			# Seperating out items that should be displayed as cost for a single item
+			"act": {"cost": 32410, "formatStr":"**:student: Average College Tuition (4 years)** costs **{:,.2f} Bitcoin**","single":True},
+			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**","single":True},
+			"lar": {"cost": 259000, "formatStr":"**:race_car: 1 McLaren 600LT 2020** costs **{:.2f} Bitcoin**","single":True},
+			"tm3": {"cost": 37990, "formatStr":"**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**","single":True},
+			"f40": {"cost": 1350000, "formatStr":"**:race_car: 1 Ferrari F40** costs **{:.2f} Bitcoin**","single":True},
+			"tay": {"cost": 232904, "formatStr":"**:red_car: 1 Porche Taycan Turbo S** costs **{:.2f} Bitcoin**","single":True},
+			"mus": {"cost": 75000, "formatStr":"**:blue_car: 1 Ford Mustang Shelby GT500 2020** costs **{:.2f} Bitcoin**","single":True}
 			}
 		blacklist = {
 			"xdg":True,
@@ -103,7 +105,7 @@ class General(commands.Cog):
 			conversion = data[arg]["usd"]["other"]["last"]
 			price = float(price)/float(conversion)
 		if isItem:
-			if itemDic[item]["cost"] < float(price):
+			if itemDic[item]["cost"] < float(price) and itemDic[item]["single"] == False:
 				price = float(price)/itemDic[item]["cost"]
 			else:
 				price = itemDic[item]["cost"]/float(price)
