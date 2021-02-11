@@ -49,7 +49,7 @@ class General(commands.Cog):
 			"rbx": {"cost": 0.0125, "formatStr": "**1 Bitcoin** is worth **:bricks: {:,.0f} Robux**"},
 			"thc": {"cost": 40, "formatStr": "**1 Bitcoin** is worth **:maple_leaf: {:,.0f} THC distillate cartridges (1 gram)**"},
 			"pod": {"cost": 5.2475, "formatStr": "**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**"},
-			"tm3": {"cost": 37990, "formatStr": "**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**"},
+			"tm3": {"cost": 37990, "formatStr": "**1 Bitcoin** is worth **{:.2f} :red_car: 1 Tesla Model 3's**"},
 			"act": {"cost": 32410, "formatStr": "**1 Bitcoin** is worth **:student: {:,.0f} average college tuitions (4 years)**"}
 			}
 		blacklist = {
