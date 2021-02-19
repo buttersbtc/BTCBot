@@ -69,6 +69,15 @@ class General(commands.Cog):
 		if arg in blacklist:
 			return
 
+		if arg == "help":
+			await ctx.channel.send("**Currency Eamples**: !p gbp, !p cad, !p xau")
+			keys = ""
+			for k in itemDic.keys():
+				keys += k + ", "
+			keys = keys[0:len(keys)-2]
+			await ctx.channel.send("**Other Supported Items**: " + keys)
+			return
+
 		#route to other func if exists
 		func = getattr(self, arg , None)
 		if(callable(func)):
