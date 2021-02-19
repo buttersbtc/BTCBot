@@ -50,7 +50,7 @@ class General(commands.Cog):
 			"act": {"cost": 32410, "formatStr":"**:student: Average College Tuition (4 years)** costs **{:,.2f} Bitcoin**","single":True},
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**","single":True},
 			"lar": {"cost": 259000, "formatStr":"**:race_car: 1 McLaren 600LT 2020** costs **{:.2f} Bitcoin**","single":True},
-			"tm3": {"cost": 37990, "formatStr":"**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**","single":True},
+			"tm3": {"cost": 36990, "formatStr":"**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**","single":True},
 			"f40": {"cost": 1350000, "formatStr":"**:race_car: 1 Ferrari F40** costs **{:.2f} Bitcoin**","single":True},
 			"tay": {"cost": 232904, "formatStr":"**:red_car: 1 Porche Taycan Turbo S** costs **{:.2f} Bitcoin**","single":True},
 			"mus": {"cost": 75000, "formatStr":"**:blue_car: 1 Ford Mustang Shelby GT500 2020** costs **{:.2f} Bitcoin**","single":True},
@@ -67,6 +67,15 @@ class General(commands.Cog):
 		arg = arg.lower()
 
 		if arg in blacklist:
+			return
+
+		if arg == "help":
+			await ctx.channel.send("**Currency Eamples**: !p gbp, !p cad, !p xau")
+			keys = ""
+			for k in itemDic.keys():
+				keys += k + ", "
+			keys = keys[0:len(keys)-2]
+			await ctx.channel.send("**Other Supported Items**: " + keys)
 			return
 
 		#route to other func if exists
