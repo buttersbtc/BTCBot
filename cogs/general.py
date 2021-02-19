@@ -41,9 +41,11 @@ class General(commands.Cog):
 			"egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**","single":False},
 			"420": {"cost": 200, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} ounces of Marijuana**","single":False},
 			"gum": {"cost": 8.37, "formatStr":"**1 Bitcoin** is worth **:teddy_bear: {:,.0f} kilograms of Gummie Bears**","single":False},
-			"rbx": {"cost": 0.0125, "formatStr": "**1 Bitcoin** is worth **:bricks: {:,.0f} Robux**","single":False},
-			"thc": {"cost": 40, "formatStr": "**1 Bitcoin** is worth **:maple_leaf: {:,.0f} THC distillate cartridges (1 gram)**","single":False},
-			"pod": {"cost": 5.2475, "formatStr": "**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**","single":False},
+			"rbx": {"cost": 0.0125, "formatStr":"**1 Bitcoin** is worth **:bricks: {:,.0f} Robux**","single":False},
+			"thc": {"cost": 40, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} THC distillate cartridges (1 gram)**","single":False},
+			"pod": {"cost": 5.2475, "formatStr":"**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**","single":False},
+			"furby": {"cost": 300, "formatStr":"**1 Bitcoin** is worth **:owl: {:,.0f} Rare Furbies**","single":False},
+			"avo": {"cost": 10, "formatStr":"**1 Bitcoin** is worth **:avocado: {:,.0f} Serves of Avocado Toast**","single":False},
 
 			# Seperating out items that should be displayed as cost for a single item
 			"act": {"cost": 32410, "formatStr":"**:student: Average College Tuition (4 years)** costs **{:,.2f} Bitcoin**","single":True},
@@ -53,7 +55,7 @@ class General(commands.Cog):
 			"f40": {"cost": 1350000, "formatStr":"**:race_car: 1 Ferrari F40** costs **{:.2f} Bitcoin**","single":True},
 			"tay": {"cost": 232904, "formatStr":"**:red_car: 1 Porche Taycan Turbo S** costs **{:.2f} Bitcoin**","single":True},
 			"mus": {"cost": 75000, "formatStr":"**:blue_car: 1 Ford Mustang Shelby GT500 2020** costs **{:.2f} Bitcoin**","single":True},
-			"furby": {"cost": 500, "formatStr":"**:owl: 1 Rare Furby** costs **{:.2f} Bitcoin**","single":True}
+			"fc9": {"cost": 62000000, "formatStr":"**:rocket: 1 SpaceX Falcon 9 Launch** costs **{:.2f} Bitcoin**","single":True}
 			}
 		blacklist = {
 			"xdg":True,
