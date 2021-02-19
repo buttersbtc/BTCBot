@@ -51,9 +51,12 @@ class General(commands.Cog):
 			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**","single":True},
 			"lar": {"cost": 259000, "formatStr":"**:race_car: 1 McLaren 600LT 2020** costs **{:.2f} Bitcoin**","single":True},
 			"tm3": {"cost": 37990, "formatStr":"**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**","single":True},
+			"rds": {"cost": 200000, "formatStr":"**:race_car: 1 Tesla Roadster 2020** costs **{:.2f} Bitcoin**","single":True},
 			"f40": {"cost": 1350000, "formatStr":"**:race_car: 1 Ferrari F40** costs **{:.2f} Bitcoin**","single":True},
 			"tay": {"cost": 232904, "formatStr":"**:red_car: 1 Porche Taycan Turbo S** costs **{:.2f} Bitcoin**","single":True},
 			"mus": {"cost": 75000, "formatStr":"**:blue_car: 1 Ford Mustang Shelby GT500 2020** costs **{:.2f} Bitcoin**","single":True},
+			"trn": {"cost": 139900, "formatStr":"**:race_car: 1 Audi RS e-tron GT 2022** costs **{:.2f} Bitcoin**","single":True},
+			"bug": {"cost": 2990000, "formatStr":"**:race_car: 1 Bugatti Chiron 2020** costs **{:.2f} Bitcoin**","single":True},
 			"rov": {"cost": 2725000000, "formatStr":"**:robot: :rocket: 1 trip to Mars + rover/drone/skycrane package** costs **{:.2f} Bitcoin**","single":True}
 			}
 		blacklist = {
