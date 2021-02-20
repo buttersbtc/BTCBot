@@ -19,6 +19,7 @@ class General(commands.Cog):
 		#Price string details
 		currencyFormatDic = {
 			"default":"${:,.2f} ",
+			"aud":"${:,.2f} Australian Dollars",
 			"gbp":"£{:,.2f} British Pounds",
 			"eur":"€{:,.2f} Euros",
 			"brl":"R${:,.2f} Brazillian Reais",
