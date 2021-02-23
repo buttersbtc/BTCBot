@@ -60,6 +60,7 @@ class General(commands.Cog):
 			"trn": {"cost": 139900, "formatStr":"**:race_car: 1 Audi RS e-tron GT 2022** costs **{:.2f} Bitcoin**","single":True},
 			"bug": {"cost": 2990000, "formatStr":"**:race_car: 1 Bugatti Chiron 2020** costs **{:.2f} Bitcoin**","single":True},
 			"gef": {"cost": 1499, "formatStr":"**:desktop_computer: 1 Nvidia GEFORCE RTX 3090** costs **{:.2f} Bitcoin**","single":True},
+			"beak": {"cost": 5318008, "formatStr":"**:duck: Cost to H00nk! it with BeakMeat (max 2 hrs)** costs **{:,.2f} Bitcoin**","single":True},
 			"rov": {"cost": 2725000000, "formatStr":"**:robot: :rocket: 1 trip to Mars + rover/drone/skycrane package** costs **{:,.2f} Bitcoin**","single":True}
 			}
 		blacklist = {
