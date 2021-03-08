@@ -46,6 +46,7 @@ class General(commands.Cog):
 			"pod": {"cost": 5.2475, "formatStr":"**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**","single":False},
 			"furby": {"cost": 300, "formatStr":"**1 Bitcoin** is worth **:owl: {:,.0f} Rare Furbies**","single":False},
 			"avo": {"cost": 10, "formatStr":"**1 Bitcoin** is worth **:avocado: {:,.0f} Serves of Avocado Toast**","single":False},
+			"chicken": {"cost": 2.85, "formatStr":"**1 Bitcoin** is worth **:chicken: {:,.0f} Rhode Island Red Chickens**","single":False},
 
 			# Seperating out items that should be displayed as cost for a single item
 			"act": {"cost": 32410, "formatStr":"**:student: Average College Tuition (4 years)** costs **{:,.2f} Bitcoin**","single":True},
