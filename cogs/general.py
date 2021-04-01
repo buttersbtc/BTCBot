@@ -48,7 +48,7 @@ class General(commands.Cog):
 			"avo": {"cost": 10, "formatStr":"**1 Bitcoin** is worth **:avocado: {:,.0f} Serves of Avocado Toast**","single":False},
 			"chicken": {"cost": 2.85, "formatStr":"**1 Bitcoin** is worth **:chicken: {:,.0f} Rhode Island Red Chickens**","single":False},
 			"nana": {"cost": 0.23, "formatStr":"**1 Bitcoin** is worth **:banana: {:,.0f} Bananas**","single":False},
-			"bez": {"cost": 74598.083, "formatStr":"**1 Bitcoin** is worth **:man_office_worker: {:,.0f} minutes of Jeff Bezos' time**","single":False},
+			"bez": {"cost": 74598.083, "formatStr":"**1 Bitcoin** is worth **:man_office_worker: {:,.2f} minutes of Jeff Bezos' time**","single":False},
 
 			# Seperating out items that should be displayed as cost for a single item
 			"act": {"cost": 32410, "formatStr":"**:student: Average College Tuition (4 years)** costs **{:,.2f} Bitcoin**","single":True},
@@ -65,6 +65,20 @@ class General(commands.Cog):
 			"gef": {"cost": 1499, "formatStr":"**:desktop_computer: 1 Nvidia GEFORCE RTX 3090** costs **{:.2f} Bitcoin**","single":True},
 			"rov": {"cost": 2725000000, "formatStr":"**:robot: :rocket: 1 trip to Mars + rover/drone/skycrane package** costs **{:,.2f} Bitcoin**","single":True}
 			}
+		satDict = {
+			"milk": {"cost": 3.59, "formatStr":"**:milk: 1 Gallon of Milk** costs **{:,.0f} Satoshis**","single":True},
+			"cru": {"cost": 2.99, "formatStr":"**:taco: 1 Crunchwrap Supreme** costs **{:,.0f} Satoshis**","single":True},
+			"egg": {"cost": 0.1208333, "formatStr":"**:egg: 1 egg** costs **{:,.0f} Satoshis**","single":True},
+			"420": {"cost": 200, "formatStr":"**:maple_leaf: 1 Ounce of Weed** costs **{:,.0f} Satoshis**","single":True},
+			"iph": {"cost": 999, "formatStr":"**:telephone: 1 iPhone 12 pro** costs **{:,.0f} Satoshis**","single":True},
+			"furby": {"cost": 300, "formatStr":"**:owl: 1 Rare Furby** costs **{:,.0f} Satoshis**","single":True},
+			"avo": {"cost": 10, "formatStr":"**:avocado: 1 avocado toast** costs **{:,.0f} Satoshis**","single":True},
+			"chicken": {"cost": 2.85, "formatStr":"***:chicken: 1 Rhode Island Red Chicken** costs **{:,.0f} Satoshis**","single":True},
+			"nana": {"cost": 0.23, "formatStr":"**:banana: 1 banana** costs **{:,.0f} satoshis**","single":True},
+			"mac": {"cost": 5.71, "formatStr":"**:hamburger: 1 Big Mac** costs **{:,.0f} Satoshis*","single":True},
+			"mcr": {"cost": 4.29, "formatStr":"**:pig2: 1 McRib Sandwich** costs**{:,.0f} Satoshi**","single":True},
+			"bez": {"cost": 74598.083, "formatStr":"**:man_office_worker: 1 minute of Jeff Bezos' time** costs **{:,.0f} Satoshis**","single":True},
+			}
 		blacklist = {
 			"xdg":True,
 			"ltc":True,
@@ -77,7 +91,7 @@ class General(commands.Cog):
 
 		if arg in blacklist:
 			return
-
+		
 		if arg == "help":
 			await ctx.channel.send("**Currency Eamples**: !p gbp, !p cad, !p xau")
 			keys = ""
@@ -211,6 +225,51 @@ class General(commands.Cog):
 		message_string = "**1 Bitcoin** costs **{:,.0f}** hours".format(float(price))
 
 		await ctx.send(message_string)
+		
+	#fetches sats for items
+	@commands.command()
+	async def sat(self, ctx, arg):
 
+		#handle items and call API
+		isItem = arg in satDict
+		item = ""
+		if isItem:
+			item = arg
+		
+		if arg == "noargs" or isItem:
+			return
+		
+		try:
+			api = "http://preev.com/pulse/units:btc+" + "usd" + "/sources:bitstamp+kraken"
+			r = requests.get(api)
+			data = json.loads(r.text)
+		except:
+			return
+			
+		#item calcs
+		skipConvert = False
+		try:
+			price = data["btc"]["usd"]["bitstamp"]["last"]
+		except:
+			try:
+				price = data["btc"]["usd"]["bitstamp"]["last"]
+				skipConvert = True
+			except:
+				price = data["btc"]["usd"]["kraken"]["last"]
+				skipConvert = True
+				
+		price = satDic[item]["cost"]/float(price)*100000000
+
+				
+		currencyStr = ""
+			currencyStr = satDic[item]["formatStr"]
+
+		price = currencyStr.format(float(price))
+		message_string = ""
+		message_string = price
+
+		
+		await ctx.send(message_string)
+		
 def setup(bot):
 	bot.add_cog(General(bot))
