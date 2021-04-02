@@ -94,6 +94,7 @@ class General(commands.Cog):
 				keys += k + ", "
 			keys = keys[0:len(keys)-2]
 			await ctx.channel.send("**Other Supported Items**: " + keys)
+			await ctx.channel.send("**!p <item> sats** will give you the cost of the item in satoshis")
 			return
 
 		#route to other func if exists
