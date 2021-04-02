@@ -15,7 +15,7 @@ class General(commands.Cog):
 	# Price - All currencies enabled by the APi are automatically supported. Add a currency formatting string to change the way a given currency is displayed
 	#To add a new item to the price call make a new entry in the itemDic with the cost and formatStr, the key being the string  used to call that item
 	@commands.command()
-	async def price(self, ctx, arg="noargs"):
+	async def price(self, ctx, *args):
 		#Price string details
 		currencyFormatDic = {
 			"default":"${:,.2f} ",
@@ -33,37 +33,37 @@ class General(commands.Cog):
 			"xag":"{:,.2f} ounces of silver"
 			}
 		itemDic = {
-			"mac": {"cost": 5.71, "formatStr":"**1 Bitcoin** is worth **:hamburger: {:,.0f} Big Macs**","single":False},
-			"mcr": {"cost": 4.29, "formatStr":"**1 Bitcoin** is worth **:pig2: {:,.0f} McRibs**","single":False},
-			"cru": {"cost": 2.99, "formatStr":"**1 Bitcoin** is worth **:taco: {:,.0f} Crunchwraps Supreme**","single":False},
-			"but": {"cost": 0.5, "formatStr":"**1 Bitcoin** is worth **:butter: {:,.0f} Sticks of Butter**","single":False},
-			"coldcards": {"cost": 119.27, "formatStr":"**1 Bitcoin** is worth **:pager: {:.0f} Coldcards**","single":False},
-			"egg": {"cost": 0.1208333, "formatStr":"**1 Bitcoin** is worth **:egg: {:,.0f} Large Eggs**","single":False},
-			"420": {"cost": 200, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} ounces of Marijuana**","single":False},
-			"gum": {"cost": 8.37, "formatStr":"**1 Bitcoin** is worth **:teddy_bear: {:,.0f} kilograms of Gummie Bears**","single":False},
-			"rbx": {"cost": 0.0125, "formatStr":"**1 Bitcoin** is worth **:bricks: {:,.0f} Robux**","single":False},
-			"thc": {"cost": 40, "formatStr":"**1 Bitcoin** is worth **:maple_leaf: {:,.0f} THC distillate cartridges (1 gram)**","single":False},
-			"pod": {"cost": 5.2475, "formatStr":"**1 Bitcoin** is worth **:smoking: {:,.0f} JUUL pods**","single":False},
-			"furby": {"cost": 300, "formatStr":"**1 Bitcoin** is worth **:owl: {:,.0f} Rare Furbies**","single":False},
-			"avo": {"cost": 10, "formatStr":"**1 Bitcoin** is worth **:avocado: {:,.0f} Serves of Avocado Toast**","single":False},
-			"chicken": {"cost": 2.85, "formatStr":"**1 Bitcoin** is worth **:chicken: {:,.0f} Rhode Island Red Chickens**","single":False},
-			"nana": {"cost": 0.23, "formatStr":"**1 Bitcoin** is worth **:banana: {:,.0f} Bananas**","single":False},
-			"bez": {"cost": 74598.083, "formatStr":"**1 Bitcoin** is worth **:man_office_worker: {:,.0f} minutes of Jeff Bezos' time**","single":False},
+			"mac": 			{"cost": 5.71,			"name":"Big Macs",											"emoji":":hamburger:",				"single":False},
+			"mcr": 			{"cost": 4.29, 			"name":"McRibs", 											"emoji":":pig2:",					"single":False},
+			"cru": 			{"cost": 2.99,			"name":"Crunchwraps Supreme", 								"emoji":":taco:",					"single":False},
+			"but": 			{"cost": .5,			"name":"Sticks of Butter", 									"emoji":":butter:",					"single":False},
+			"coldcards": 	{"cost": 119.27,		"name":"Coldcards", 										"emoji":":pager:",					"single":False},
+			"egg": 			{"cost": 0.1208333,		"name":"Large Eggs", 										"emoji":":egg:",					"single":False},
+			"420": 			{"cost": 200,			"name":"Ounces of Marijuana", 								"emoji":":maple_leaf:",				"single":False},
+			"gum": 			{"cost": 8.37,			"name":"Kilograms of Gummie Bears", 						"emoji":":teddy_bear:",				"single":False},
+			"rbx": 			{"cost": 0.0125,		"name":"Robux",												"emoji":":bricks:",					"single":False},
+			"thc": 			{"cost": 40,			"name":"THC distillate cartridges (1 gram)",				"emoji":":maple_leaf:",				"single":False},
+			"pod": 			{"cost": 5.2475,		"name":"JUUL pods", 										"emoji":":smoking:",				"single":False},
+			"furby": 		{"cost": 300, 			"name":"Rare Furbies", 										"emoji":":owl:",					"single":False},
+			"avo": 			{"cost": 10, 			"name":"Serves of Avocado Toast", 							"emoji":":avocado:",				"single":False},
+			"chicken": 		{"cost": 2.85, 			"name":"Rhode Island Red Chickens", 						"emoji":":chicken:",				"single":False},
+			"nana": 		{"cost": 0.23, 			"name":"Bananas", 											"emoji":":banana:",					"single":False},
+			"bez": 			{"cost": 74598.083, 	"name":"minutes of Jeff Bezos' time", 						"emoji":":man_office_worker:",		"single":False},
 
 			# Seperating out items that should be displayed as cost for a single item
-			"act": {"cost": 32410, "formatStr":"**:student: Average College Tuition (4 years)** costs **{:,.2f} Bitcoin**","single":True},
-			"lam": {"cost": 521465, "formatStr":"**:race_car: 1 Lamborghini Aventador SVJ** costs **{:.2f} Bitcoin**","single":True},
-			"lar": {"cost": 259000, "formatStr":"**:race_car: 1 McLaren 600LT 2020** costs **{:.2f} Bitcoin**","single":True},
-			"tm3": {"cost": 36990, "formatStr":"**:red_car: 1 Tesla Model 3** costs **{:.2f} Bitcoin**","single":True},
-			"rds": {"cost": 200000, "formatStr":"**:race_car: 1 Tesla Roadster 2020** costs **{:.2f} Bitcoin**","single":True},
-			"f40": {"cost": 1350000, "formatStr":"**:race_car: 1 Ferrari F40** costs **{:.2f} Bitcoin**","single":True},
-			"tay": {"cost": 232904, "formatStr":"**:red_car: 1 Porche Taycan Turbo S** costs **{:.2f} Bitcoin**","single":True},
-			"mus": {"cost": 75000, "formatStr":"**:blue_car: 1 Ford Mustang Shelby GT500 2020** costs **{:.2f} Bitcoin**","single":True},
-			"fc9": {"cost": 62000000, "formatStr":"**:rocket: 1 SpaceX Falcon 9 Launch** costs **{:,.2f} Bitcoin**","single":True},
-			"trn": {"cost": 139900, "formatStr":"**:race_car: 1 Audi RS e-tron GT 2022** costs **{:.2f} Bitcoin**","single":True},
-			"bug": {"cost": 2990000, "formatStr":"**:race_car: 1 Bugatti Chiron 2020** costs **{:.2f} Bitcoin**","single":True},
-			"gef": {"cost": 1499, "formatStr":"**:desktop_computer: 1 Nvidia GEFORCE RTX 3090** costs **{:.2f} Bitcoin**","single":True},
-			"rov": {"cost": 2725000000, "formatStr":"**:robot: :rocket: 1 trip to Mars + rover/drone/skycrane package** costs **{:,.2f} Bitcoin**","single":True}
+			"lam": 			{"cost": 521465, 		"name":"Lamborghini Aventador SVJ", 						"emoji":":race_car:",				"single":True},
+			"act": 			{"cost": 32410, 		"name":"Average College Tuition (4 years)",					"emoji":":student:",				"single":True},
+			"lar": 			{"cost": 259000, 		"name":"McLaren 600LT 2020",		 						"emoji":":race_car:",				"single":True},
+			"tm3": 			{"cost": 36990, 		"name":"Tesla Model 3", 									"emoji":":red_car:",				"single":True},
+			"rds": 			{"cost": 200000, 		"name":"Tesla Roadster 2020", 								"emoji":":race_car:",				"single":True},
+			"f40": 			{"cost": 1350000, 		"name":"Ferrari F40", 										"emoji":":race_car:",				"single":True},
+			"tay": 			{"cost": 232904, 		"name":"Porche Taycan Turbo S",		 						"emoji":":red_car:",				"single":True},
+			"mus": 			{"cost": 75000, 		"name":"Ford Mustang Shelby GT500 2020", 					"emoji":":blue_car:",				"single":True},
+			"fc9": 			{"cost": 62000000, 		"name":"SpaceX Falcon 9 Launch", 							"emoji":":rocket:",					"single":True},
+			"trn": 			{"cost": 139900, 		"name":"Audi RS e-tron GT 2022", 							"emoji":":race_car:",				"single":True},
+			"bug": 			{"cost": 2990000, 		"name":"Bugatti Chiron 2020", 								"emoji":":race_car:",				"single":True},
+			"gef": 			{"cost": 1499, 			"name":"Nvidia GEFORCE RTX 3090", 							"emoji":":desktop_computer:",		"single":True},
+			"rov": 			{"cost": 2725000000,	"name":"trip to Mars + rover/drone/skycrane package", 		"emoji":":robot: :rocket:",			"single":True},
 			}
 		blacklist = {
 			"xdg":True,
@@ -73,7 +73,16 @@ class General(commands.Cog):
 			"bch":True
 			}
 
-		arg = arg.lower()
+		if len(args) == 0:
+			arg="noargs"
+		else:
+			arg = args[0].lower()
+
+		if len(args) >= 2:
+			arg = args[0].lower()
+			arg2 = args[1].lower()
+		else:
+			arg2 = "noarg"
 
 		if arg in blacklist:
 			return
@@ -125,20 +134,39 @@ class General(commands.Cog):
 			conversion = data[arg]["usd"]["other"]["last"]
 			price = float(price)/float(conversion)
 		if isItem:
-			if itemDic[item]["cost"] < float(price) and itemDic[item]["single"] == False:
-				price = float(price)/itemDic[item]["cost"]
+			if itemDic[item]["single"] == False:
+				if itemDic[item]["cost"] < float(price) and arg2=="sats":
+					price = itemDic[item]["cost"]/float(price) * 100000000
+				else:
+					price = float(price)/itemDic[item]["cost"]
+					if arg2 == "sats":
+						price = price * 100000000
+
 			else:
 				price = itemDic[item]["cost"]/float(price)
+				if arg2 == "sats":
+					price = price * 100000000
+
 
 		currencyStr = ""
 		if arg in currencyFormatDic:
 			currencyStr = currencyFormatDic[arg]
 		elif isItem:
-			currencyStr = itemDic[item]["formatStr"]
+			if itemDic[item]["single"] == False:
+				if arg2 == "sats":
+					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:,.0f}" + " Satoshis**"
+				else:
+					currencyStr = "**1 Bitcoin** is worth **" + itemDic[item]["emoji"] + " {:,.0f}" + " " + itemDic[item]["name"] + "**"
+			else:
+				if arg2 == "sats":
+					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:,.0f}" + " Satoshis**"
+				else:
+					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:.2f}" + " Bitcoin**"
 		else:
 			currencyStr = currencyFormatDic["default"] + arg.upper()
 		
 		price = currencyStr.format(float(price))
+		
 		message_string = ""
 		if isItem:
 			message_string = price
@@ -149,8 +177,8 @@ class General(commands.Cog):
 
 	# price synonym
 	@commands.command()
-	async def p(self, ctx, arg="noargs"):
-		await General(self).price(self, ctx, arg)
+	async def p(self, ctx, *args):
+		await General(self).price(self, ctx, *args)
 
 	# Bitcoin is a btc
 	@commands.command()
