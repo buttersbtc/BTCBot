@@ -48,7 +48,6 @@ class General(commands.Cog):
 			"avo":{"cost": 10,"name":"Serves of Avocado Toast","emoji":":avocado:","single":False},
 			"chicken":{"cost": 2.85,"name":"Rhode Island Red Chickens","emoji":":chicken:","single":False},
 			"nana":{"cost": 0.23,"name":"Bananas","emoji":":banana:","single":False},
-			"bez":{"cost": 74598.083,"name":"minutes of Jeff Bezos' time","emoji":":man_office_worker:","single":False},
 
 			# Seperating out items that should be displayed as cost for a single item
 			"lam":{"cost": 521465,"name":"Lamborghini Aventador SVJ","emoji":":race_car:","single":True},
@@ -65,6 +64,9 @@ class General(commands.Cog):
 			"nev":{"cost": 2440000,"name":"Rimac Nevera","emoji":":race_car:","single":True},
 			"gef":{"cost": 1499,"name":"Nvidia GEFORCE RTX 3090","emoji":":desktop_computer:","single":True},
 			"rov":{"cost": 2725000000,"name":"trip to Mars + rover/drone/skycrane package","emoji":":robot: :rocket:","single":True}
+			"bez":{"cost": 74598,"name":"One minute of Jeff Bezos' time","emoji":":man_office_worker:","single":True},
+			"kid":{"cost": 200000,"name":"black market kidney","emoji":":detective: :aubergine:","single":True}
+			"ukb":{"cost": 850000000000,"name":"British banking bailout","emoji":":flag_gb: :bank:","single":True}
 			}
 		blacklist = {
 			"xdg":True,
