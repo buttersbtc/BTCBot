@@ -62,6 +62,7 @@ class General(commands.Cog):
 			"fc9":{"cost": 62000000,"name":"SpaceX Falcon 9 Launch","emoji":":rocket:","single":True},
 			"trn":{"cost": 139900,"name":"Audi RS e-tron GT 2022","emoji":":race_car:","single":True},
 			"bug":{"cost": 2990000,"name":"Bugatti Chiron 2020","emoji":":race_car:","single":True},
+			"nev":{"cost": 2440000,"name":"Rimac Nevera","emoji":":race_car:","single":True},
 			"gef":{"cost": 1499,"name":"Nvidia GEFORCE RTX 3090","emoji":":desktop_computer:","single":True},
 			"rov":{"cost": 2725000000,"name":"trip to Mars + rover/drone/skycrane package","emoji":":robot: :rocket:","single":True}
 			}
