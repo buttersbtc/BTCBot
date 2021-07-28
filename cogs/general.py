@@ -63,9 +63,9 @@ class General(commands.Cog):
 			"bug":{"cost": 2990000,"name":"Bugatti Chiron 2020","emoji":":race_car:","single":True},
 			"nev":{"cost": 2440000,"name":"Rimac Nevera","emoji":":race_car:","single":True},
 			"gef":{"cost": 1499,"name":"Nvidia GEFORCE RTX 3090","emoji":":desktop_computer:","single":True},
-			"rov":{"cost": 2725000000,"name":"trip to Mars + rover/drone/skycrane package","emoji":":robot: :rocket:","single":True}
+			"rov":{"cost": 2725000000,"name":"trip to Mars + rover/drone/skycrane package","emoji":":robot: :rocket:","single":True},
 			"bez":{"cost": 74598,"name":"One minute of Jeff Bezos' time","emoji":":man_office_worker:","single":True},
-			"kid":{"cost": 200000,"name":"black market kidney","emoji":":detective: :aubergine:","single":True}
+			"kid":{"cost": 200000,"name":"black market kidney","emoji":":detective: :aubergine:","single":True},
 			"ukb":{"cost": 850000000000,"name":"British banking bailout","emoji":":flag_gb: :bank:","single":True}
 			}
 		blacklist = {
