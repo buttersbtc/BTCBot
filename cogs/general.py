@@ -36,7 +36,7 @@ class General(commands.Cog):
 			"mac":{"cost": 5.71,"name":"Big Macs","emoji":":hamburger:","single":False},
 			"mcr":{"cost": 4.29,"name":"McRibs","emoji":":pig2:","single":False},
 			"cru":{"cost": 2.99,"name":"Crunchwraps Supreme","emoji":":taco:","single":False},
-			"but":{"cost": .5,"name":"Sticks of Butter","emoji":":butter:","single":False},
+			"but":{"cost": .75,"name":"Sticks of Butter","emoji":":butter:","single":False},
 			"coldcards":{"cost": 119.27,"name":"Coldcards","emoji":":pager:","single":False},
 			"egg":{"cost": 0.1208333,"name":"Large Eggs","emoji":":egg:","single":False},
 			"420":{"cost": 200,"name":"Ounces of Marijuana","emoji":":maple_leaf:","single":False},
