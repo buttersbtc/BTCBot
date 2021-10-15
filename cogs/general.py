@@ -99,6 +99,15 @@ class General(commands.Cog):
 			await ctx.channel.send("**Other Supported Items**: " + keys)
 			await ctx.channel.send("**!p <item> sats** will give you the cost of the item in satoshis")
 			return
+		
+		if arg == "ath":
+			api = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false"
+			r = requests.get(api)
+			data = json.loads(r.text)
+			price = data[0]["ath"]
+			message_string = "**Bitcoin ATH** is currently **$" + price + "**"
+			await ctx.send(message_string)
+			return
 
 		#route to other func if exists
 		func = getattr(self, arg , None)
