@@ -100,7 +100,7 @@ class General(commands.Cog):
 			await ctx.channel.send("**!p <item> sats** will give you the cost of the item in satoshis")
 			return
 		
-		if arg == 'ath':
+		if arg == "ath":
 			await ctx.channel.send("**Bitcoin ATH** is currently **$64,863.10**")
 			return
 					       
