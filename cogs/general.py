@@ -251,8 +251,7 @@ class General(commands.Cog):
 		r = requests.get(api)
 		data = json.loads(r.text)
 		price = data[0]["ath"]
-		price_str = str(price)
-		message_string = "**Bitcoin ATH** is currently **$" + price_str + "**"
+		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(float(price))
 		await ctx.send(message_string)
 
 def setup(bot):
