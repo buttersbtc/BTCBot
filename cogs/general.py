@@ -243,6 +243,16 @@ class General(commands.Cog):
 		message_string = "**1 Bitcoin** costs **{:,.0f}** hours".format(float(price))
 
 		await ctx.send(message_string)
+		
+	# Fetches Bitcoin all time high (ATH) price
+	@commands.command()
+	async def ath(self, ctx):
+		api = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false"
+		r = requests.get(api)
+		data = json.loads(r.text)
+		price = data[0]["ath"]
+		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(float(price))
+		await ctx.send(message_string)
 
 def setup(bot):
 	bot.add_cog(General(bot))
