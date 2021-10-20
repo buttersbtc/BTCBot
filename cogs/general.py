@@ -37,7 +37,7 @@ class General(commands.Cog):
 			"mac":{"cost": 5.71,"name":"Big Macs","emoji":":hamburger:","single":False},
 			"mcr":{"cost": 4.29,"name":"McRibs","emoji":":pig2:","single":False},
 			"cru":{"cost": 2.99,"name":"Crunchwraps Supreme","emoji":":taco:","single":False},
-			"but":{"cost": .5,"name":"Sticks of Butter","emoji":":butter:","single":False},
+			"but":{"cost": .75,"name":"Sticks of Butter","emoji":":butter:","single":False},
 			"coldcards":{"cost": 119.27,"name":"Coldcards","emoji":":pager:","single":False},
 			"egg":{"cost": 0.1208333,"name":"Large Eggs","emoji":":egg:","single":False},
 			"420":{"cost": 200,"name":"Ounces of Marijuana","emoji":":maple_leaf:","single":False},
@@ -243,6 +243,16 @@ class General(commands.Cog):
 		price = float(price)/float(wage)
 		message_string = "**1 Bitcoin** costs **{:,.0f}** hours".format(float(price))
 
+		await ctx.send(message_string)
+		
+	# Fetches Bitcoin all time high (ATH) price
+	@commands.command()
+	async def ath(self, ctx):
+		api = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false"
+		r = requests.get(api)
+		data = json.loads(r.text)
+		price = data[0]["ath"]
+		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(float(price))
 		await ctx.send(message_string)
 
 def setup(bot):
