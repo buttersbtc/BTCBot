@@ -3,6 +3,7 @@ from discord.ext import commands
 import requests
 import json
 from random import randrange
+import math
 
 class General(commands.Cog):
 	"""General commands"""
@@ -63,9 +64,9 @@ class General(commands.Cog):
 			"bug":{"cost": 2990000,"name":"Bugatti Chiron 2020","emoji":":race_car:","single":True},
 			"nev":{"cost": 2440000,"name":"Rimac Nevera","emoji":":race_car:","single":True},
 			"gef":{"cost": 1499,"name":"Nvidia GEFORCE RTX 3090","emoji":":desktop_computer:","single":True},
-			"rov":{"cost": 2725000000,"name":"trip to Mars + rover/drone/skycrane package","emoji":":robot: :rocket:","single":True}
+			"rov":{"cost": 2725000000,"name":"trip to Mars + rover/drone/skycrane package","emoji":":robot: :rocket:","single":True},
 			"bez":{"cost": 74598,"name":"One minute of Jeff Bezos' time","emoji":":man_office_worker:","single":True},
-			"kid":{"cost": 200000,"name":"black market kidney","emoji":":detective: :aubergine:","single":True}
+			"kid":{"cost": 200000,"name":"black market kidney","emoji":":detective: :aubergine:","single":True},
 			"ukb":{"cost": 850000000000,"name":"British banking bailout","emoji":":flag_gb: :bank:","single":True}
 			}
 		blacklist = {
@@ -165,7 +166,7 @@ class General(commands.Cog):
 				if arg2 == "sats":
 					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:,.0f}" + " Satoshis**"
 				else:
-					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:.2f}" + " Bitcoin**"
+					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:,.2f}" + " Bitcoin**"
 		else:
 			currencyStr = currencyFormatDic["default"] + arg.upper()
 		
