@@ -2,8 +2,11 @@ import discord
 from discord.ext import commands
 import requests
 import json
+import datetime
 import os
 from dotenv import load_dotenv
+from captcha.image import ImageCaptcha
+import math
 
 class Utilities(commands.Cog):
 	def __init__(self, bot):
@@ -118,7 +121,7 @@ class Utilities(commands.Cog):
 			"trezor": {"tags": ["hardware", "hot"], "link":"https://trezor.io/"},
 			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy"], "link":"https://breez.technology/"},
 			"wallet-of-satoshi": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://www.walletofsatoshi.com/"},
-			"blw": {"tags": ["android", "hot", "lightning", "node", "spv", "advanced"], "link":"https://lightning-wallet.com/"},
+			"sbw": {"tags": ["android", "hot", "lightning", "node", "spv", "advanced"], "link":"https://lightning-wallet.com/"},
 			}
 		resp = " \n"
 		for wallet in walletDic:
@@ -141,12 +144,17 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def dev(self, ctx, *args):
-		msg = "<https://github.com/bitcoin/bitcoin> <- the repo\n<https://webchat.freenode.net/?channels=bitcoin-core-dev> <- the irc\nhttps://bitcoin.stackexchange.com/ <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack"
+		msg = "<https://github.com/bitcoin/bitcoin> <- the repo\n<https://webchat.freenode.net/?channels=bitcoin-core-dev> <- the irc\n<https://bitcoin.stackexchange.com>/ <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack"
+		await ctx.channel.send(msg)
+
+	@commands.command()
+	async def job(self, ctx, *args):
+		msg = "Bitcoin job boards and resources: \n<https://pompcryptojobs.com/>\n<https://reddit.com/r/Jobs4Bitcoins>\n<https://reddit.com/r/Jobs4Bitcoin>\n<https://strike.me/jobs>\n<https://www.kraken.com/careers>\n<https://bitstamp.talentlyft.com/>\n<https://www.bitmex.com/careers>\n<https://angel.co/company/river-financial/jobs>\n<https://bitcoinerjobs.co/>"
 		await ctx.channel.send(msg)
 
 	@commands.command()
 	async def quantum(self, ctx, *args):
-		msg = "A general purpose and stable high qubit quantum computer (which doesn't exist and no one is sure if will ever exist) can run an algorithm called shor's. Shor's is used to factor numbers.  You can thus use shor's to derive a private key from a public key. Bitcoin exposes public keys in the scenarios of certain address reuse and when certain transactions are sitting in the mempool, as well as very old 2009 era pay to pubkey coinbases. What will happen if such a computer ever exists is slowly attempts to mine the most static of these coins, probably the old coinbases, will occur. Once this happens everyone will know there is a quantum actor and avoid address reuse or in the worst case just move to a new address format. It's also important to remember that a quantum attack takes considerable time, not dissimilar to mining, as it's the process for searching for a private key."
+		msg = "A general purpose and stable high qubit quantum computer (which doesn't exist and no one is sure if will ever exist) can run an algorithm called shor's. Shor's is used to factor numbers.  You can thus use shor's to derive a private key from a public key. Bitcoin exposes public keys in the scenarios of certain address reuse and when certain transactions are sitting in the mempool, as well as very old 2009 era pay to pubkey coinbases and new taproot transactions. What will happen if such a computer ever exists is slowly attempts to mine the most static of these coins, probably the old coinbases, will occur. Once this happens everyone will know there is a quantum actor and avoid address reuse or in the worst case just move to a new address format. It's also important to remember that a quantum attack takes considerable time, not dissimilar to mining, as it's the process for searching for a private key. Another Algorithm, called grovers, will enable a new kind of mining ASIC, similar to how generations of PoW devices have always functioned."
 		await ctx.channel.send(msg)
 
 	@commands.command()
@@ -160,7 +168,40 @@ class Utilities(commands.Cog):
 			embed.set_image(url="https://bitcoincharts.com/charts/chart.png?width=940&m=" + exchange + "USD&SubmitButton=Draw&r=" + timespan + "&i=&c=0&s=&e=&Prev=&Next=&t=S&b=&a1=&m1=10&a2=&m2=25&x=0&i1=&i2=&i3=&i4=&v=1&cv=0&ps=0&l=0&p=0&")
 			msg = "https://bitcoincharts.com/charts/chart.png?width=940&m=" + exchange + "USD&SubmitButton=Draw&r=" + timespan + "&i=&c=0&s=&e=&Prev=&Next=&t=S&b=&a1=&m1=10&a2=&m2=25&x=0&i1=&i2=&i3=&i4=&v=1&cv=0&ps=0&l=0&p=0&";
 			await ctx.channel.send(embed=embed)
-		
+	
+	@commands.command()
+	async def ban(self, ctx, *args):
+		if hasattr(ctx.message.author, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles):
+			n=0
+			for user in ctx.message.mentions:
+				await user.ban()
+				n = n+1
+			await ctx.channel.send(str(n) + " users banned")
+		else:
+			await ctx.channel.send("No permission.")
+
+	@commands.command()
+	async def banafter(self, ctx, *args):
+		if hasattr(ctx.message.author, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles):
+			n=0
+			start = (await ctx.fetch_message(args[0])).created_at
+			end = datetime.datetime.now(tz=None) if len(args) < 2 else (await ctx.fetch_message(args[1])).created_at
+			for message in await ctx.message.channel.history(after=start, before=end).flatten():
+				await ctx.guild.ban(message.author)
+				n = n+1
+			await ctx.channel.send(str(n) + " users banned")
+		else:
+			await ctx.channel.send("No permission.")
+
+	@commands.command()
+	async def captcha(self, ctx, *args):
+		print("in captcha")
+		member = ctx.message.author
+		await member.send("Please complete the following captcha:")
+		image = ImageCaptcha()
+		data = image.generate(str(round(math.sqrt(int(ctx.message.author.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))))
+		await member.send(file=discord.File(data, 'captcha.png'))
+
 
 def setup(bot):
 	bot.add_cog(Utilities(bot))
