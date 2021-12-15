@@ -3,6 +3,7 @@ from discord.ext import commands
 import requests
 import json
 from random import randrange
+import math
 
 class General(commands.Cog):
 	"""General commands"""
@@ -173,7 +174,7 @@ class General(commands.Cog):
 				if arg2 == "sats":
 					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:,.0f}" + " Satoshis**"
 				else:
-					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:.2f}" + " Bitcoin**"
+					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:,.2f}" + " Bitcoin**"
 		else:
 			if arg2 == "sats":
 				currencyStr = "**1 " + arg.upper()  + "** is **" + "{:,.0f} Satoshis**"
