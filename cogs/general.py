@@ -150,11 +150,19 @@ class General(commands.Cog):
 				price = itemDic[item]["cost"]/float(price)
 				if arg2 == "sats":
 					price = price * 100000000
+		else:
+			if arg2 == "sats":
+				price = 100000000/float(price)
+
 
 
 		currencyStr = ""
 		if arg in currencyFormatDic:
-			currencyStr = currencyFormatDic[arg]
+			if arg2 == "sats":
+				currencyStr = "**1 " + arg.upper()  + "** is **" + "{:,.0f} Satoshis**"
+			else:
+				currencyStr = currencyFormatDic[arg]
+
 		elif isItem:
 			if itemDic[item]["single"] == False:
 				if arg2 == "sats":
@@ -167,7 +175,11 @@ class General(commands.Cog):
 				else:
 					currencyStr = "**" + itemDic[item]["emoji"] + " 1 " + itemDic[item]["name"] + "**" + " costs **" + "{:.2f}" + " Bitcoin**"
 		else:
-			currencyStr = currencyFormatDic["default"] + arg.upper()
+			if arg2 == "sats":
+				currencyStr = "**1 " + arg.upper()  + "** is **" + "{:,.0f} Satoshis**"
+			else:
+				currencyStr = currencyFormatDic["default"] + arg.upper()
+
 		
 		price = currencyStr.format(float(price))
 		
@@ -175,7 +187,10 @@ class General(commands.Cog):
 		if isItem:
 			message_string = price
 		else:
-			message_string = "**1 Bitcoin** is worth **" + price + "**"
+			if arg2 == "sats":
+				message_string = price
+			else:	
+				message_string = "**1 Bitcoin** is worth **" + price + "**"
 		
 		await ctx.send(message_string)
 
