@@ -91,6 +91,10 @@ class General(commands.Cog):
 		if arg in blacklist:
 			return
 
+		if arg =="sats":
+			await ctx.channel.send("**1 Bitcoin** is equal to **100,000,000 Satoshis**")
+			return
+			
 		if arg == "help":
 			await ctx.channel.send("**Currency Eamples**: !p gbp, !p cad, !p xau")
 			keys = ""
