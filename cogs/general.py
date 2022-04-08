@@ -49,6 +49,7 @@ class General(commands.Cog):
 			"avo":{"cost": 10,"name":"Serves of Avocado Toast","emoji":":avocado:","single":False},
 			"chicken":{"cost": 2.85,"name":"Rhode Island Red Chickens","emoji":":chicken:","single":False},
 			"nana":{"cost": 0.23,"name":"Bananas","emoji":":banana:","single":False},
+			"bre":{"cost": 2.04,"name":"Loaves of bread","emoji":":bread:","single":False},
 
 			# Seperating out items that should be displayed as cost for a single item
 			"lam":{"cost": 521465,"name":"Lamborghini Aventador SVJ","emoji":":race_car:","single":True},
