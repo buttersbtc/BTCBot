@@ -1,3 +1,4 @@
+from operator import truediv
 import discord
 from discord.ext import commands
 import requests
@@ -122,27 +123,33 @@ class General(commands.Cog):
 			arg = "usd"
 		#call the api for our currency
 		try:
-			api = "http://preev.com/pulse/units:btc+" + arg + "/sources:bitstamp+kraken"
+			api = "https://api.coincap.io/v2/assets/bitcoin"
 			r = requests.get(api)
 			data = json.loads(r.text)
+
+			api_rates = "https://api.coincap.io/v2/rates/"
+			r_rates = requests.get(api_rates)
+			data_rates = json.loads(r_rates.text)
+
 		except:
 			return
-		#look through the response for anything we can use, thanks for the consistent response format preev
+
+		price = data["data"]["priceUsd"]
 		skipConvert = False
-		try:
-			price = data["btc"]["usd"]["bitstamp"]["last"]
-		except:
-			try:
-				price = data["btc"][arg]["bitstamp"]["last"]
-				skipConvert = True
-			except:
-				price = data["btc"][arg]["kraken"]["last"]
-				skipConvert = True
 
 		#convert if necessary or do item calcs.
+		found_currency = False
+
 		if arg != "usd" and not skipConvert:
-			conversion = data[arg]["usd"]["other"]["last"]
-			price = float(price)/float(conversion)
+		
+			for i in data_rates["data"]:
+				if i["symbol"] == arg.upper():
+					found_currency = True
+					price = float(price) / float(i["rateUsd"])
+		
+		if found_currency == False:
+			arg = "USD"
+		
 		if isItem:
 			if itemDic[item]["single"] == False:
 				if itemDic[item]["cost"] < float(price) and arg2=="sats":
