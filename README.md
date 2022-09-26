@@ -48,4 +48,5 @@ Installation
 Run program
 
 >cd cogs
+
 >python3 general.py
