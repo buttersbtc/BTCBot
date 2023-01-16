@@ -45,7 +45,7 @@ class Utilities(commands.Cog):
 	async def exchanges(self, ctx, *args):
 		exchangeDic = {
 			"international": "Bitstamp, Coinbase, Gemini, Kraken, OKCoin, Binance",
-			"p2p": "Bisq, HodlHodl, BitQuickBitcoin, Local Bitcoins, PaxfulBitcoin",
+			"p2p": "Bisq, robosats, HodlHodl, BitQuickBitcoin, Local Bitcoins, PaxfulBitcoin",
 			"bahrain": "Rain",
 			"indonesia":"Indodax",
 			"israel": "Bits of Gold",
@@ -84,7 +84,10 @@ class Utilities(commands.Cog):
 			arg += str(a) + " "
 		arg = arg[0:len(arg)-1]
 		if arg.lower() in exchangeDic:
-			await ctx.channel.send("Exchanges in " + arg + ": " + exchangeDic[arg.lower()])
+			send = "Exchanges in " + arg + ": " + exchangeDic[arg.lower()]
+			if (arg.lower() != "p2p"):
+				send += ". When using custodial exchanges, be sure to withdraw your coins to your own wallet after buying! P2P is highly recommended over centralized exchanges."
+			await ctx.channel.send(send)
 		else:
 			keys = ""
 			for k in exchangeDic.keys():
