@@ -12,7 +12,7 @@ class Utilities(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	# Report to r/bitcoin mod-log. Subsitute other channel ID's as necessary
+	# Report to mod-log channel. Subsitute other channel ID's as necessary
 	#todo get channel by ID
 	@commands.command()
 	async def report(self, ctx):
@@ -38,8 +38,8 @@ class Utilities(commands.Cog):
 			user = ", " + reply.author.mention
 		else:
 			user = ""
-		await ctx.channel.send("Welcome to the r/Bitcoin chat" + user + ". Please review the #rules while you're here; primarily no altcoin, stock, or off topic discussion. Also please read our newcomers faq at https://www.reddit.com/r/Bitcoin/comments/i19uta/bitcoin_newcomers_faq_please_read/. For additional learning resources and information please check out https://lopp.net/bitcoin.html, a community curated resource list. To report users for breaking these rules please reply to the rulebreaking comment and type !report <reason>.")
-
+		await ctx.channel.send("Welcome to our community Bitcoin chat" + user + "! Please review the #rules while you're here; primarily no altcoin, stock, or off topic discussion. If you’re new to bitcoin, please check out https://lopp.net/bitcoin.html, a community curated list of educational resources, tools, and information. To report users breaking the rules, please reply to the message in question with !report <reason>.")
+	
 	
 	@commands.command()
 	async def exchanges(self, ctx, *args):
