@@ -144,7 +144,7 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def dev(self, ctx, *args):
-		msg = "<https://github.com/bitcoin/bitcoin> <- the repo\n<https://webchat.freenode.net/?channels=bitcoin-core-dev> <- the irc\n<https://bitcoin.stackexchange.com>/ <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack"
+		msg = "<https://github.com/bitcoin/bitcoin> <- the repo\n<https://webchat.freenode.net/?channels=bitcoin-core-dev> <- the irc\n<https://bitcoin.stackexchange.com>/ <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack\nhttps://bitcoincore.reviews/ <- The PR review club\nhttps://learning.chaincode.com/ <- Chaincodes educational resource\nhttps://obc.256k1.dev/ <- Detailed Bitcoin repo explaination\nhttps://jonatack.github.io/articles <- Compiling, Reviewing, and Contributing to the Bitcoin codebase"
 		await ctx.channel.send(msg)
 
 	@commands.command()
