@@ -12,7 +12,7 @@ class Utilities(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	# Report to r/bitcoin mod-log. Subsitute other channel ID's as necessary
+	# Report to mod-log channel. Subsitute other channel ID's as necessary
 	#todo get channel by ID
 	@commands.command()
 	async def report(self, ctx):
@@ -38,14 +38,14 @@ class Utilities(commands.Cog):
 			user = ", " + reply.author.mention
 		else:
 			user = ""
-		await ctx.channel.send("Welcome to the r/Bitcoin chat" + user + ". Please review the #rules while you're here; primarily no altcoin, stock, or off topic discussion. Also please read our newcomers faq at https://www.reddit.com/r/Bitcoin/comments/i19uta/bitcoin_newcomers_faq_please_read/. For additional learning resources and information please check out https://lopp.net/bitcoin.html, a community curated resource list. To report users for breaking these rules please reply to the rulebreaking comment and type !report <reason>.")
-
+		await ctx.channel.send("Welcome to our community Bitcoin chat" + user + "! Please review the #rules while you're here; primarily no altcoin, stock, or off topic discussion. If you’re new to bitcoin, please check out https://lopp.net/bitcoin.html, a community curated list of educational resources, tools, and information. To report users breaking the rules, please reply to the message in question with !report <reason>.")
+	
 	
 	@commands.command()
 	async def exchanges(self, ctx, *args):
 		exchangeDic = {
 			"international": "Bitstamp, Coinbase, Gemini, Kraken, OKCoin, Binance",
-			"p2p": "Bisq, HodlHodl, BitQuickBitcoin, Local Bitcoins, PaxfulBitcoin",
+			"p2p": "Bisq, robosats, HodlHodl, BitQuickBitcoin, Local Bitcoins, PaxfulBitcoin",
 			"bahrain": "Rain",
 			"indonesia":"Indodax",
 			"israel": "Bits of Gold",
@@ -59,11 +59,11 @@ class Utilities(commands.Cog):
 			"taiwan": "MaiCoin MAX, BitoPro",
 			"turkey": "Koinim",
 			"uae": "BitOasis, Karsha, Rain",
-			"europe""": "Kraken, Coinbase, AnyCoin Direct, Binance, Bitcoin.de, bitFlyer, BitPanda, Bitvavo, Kriptomat, Paymium, The Rock Trading",
+			"europe""": "Kraken, Coinbase, AnyCoin Direct, Binance, Bitcoin.de, bitFlyer, BitPanda, Bitvavo, Kriptomat, Paymium, The Rock Trading, Relai",
 			"netherlands": "Bitvavo",
 			"poland": "BitBay",
 			"ukraine": "Kuna",
-			"uk": "Bitstamp, Coinbase, Gemini, Kraken, OKCoin, Binance, Bittylicious, CoinCorner, Coinfloor, CoinJar",
+			"uk": "Bitstamp, Coinbase, Gemini, Kraken, OKCoin, Binance, Bittylicious, CoinCorner, Coinfloor, CoinJar, Relai",
 			"nigeria": "Luno, BuyCoins",
 			"south africa": "Luno",
 			"uganda": "Binance",
@@ -84,7 +84,10 @@ class Utilities(commands.Cog):
 			arg += str(a) + " "
 		arg = arg[0:len(arg)-1]
 		if arg.lower() in exchangeDic:
-			await ctx.channel.send("Exchanges in " + arg + ": " + exchangeDic[arg.lower()])
+			send = "Exchanges in " + arg + ": " + exchangeDic[arg.lower()]
+			if (arg.lower() != "p2p"):
+				send += ". When using custodial exchanges, be sure to withdraw your coins to your own wallet after buying! P2P is highly recommended over centralized exchanges."
+			await ctx.channel.send(send)
 		else:
 			keys = ""
 			for k in exchangeDic.keys():
