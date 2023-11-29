@@ -12,8 +12,6 @@ class Utilities(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 
-	# Report to mod-log channel. Subsitute other channel ID's as necessary
-	#todo get channel by ID
 	@commands.command()
 	async def report(self, ctx):
 		load_dotenv()
@@ -38,14 +36,13 @@ class Utilities(commands.Cog):
 			user = ", " + reply.author.mention
 		else:
 			user = ""
-		await ctx.channel.send("Welcome to our community Bitcoin chat" + user + "! Please review the #rules while you're here; primarily no altcoin, stock, or off topic discussion. If you’re new to bitcoin, please check out https://lopp.net/bitcoin.html, a community curated list of educational resources, tools, and information. To report users breaking the rules, please reply to the message in question with !report <reason>.")
+		await ctx.channel.send("Welcome to our community Bitcoin chat" + user + "! Please review the #rules while you're here; primarily no altcoin, stock, or off topic discussion. If you’re new to bitcoin, please check out https://lopp.net/bitcoin.html, a community curated list of educational resources, tools, and information.")
 	
 	
 	@commands.command()
 	async def exchanges(self, ctx, *args):
 		exchangeDic = {
-			"international": "Bitstamp, Coinbase, Gemini, Kraken, OKCoin, Binance",
-			"p2p": "Bisq, robosats, HodlHodl, BitQuickBitcoin, Local Bitcoins, PaxfulBitcoin",
+			"p2p": "Bisq, robosats, HodlHodl",
 			"bahrain": "Rain",
 			"indonesia":"Indodax",
 			"israel": "Bits of Gold",
@@ -59,7 +56,7 @@ class Utilities(commands.Cog):
 			"taiwan": "MaiCoin MAX, BitoPro",
 			"turkey": "Koinim",
 			"uae": "BitOasis, Karsha, Rain",
-			"europe""": "Kraken, Coinbase, AnyCoin Direct, Binance, Bitcoin.de, bitFlyer, BitPanda, Bitvavo, Kriptomat, Paymium, The Rock Trading, Relai",
+			"europe": "Relai",
 			"netherlands": "Bitvavo",
 			"poland": "BitBay",
 			"ukraine": "Kuna",
@@ -67,9 +64,9 @@ class Utilities(commands.Cog):
 			"nigeria": "Luno, BuyCoins",
 			"south africa": "Luno",
 			"uganda": "Binance",
-			"canada": "BullBitcoin, Newton, Kraken, Shakepay, Bitbuy, Bisq, Canadian Bitcoins, Coinberry, Coinsmart, NDAX",
+			"canada": "BullBitcoin, BitcoinWell",
 			"mexico": "Bitso, Volabit",
-			"usa": "Kraken, Coinbase, CEX IO, Bitstamp, bitFlyer, Bittrex, Gemini, itBit, River Financial, Swan Bitcoin, eToro, Binance, LocalBitcoins, Changelly, Coinmama, Bitpanda, Blockchain, BitcoinIRA, CoinSwitch, KuCoin, CashApp, Bisq, Paxful",
+			"usa": "River Financial, CashApp, Strike",
 			"argentina": "ArgenBTC, SatoshiTango",
 			"brazil": "Brasil Bitcoin, Mercado Bitcoin, NovaDAX, Walltime",
 			"chile": "Buda",
@@ -110,22 +107,24 @@ class Utilities(commands.Cog):
 	@commands.command()
 	async def wallets(self, ctx, *args):
 		walletDic = {
-			"electrum": {"tags": ["pc", "windows", "linux", "mac", "android", "hot", "advanced", "lightning", "2fa", "node-compatible", "spv"], "link":"https://electrum.org/"},
-			"sparrow": {"tags": ["pc", "windows", "linux", "mac", "hot", "advanced", "node-compatible"], "link":"https://sparrowwallet.com/"},
-			"core": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoincore.org/"},
-			"knots": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoinknots.org/"},
-			"joinmarket": {"tags": ["pc", "windows", "hot", "privacy", "coinjoin"], "link":"https://www.keepitsimplebitcoin.com/joinmarket/"},
-			"coldcard": {"tags": ["hardware", "cold", "requires-wallet"], "link":"https://coldcardwallet.com/"},
-			"green": {"tags": ["android", "ios", "2fa", "pc", "windows", "linux", "mac", "hot", "spv"], "link":"https://blockstream.com/green/"},
+			"electrum": {"tags": ["pc", "windows", "linux", "mac", "android", "hot", "airgap", "psbt", "timelocks", "recommended", "multisig", "advanced", "lightning", "2fa", "node-compatible", "spv"], "link":"https://electrum.org/"},
+			"sparrow": {"tags": ["pc", "windows", "linux", "mac", "hot", "advanced", "multisig", "node-compatible", "recommended"], "link":"https://sparrowwallet.com/"},
+			"core": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced", "recommended"], "link":"https://bitcoincore.org/"},
+			"knots": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced", "recommended"], "link":"https://bitcoinknots.org/"},
+			"joinmarket": {"tags": ["pc", "windows", "hot", "privacy", "coinjoin", "recommended"], "link":"https://www.keepitsimplebitcoin.com/joinmarket/"},
+			"coldcard": {"tags": ["hardware", "cold", "requires-wallet", "multisig", "node-compatible", "psbt", "airgap", "recommended"], "link":"https://coldcardwallet.com/"},
+			"green": {"tags": ["android", "ios", "2fa", "pc", "windows", "linux", "mac", "multisig", "hot", "spv"], "link":"https://blockstream.com/green/"},
 			"phoenix": {"tags": ["android", "hot", "lightning", "easy"], "link":"https://phoenix.acinq.co/"},
 			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "node-compatible", "advanced", "partial-custody"], "link":"https://github.com/lightningnetwork/lnd/releases"},
-			"c-lightning": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "advanced"], "link":"https://github.com/ElementsProject/lightning/releases"},
+			"c-lightning": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "node-compatible", "advanced"], "link":"https://github.com/ElementsProject/lightning/releases"},
 			"blue": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy", "node-compatible"], "link":"https://bluewallet.io/"},
 			"mycelium": {"tags": ["android", "ios", "hot", "local-trader"], "link":"https://wallet.mycelium.com/"},
-			"trezor": {"tags": ["hardware", "hot"], "link":"https://trezor.io/"},
+			"seedsigner": {"tags": ["hardware", "airgap", "diy", "cold", "recommended"], "link":"https://seedsigner.com/"},
+			"yeticold": {"tags": ["hardware", "airgap", "diy", "cold", "recommended"], "link":"https://yeticold.com/"},
+			"glacier-protocol": {"tags": ["hardware", "airgap", "diy", "cold"], "link":"https://glacierprotocol.org/"},
 			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy"], "link":"https://breez.technology/"},
 			"wallet-of-satoshi": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://www.walletofsatoshi.com/"},
-			"sbw": {"tags": ["android", "hot", "lightning", "node", "spv", "advanced"], "link":"https://lightning-wallet.com/"},
+			"liana": {"tags": ["pc", "mac", "windows", "hot", "timelocks", "multisig", "cold", "easy", "advanced"], "link":"https://lightning-wallet.com/"},
 			}
 		resp = " \n"
 		for wallet in walletDic:
@@ -148,7 +147,7 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def dev(self, ctx, *args):
-		msg = "<https://github.com/bitcoin/bitcoin> <- the repo\n<https://web.libera.chat/#bitcoin-core-dev> <- the irc\n<https://github.com/bitcoin-core/bitcoin-devwiki/wiki/General-IRC-meeting> <- the dev meetings\n<https://bitcoincore.reviews/> the PR review club meetings\n<https://bitcoin.stackexchange.com> <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack"
+		msg = "\n<https://github.com/bitcoin/bitcoin> <- the repo\n<https://web.libera.chat/#bitcoin-core-dev> <- the irc\n<https://github.com/bitcoin-core/bitcoin-devwiki/wiki/General-IRC-meeting> <- the dev meetings\n<https://bitcoincore.reviews/> the PR review club meetings\n<https://bitcoin.stackexchange.com> <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack, <https://delvingbitcoin.org/> <- technical discussion community"
 		await ctx.channel.send(msg)
 
 	@commands.command()
@@ -194,6 +193,106 @@ class Utilities(commands.Cog):
 		data = image.generate(str(round(math.sqrt(int(ctx.message.author.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))))
 		await member.send(file=discord.File(data, 'captcha.png'))
 
+	# Fetches Bitcoin TX by hash
+	@commands.command()
+	async def tx(self, ctx, *args):
+		api = "https://blockstream.info/api/tx/" + args[0]
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+		except:
+			await ctx.send("Invalid argument, please provide a valid tx hash")
+			return
+		confirmed = "Unconfirmed"
+		block = ""
+		time = ""
+		if data["status"]["confirmed"]:
+			confirmed = "Confirmed"
+			block = '{:,.0f}'.format(data["status"]["block_height"])
+			time = datetime.datetime.utcfromtimestamp(data["status"]["block_time"]).strftime("%d/%m/%Y, %H:%M:%S") + " UTC"
+		amount = 0
+		for vout in data["vout"]:
+			amount+=vout["value"]
+		fee = data["fee"]
+		size = data["weight"]/4
+		feerate = fee/size
+		feepercent = fee/amount*100
+		inputs = len(data["vin"])
+		outputs = len(data["vout"])
+
+		
+
+		message_string = '''```TX {txid}
+{confirmed} {block} {time}
+Sent {amount} sat for {fee} sat fee ({feerate} sat/vbtye, {feepercent}%)
+{inputs} inputs, {outputs} outputs, {size} vbytes
+```'''.format(txid=data["txid"], confirmed=confirmed, block=block, time=time, amount='{:,.0f}'.format(amount), fee='{:,.0f}'.format(fee), feerate='{:,.2f}'.format(feerate), feepercent='{:,.2f}'.format(feepercent), inputs=inputs, outputs=outputs, size='{:,.2f}'.format(size))
+		await ctx.send(message_string)
+
+
+	# Fetches Bitcoin address info
+	@commands.command()
+	async def address(self, ctx, *args):
+		api = "https://blockstream.info/api/address/" + args[0]
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+		except:
+			await ctx.send("Invalid argument, please provide a valid address")
+			return
+		balance = data["chain_stats"]["funded_txo_sum"] - data["chain_stats"]["spent_txo_sum"]
+		mempoolAmt = data["mempool_stats"]["funded_txo_sum"] - data["mempool_stats"]["spent_txo_sum"]
+
+		message_string = '''```Address {address}
+Balance is {balance} sat
+Received {receivedCount} TXO for {receivedAmt} sat
+Sent {sentCount} TXO for {sentAmt} sat
+{mempoolCount} TX in mempool for {mempoolAmt} sat
+```'''.format(address=data["address"], balance='{:,.0f}'.format(balance), receivedCount='{:,.0f}'.format(data["chain_stats"]["funded_txo_count"]), receivedAmt='{:,.0f}'.format(data["chain_stats"]["funded_txo_sum"]), sentCount='{:,.0f}'.format(data["chain_stats"]["spent_txo_count"]), sentAmt='{:,.0f}'.format(data["chain_stats"]["spent_txo_sum"]), mempoolCount='{:,.0f}'.format(data["mempool_stats"]["tx_count"]), mempoolAmt='{:,.0f}'.format(mempoolAmt))
+		await ctx.send(message_string)
+
+	# Fetches Bitcoin mempool info from blockstreams mempool
+	@commands.command()
+	async def mempool(self, ctx, *args):
+		api = "https://blockstream.info/api/mempool"
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+		except:
+			await ctx.send("Unable to parse mempool data. Try again later.")
+			return
+		
+		brackets = [[0, 1000000], [1000000, 4000000], [4000000, 12000000], [12000000, 36000000]]
+		n=0
+		pendingVsize = 0
+		for entry in data["fee_histogram"]:
+			if n > len(brackets) - 1:
+				break
+			fee = entry[0]
+			vsize = entry[1]
+			if len(brackets[n]) <= 2:
+				brackets[n].append(fee)
+			sizeRange = brackets[n][1] - brackets[n][0]
+			if vsize + pendingVsize >= sizeRange:
+				brackets[n].append(fee)
+				brackets[n].append(vsize + pendingVsize)
+				n+=1
+				pendingVsize = vsize + pendingVsize - sizeRange
+			else:
+				pendingVsize+=vsize
+
+		message_string = '''```Blockstream's mempool has {count} TX and is {size} MB
+Total fees in mempool are {fees} BTC
+The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte and {range0topMB} sat/vbyte
+{range10}MB- {range11}MB = {range1bottomMB}-{range1topMB} sat/vbyte
+{range20}MB- {range21}MB = {range2bottomMB}-{range2topMB} sat/vbyte
+{range30}MB- {range31}MB  = {range3bottomMB}-{range3topMB} sat/vbyte
+```'''.format(count='{:,.0f}'.format(data["count"]), size='{:,.2f}'.format(data["vsize"]/1000000), fees='{:,.2f}'.format(data["total_fee"]/100000000), 
+			  range01='{:,.0f}'.format(brackets[0][1]/1000000), range0bottomMB='{:,.0f}'.format(brackets[0][3]), range0topMB='{:,.0f}'.format(brackets[0][2]), 
+			  range10='{:,.0f}'.format(brackets[1][0]/1000000), range11='{:,.0f}'.format(brackets[1][1]/1000000), range1bottomMB='{:,.0f}'.format(brackets[1][3]), range1topMB='{:,.0f}'.format(brackets[1][2]),
+			  range20='{:,.0f}'.format(brackets[2][0]/1000000), range21='{:,.0f}'.format(brackets[2][1]/1000000), range2bottomMB='{:,.0f}'.format(brackets[2][3]), range2topMB='{:,.0f}'.format(brackets[2][2]),
+			  range30='{:,.0f}'.format(brackets[3][0]/1000000), range31='{:,.0f}'.format(brackets[3][1]/1000000), range3bottomMB='{:,.0f}'.format(brackets[3][3]), range3topMB='{:,.0f}'.format(brackets[3][2]))
+		await ctx.send(message_string)
 
 async def setup(bot):
 	await bot.add_cog(Utilities(bot))
