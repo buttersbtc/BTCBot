@@ -293,7 +293,7 @@ class General(commands.Cog):
 		if data["status"]["confirmed"]:
 			confirmed = "Confirmed"
 			block = '{:,.0f}'.format(data["status"]["block_height"])
-			time = datetime.datetime.utcfromtimestamp(data["status"]["block_time"])
+			time = datetime.datetime.utcfromtimestamp(data["status"]["block_time"]) + "UTC"
 		amount = 0
 		for vout in data["vout"]:
 			amount+=vout["value"]
@@ -307,7 +307,7 @@ class General(commands.Cog):
 		
 
 		message_string = '''```TX {txid}
-{confirmed} {block} {time} UTC
+{confirmed} {block} {time}
 Sent {amount} sat for {fee} sat fee ({feerate} sat/vbtye, {feepercent}%)
 {inputs} inputs, {outputs} outputs, {size} vbytes
 ```'''.format(txid=data["txid"], confirmed=confirmed, block=block, time=time, amount='{:,.0f}'.format(amount), fee='{:,.0f}'.format(fee), feerate='{:,.2f}'.format(feerate), feepercent='{:,.2f}'.format(feepercent), inputs=inputs, outputs=outputs, size='{:,.2f}'.format(size))
