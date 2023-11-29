@@ -1,6 +1,12 @@
 # BTCBot
 A Discord BTC bot for listing price in various currencies and assets
 
+# Install:
+
+```pip install -r requirements.txt```
+
+# Configure
+
 Create a new file named .env in the same directory as btcbot.py with the following contents:
 
 >BOT_PREFIX=character-that-calls-bot, ex: !
@@ -40,3 +46,9 @@ Create a new file named .env in the same directory as btcbot.py with the followi
 >USER_ROLE=the role name of the role to apply to new users who complete anti-bot verification
 
 >MOD_ROLE=the role name for mods of the server
+
+>ENABLE_BAN_PATTERN=1 or 0 to enable or disable ban patterns
+
+>BAN_PATTERN=regex pattern array matching auto-banned users
+
+# Run

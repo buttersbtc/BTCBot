@@ -5,6 +5,8 @@ import requests
 import json
 from random import randrange
 import math
+import datetime
+import functools
 
 class General(commands.Cog):
 	"""General commands"""
@@ -225,14 +227,7 @@ class General(commands.Cog):
 	async def cat(self, ctx):
 		message_string = "**:black_cat:** stop trying to price cats!"
 		await ctx.send(message_string)
-		
-	# Fox got bear's tail
-	@commands.command()
-	async def fox(self, ctx):
-		message_string = "**:fox:** 1 Fox is worth 1 Tail of a bear :polar_bear:"
-		await ctx.send(message_string)
 	
-
 	# old ester egg spam
 	@commands.command()
 	async def strong(self, ctx):
@@ -283,5 +278,60 @@ class General(commands.Cog):
 		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(float(price))
 		await ctx.send(message_string)
 
-def setup(bot):
-	bot.add_cog(General(bot))
+	# Fetches Bitcoin TX by hash
+	@commands.command()
+	async def tx(self, ctx, *args):
+		api = "https://blockstream.info/api/tx/" + args[0]
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+		except:
+			await ctx.send("Invalid argument, please provide a valid tx hash")
+			return
+		confirmed = "Unconfirmed"
+		block = ""
+		time = ""
+		if data["status"]["confirmed"]:
+			confirmed = "Confirmed"
+			block = data["status"]["block_height"]
+			time = datetime.datetime.utcfromtimestamp(data["status"]["block_time"])
+		amount = functools.reduce(lambda a, b: a["value"] + b["value"], data["vout"])
+		fee = data["fee"]
+		size = data["weight"]/4
+		feerate = fee/size
+		feepercent = fee/amount*100
+		inputs = len(data["vin"])
+		outputs = len(data["vout"])
+
+		message_string = '''```TX {txid}
+{confirmed} {block} {time} UTC
+Sent {amount} sat for {fee} sat fee ({feerate} sat/vbtye, {feepercent}%)
+{inputs} inputs, {outputs} outputs, {size} vbytes
+```'''.format(txid=data["txid"], confirmed=confirmed, block='{:,.0f}'.format(block), time=time, amount='{:,.0f}'.format(amount), fee='{:,.0f}'.format(fee), feerate='{:,.2f}'.format(feerate), feepercent='{:,.2f}'.format(feepercent), inputs=inputs, outputs=outputs, size='{:,.2f}'.format(size))
+		await ctx.send(message_string)
+
+
+	# Fetches Bitcoin address info
+	@commands.command()
+	async def address(self, ctx, *args):
+		api = "https://blockstream.info/api/address/" + args[0]
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+		except:
+			await ctx.send("Invalid argument, please provide a valid address")
+			return
+		balance = data["chain_stats"]["funded_txo_sum"] - data["chain_stats"]["spent_txo_sum"]
+		mempoolAmt = data["mempool_stats"]["funded_txo_sum"] - data["mempool_stats"]["spent_txo_sum"]
+
+		message_string = '''```Address {address}
+Balance is {balance} sat
+Received {receivedCount} TXO for {receivedAmt} sat
+Sent {sentCount} TXO for {sentAmt} sat
+{mempoolCount} TX in mempool for {mempoolAmt} sat
+```'''.format(address=data["address"], balance='{:,.0f}'.format(balance), receivedCount='{:,.0f}'.format(data["chain_stats"]["funded_txo_count"]), receivedAmt='{:,.0f}'.format(data["chain_stats"]["funded_txo_sum"]), sentCount='{:,.0f}'.format(data["chain_stats"]["spent_txo_count"]), sentAmt='{:,.0f}'.format(data["chain_stats"]["spent_txo_sum"]), mempoolCount='{:,.0f}'.format(data["mempool_stats"]["tx_count"]), mempoolAmt='{:,.0f}'.format(mempoolAmt))
+		await ctx.send(message_string)
+
+
+async def setup(bot):
+	await bot.add_cog(General(bot))

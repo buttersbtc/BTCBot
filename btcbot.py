@@ -10,35 +10,50 @@ from random import randrange
 import datetime
 from captcha.image import ImageCaptcha
 import math
+import re
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 PREFIX = os.getenv('BOT_PREFIX')
 
-bot = commands.Bot(command_prefix=PREFIX, description="BTC Bot")
+#move to env
+patterns = os.getenv('BAN_PATTERNS')
+
+bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all(), description="BTC Bot")
+
+
 
 @bot.event
 async def on_ready():
+	# Loads all commands from the cogs directory
 	print('Logged in as {0.user}'.format(bot))
 	print(discord.__version__)
 	watcher = pricewatch()
 	await watcher.watch(bot)
 
-# Loads all commands from the cogs directory
-cogs = [i for i in os.listdir("cogs") if i.endswith(".py")]
-
-for cog in cogs:
-	cog_name = cog.split(".py")[0]
-	bot.load_extension("cogs.{0}".format(cog_name))
+@bot.event
+async def setup_hook() -> None:
+	cogs = [i for i in os.listdir("cogs") if i.endswith(".py")]
+	for cog in cogs:
+		cog_name = cog.split(".py")[0]
+		await bot.load_extension("cogs.{0}".format(cog_name))
 
 #URL blacklist
 @bot.event
 async def on_message(message):
+	if(message.channel.name == "new-joins"):
+		print("new join " + message.author.name)
+		if os.getenv('ENABLE_BAN_PATTERNS'):
+			for pattern in patterns:
+				print(re.search(pattern, message.author.name))
+				if(re.search(pattern, message.author.name) != None):
+					await message.channel.send("banned " + message.author.name)
+					await message.author.ban()
 	#handle public channels
 	if(str(message.channel.type) != "private"):
 		#remove blacklisted content
 		if os.getenv('ENABLE_BLACKLIST') == "1":
-			if hasattr(message.author, 'roles') and not any(role.name == os.getenv('MOD_ROLE') for role in message.author.roles):
+			if hasattr(message.author, 'roles') and not any(role.name == os.getenv('MOD_ROLE') or role.name == os.getenv('') for role in message.author.roles):
 				blacklist = list(filter(None, os.getenv('BLACKLIST').split(",")))
 				if len(blacklist) != 0:
 					for item in blacklist:
@@ -84,7 +99,6 @@ async def on_message(message):
 		else:
 			if message.content[0:1] != os.getenv('BOT_PREFIX'):
 				await member.send(os.getenv('ERROR'))
-				USER_ARR.append(member.id)
 				#rate limit
 
 	await bot.process_commands(message)
@@ -96,9 +110,8 @@ async def on_member_join(member):
 		await member.send(os.getenv('NEW_USER_MSG'))
 		await member.send("Please complete the following captcha:")
 		image = ImageCaptcha()
-		data = image.generate(str(round(math.sqrt(int(ctx.message.author.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))))
+		data = image.generate(str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))))
 		await member.send(file=discord.File(data, 'captcha.png'))
-
 
 # Disables the default help command from discord.py
 bot.remove_command('help')

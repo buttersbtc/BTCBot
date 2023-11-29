@@ -206,5 +206,5 @@ class Utilities(commands.Cog):
 		await member.send(file=discord.File(data, 'captcha.png'))
 
 
-def setup(bot):
-	bot.add_cog(Utilities(bot))
+async def setup(bot):
+	await bot.add_cog(Utilities(bot))
