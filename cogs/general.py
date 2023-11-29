@@ -6,7 +6,6 @@ import json
 from random import randrange
 import math
 import datetime
-import functools
 
 class General(commands.Cog):
 	"""General commands"""
@@ -295,7 +294,9 @@ class General(commands.Cog):
 			confirmed = "Confirmed"
 			block = data["status"]["block_height"]
 			time = datetime.datetime.utcfromtimestamp(data["status"]["block_time"])
-		amount = functools.reduce(lambda a, b: a["value"] + b["value"], data["vout"])
+		amount = 0
+		for vout in data["vout"]:
+			amount+=vout["value"]
 		fee = data["fee"]
 		size = data["weight"]/4
 		feerate = fee/size
