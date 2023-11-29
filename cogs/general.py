@@ -371,7 +371,7 @@ Sent {sentCount} TXO for {sentAmt} sat
 			res = stats.cumfreq(data["fee_histogram"], numbins=4,
                     defaultreallimits=(1.5, 5))
 			
-		message_string = '''```Mempool has {count} TX and is {size} MB
+		message_string = '''```Blockstream's mempool has {count} TX and is {size} MB
 Total fees in mempool are {fees} BTC
 The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte and {range0topMB} sat/vbyte
 {range10}MB- {range11}MB = {range1bottomMB}-{range1topMB} sat/vbyte
