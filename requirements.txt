@@ -2,3 +2,5 @@ discord.py
 requests
 python-dotenv
 captcha
+matplotlib
+scipy

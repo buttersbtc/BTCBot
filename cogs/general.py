@@ -6,6 +6,9 @@ import json
 from random import randrange
 import math
 import datetime
+import matplotlib.pyplot as plt
+import numpy as np
+from scipy import stats
 
 class General(commands.Cog):
 	"""General commands"""
@@ -334,6 +337,53 @@ Sent {sentCount} TXO for {sentAmt} sat
 {mempoolCount} TX in mempool for {mempoolAmt} sat
 ```'''.format(address=data["address"], balance='{:,.0f}'.format(balance), receivedCount='{:,.0f}'.format(data["chain_stats"]["funded_txo_count"]), receivedAmt='{:,.0f}'.format(data["chain_stats"]["funded_txo_sum"]), sentCount='{:,.0f}'.format(data["chain_stats"]["spent_txo_count"]), sentAmt='{:,.0f}'.format(data["chain_stats"]["spent_txo_sum"]), mempoolCount='{:,.0f}'.format(data["mempool_stats"]["tx_count"]), mempoolAmt='{:,.0f}'.format(mempoolAmt))
 		await ctx.send(message_string)
+
+	# Fetches Bitcoin mempool info from blockstreams mempool
+	@commands.command()
+	async def mempool(self, ctx, *args):
+		api = "https://blockstream.info/api/mempool"
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+		except:
+			await ctx.send("Unable to parse mempool data. Try again later.")
+			return
+		
+		brackets = [[0, 1000000], [1000000, 4000000], [4000000, 12000000], [12000000, 36000000]]
+		n=0
+		pendingVsize = 0
+		for entry in data["fee_histogram"]:
+			if n > len(brackets) - 1:
+				break
+			fee = entry[0]
+			vsize = entry[1]
+			if len(brackets[n]) <= 2:
+				brackets[n].append(fee)
+			sizeRange = brackets[n][1] - brackets[n][0]
+			if vsize + pendingVsize >= sizeRange:
+				brackets[n].append(fee)
+				brackets[n].append(vsize + pendingVsize)
+				n+=1
+				pendingVsize = vsize + pendingVsize - sizeRange
+			else:
+				pendingVsize+=vsize
+
+			res = stats.cumfreq(data["fee_histogram"], numbins=4,
+                    defaultreallimits=(1.5, 5))
+			
+		message_string = '''```Mempool has {count} TX and is {size} MB
+Total fees in mempool are {fees} BTC
+The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte and {range0topMB} sat/vbyte
+{range10}MB- {range11}MB = {range1bottomMB}-{range1topMB} sat/vbyte
+{range20}MB- {range21}MB = {range2bottomMB}-{range2topMB} sat/vbyte
+{range30}MB- {range31}MB  = {range3bottomMB}-{range3topMB} sat/vbyte
+```'''.format(count='{:,.0f}'.format(data["count"]), size='{:,.2f}'.format(data["vsize"]/1000000), fees='{:,.2f}'.format(data["total_fee"]/100000000), 
+			  range01='{:,.0f}'.format(brackets[0][1]/1000000), range0bottomMB='{:,.0f}'.format(brackets[0][3]), range0topMB='{:,.0f}'.format(brackets[0][2]), 
+			  range10='{:,.0f}'.format(brackets[1][0]/1000000), range11='{:,.0f}'.format(brackets[1][1]/1000000), range1bottomMB='{:,.0f}'.format(brackets[1][3]), range1topMB='{:,.0f}'.format(brackets[1][2]),
+			  range20='{:,.0f}'.format(brackets[2][0]/1000000), range21='{:,.0f}'.format(brackets[2][1]/1000000), range2bottomMB='{:,.0f}'.format(brackets[2][3]), range2topMB='{:,.0f}'.format(brackets[2][2]),
+			  range30='{:,.0f}'.format(brackets[3][0]/1000000), range31='{:,.0f}'.format(brackets[3][1]/1000000), range3bottomMB='{:,.0f}'.format(brackets[3][3]), range3topMB='{:,.0f}'.format(brackets[3][2]))
+		await ctx.send(message_string)
+
 
 async def setup(bot):
 	await bot.add_cog(General(bot))
