@@ -293,7 +293,7 @@ class General(commands.Cog):
 		if data["status"]["confirmed"]:
 			confirmed = "Confirmed"
 			block = '{:,.0f}'.format(data["status"]["block_height"])
-			time = datetime.datetime.utcfromtimestamp(data["status"]["block_time"]) + "UTC"
+			time = datetime.datetime.utcfromtimestamp(data["status"]["block_time"]).strftime("%d/%m/%Y, %H:%M:%S") + " UTC"
 		amount = 0
 		for vout in data["vout"]:
 			amount+=vout["value"]
@@ -334,7 +334,6 @@ Sent {sentCount} TXO for {sentAmt} sat
 {mempoolCount} TX in mempool for {mempoolAmt} sat
 ```'''.format(address=data["address"], balance='{:,.0f}'.format(balance), receivedCount='{:,.0f}'.format(data["chain_stats"]["funded_txo_count"]), receivedAmt='{:,.0f}'.format(data["chain_stats"]["funded_txo_sum"]), sentCount='{:,.0f}'.format(data["chain_stats"]["spent_txo_count"]), sentAmt='{:,.0f}'.format(data["chain_stats"]["spent_txo_sum"]), mempoolCount='{:,.0f}'.format(data["mempool_stats"]["tx_count"]), mempoolAmt='{:,.0f}'.format(mempoolAmt))
 		await ctx.send(message_string)
-
 
 async def setup(bot):
 	await bot.add_cog(General(bot))
