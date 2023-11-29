@@ -110,16 +110,17 @@ class Utilities(commands.Cog):
 	@commands.command()
 	async def wallets(self, ctx, *args):
 		walletDic = {
-			"electrum": {"tags": ["pc", "windows", "linux", "mac", "android", "hot", "advanced", "lightning", "2fa", "spv"], "link":"https://electrum.org/"},
+			"electrum": {"tags": ["pc", "windows", "linux", "mac", "android", "hot", "advanced", "lightning", "2fa", "node-compatible", "spv"], "link":"https://electrum.org/"},
+			"sparrow": {"tags": ["pc", "windows", "linux", "mac", "hot", "advanced", "node-compatible"], "link":"https://sparrowwallet.com/"},
 			"core": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoincore.org/"},
 			"knots": {"tags": ["pc", "windows", "linux", "hot", "node", "full-node", "advanced"], "link":"https://bitcoinknots.org/"},
-			"wasabi": {"tags": ["pc", "windows", "hot", "privacy"], "link":"https://wasabiwallet.io/"},
+			"joinmarket": {"tags": ["pc", "windows", "hot", "privacy", "coinjoin"], "link":"https://www.keepitsimplebitcoin.com/joinmarket/"},
 			"coldcard": {"tags": ["hardware", "cold", "requires-wallet"], "link":"https://coldcardwallet.com/"},
 			"green": {"tags": ["android", "ios", "2fa", "pc", "windows", "linux", "mac", "hot", "spv"], "link":"https://blockstream.com/green/"},
 			"phoenix": {"tags": ["android", "hot", "lightning", "easy"], "link":"https://phoenix.acinq.co/"},
-			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "advanced", "partial-custody"], "link":"https://github.com/lightningnetwork/lnd/releases"},
+			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "node-compatible", "advanced", "partial-custody"], "link":"https://github.com/lightningnetwork/lnd/releases"},
 			"c-lightning": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "advanced"], "link":"https://github.com/ElementsProject/lightning/releases"},
-			"blue": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://bluewallet.io/"},
+			"blue": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy", "node-compatible"], "link":"https://bluewallet.io/"},
 			"mycelium": {"tags": ["android", "ios", "hot", "local-trader"], "link":"https://wallet.mycelium.com/"},
 			"trezor": {"tags": ["hardware", "hot"], "link":"https://trezor.io/"},
 			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy"], "link":"https://breez.technology/"},
@@ -147,30 +148,18 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def dev(self, ctx, *args):
-		msg = "<https://github.com/bitcoin/bitcoin> <- the repo\n<https://webchat.freenode.net/?channels=bitcoin-core-dev> <- the irc\n<https://bitcoin.stackexchange.com>/ <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack"
+		msg = "<https://github.com/bitcoin/bitcoin> <- the repo\n<https://web.libera.chat/#bitcoin-core-dev> <- the irc\n<https://github.com/bitcoin-core/bitcoin-devwiki/wiki/General-IRC-meeting> <- the dev meetings\n<https://bitcoincore.reviews/> the PR review club meetings\n<https://bitcoin.stackexchange.com> <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack"
 		await ctx.channel.send(msg)
 
 	@commands.command()
 	async def job(self, ctx, *args):
-		msg = "Bitcoin job boards and resources: \n<https://pompcryptojobs.com/>\n<https://reddit.com/r/Jobs4Bitcoins>\n<https://reddit.com/r/Jobs4Bitcoin>\n<https://strike.me/jobs>\n<https://www.kraken.com/careers>\n<https://bitstamp.talentlyft.com/>\n<https://www.bitmex.com/careers>\n<https://angel.co/company/river-financial/jobs>\n<https://bitcoinerjobs.co/>"
+		msg = "Bitcoin job boards and resources:\n<https://cash.app/careers>\n<https://reddit.com/r/Jobs4Bitcoins>\n<https://strike.me/jobs>\n<https://www.bitmex.com/careers>\n<https://angel.co/company/river-financial/jobs>\n<https://bitcoinerjobs.co/>"
 		await ctx.channel.send(msg)
 
 	@commands.command()
 	async def quantum(self, ctx, *args):
 		msg = "A general purpose and stable high qubit quantum computer (which doesn't exist and no one is sure if will ever exist) can run an algorithm called shor's. Shor's is used to factor numbers.  You can thus use shor's to derive a private key from a public key. Bitcoin exposes public keys in the scenarios of certain address reuse and when certain transactions are sitting in the mempool, as well as very old 2009 era pay to pubkey coinbases and new taproot transactions. What will happen if such a computer ever exists is slowly attempts to mine the most static of these coins, probably the old coinbases, will occur. Once this happens everyone will know there is a quantum actor and avoid address reuse or in the worst case just move to a new address format. It's also important to remember that a quantum attack takes considerable time, not dissimilar to mining, as it's the process for searching for a private key. Another Algorithm, called grovers, will enable a new kind of mining ASIC, similar to how generations of PoW devices have always functioned."
 		await ctx.channel.send(msg)
-
-	@commands.command()
-	async def chart(self, ctx, *args):
-		exchange = args[0].lower() if len(args) > 0 else "bitstamp"
-		timespan = args[0].lower() if len(args) > 1 else "150"
-		r = requests.get("https://bitcoincharts.com/charts/chart.png?width=940&m=" + exchange + "USD&SubmitButton=Draw&r=" + timespan + "&i=&c=0&s=&e=&Prev=&Next=&t=S&b=&a1=&m1=10&a2=&m2=25&x=0&i1=&i2=&i3=&i4=&v=1&cv=0&ps=0&l=0&p=0&", stream = True)
-		if r.status_code == 200:
-			r.raw.decode_content = True
-			embed = discord.Embed()
-			embed.set_image(url="https://bitcoincharts.com/charts/chart.png?width=940&m=" + exchange + "USD&SubmitButton=Draw&r=" + timespan + "&i=&c=0&s=&e=&Prev=&Next=&t=S&b=&a1=&m1=10&a2=&m2=25&x=0&i1=&i2=&i3=&i4=&v=1&cv=0&ps=0&l=0&p=0&")
-			msg = "https://bitcoincharts.com/charts/chart.png?width=940&m=" + exchange + "USD&SubmitButton=Draw&r=" + timespan + "&i=&c=0&s=&e=&Prev=&Next=&t=S&b=&a1=&m1=10&a2=&m2=25&x=0&i1=&i2=&i3=&i4=&v=1&cv=0&ps=0&l=0&p=0&";
-			await ctx.channel.send(embed=embed)
 	
 	@commands.command()
 	async def ban(self, ctx, *args):

@@ -240,30 +240,30 @@ class General(commands.Cog):
 	async def wage(self, ctx, *args):
 
 		if len(args) != 2:
+			await ctx.send("To use wage include the amount earned in the wage and a currency. ex. !wage 15.00 USD")
 			return
 
 		arg = args[1].lower()
 		wage = args[0]
 
 		try:
-			api = "http://preev.com/pulse/units:btc+" + arg + "/sources:bitstamp+kraken"
+			api = "https://api.coincap.io/v2/assets/bitcoin"
 			r = requests.get(api)
 			data = json.loads(r.text)
+
+			api_rates = "https://api.coincap.io/v2/rates/"
+			r_rates = requests.get(api_rates)
+			data_rates = json.loads(r_rates.text)
+
 		except:
+			await ctx.send("The price API is currently unavailable")
 			return
-		skipConvert = False
-		try:
-			price = data["btc"]["usd"]["bitstamp"]["last"]
-		except:
-			try:
-				price = data["btc"][arg]["bitstamp"]["last"]
-				skipConvert = True
-			except:
-				price = data["btc"][arg]["kraken"]["last"]
-				skipConvert = True
+		price = data["data"]["priceUsd"]
 		if arg != "usd":
-			conversion = data[arg]["usd"]["other"]["last"]
-			price = float(price)/float(conversion)
+			for currency in data_rates["data"]:
+				if currency["symbol"].lower() == arg:
+					conversion = currency["rateUsd"]
+					price = float(price)/float(conversion)
 
 		price = float(price)/float(wage)
 		message_string = "**1 Bitcoin** costs **{:,.0f}** hours".format(float(price))
@@ -368,9 +368,6 @@ Sent {sentCount} TXO for {sentAmt} sat
 			else:
 				pendingVsize+=vsize
 
-			res = stats.cumfreq(data["fee_histogram"], numbins=4,
-                    defaultreallimits=(1.5, 5))
-			
 		message_string = '''```Blockstream's mempool has {count} TX and is {size} MB
 Total fees in mempool are {fees} BTC
 The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte and {range0topMB} sat/vbyte
