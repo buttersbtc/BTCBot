@@ -35,6 +35,8 @@ Create a new file named .env in the same directory as btcbot.py with the followi
 
 >ENABLE_ANTI_BOT=0 or 1, 1 is enabled. Enables anti-bot captcha and permissioned joining and role management. Users will need to complete a DM exchange with the bot to be applied a role which gives them permissions to use discord.
 
+>ANTI_BOT_SERVER_ID=Server on which to enable anti bot
+
 >NEW_USER_MSG=Hello welcome to the server (OPTIONAL if ENABLE_ANTI_BOT=0)
 
 >SALT1=a 2-5 digit numerical salt (OPTIONAL if ENABLE_ANTI_BOT=0)

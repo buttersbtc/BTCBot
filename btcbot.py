@@ -11,13 +11,12 @@ import datetime
 from captcha.image import ImageCaptcha
 import math
 import re
+import hashlib
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
 PREFIX = os.getenv('BOT_PREFIX')
 
-#move to env
-patterns = os.getenv('BAN_PATTERNS')
 
 bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all(), description="BTC Bot")
 
@@ -38,19 +37,19 @@ async def setup_hook() -> None:
 		cog_name = cog.split(".py")[0]
 		await bot.load_extension("cogs.{0}".format(cog_name))
 
-#URL blacklist
 @bot.event
 async def on_message(message):
-	if(message.channel.name == "new-joins"):
-		print("new join " + message.author.name)
-		if os.getenv('ENABLE_BAN_PATTERNS'):
-			for pattern in patterns:
-				print(re.search(pattern, message.author.name))
-				if(re.search(pattern, message.author.name) != None):
-					await message.channel.send("banned " + message.author.name)
-					await message.author.ban()
+	print(os.getenv('ENABLE_ANTI_BOT')=="1")
 	#handle public channels
 	if(str(message.channel.type) != "private"):
+		if(message.channel.name == "new-joins"):
+			print("new join " + message.author.name)
+			if os.getenv('ENABLE_BAN_PATTERNS'):
+				for pattern in os.getenv('BAN_PATTERNS'):
+					print(re.search(pattern, message.author.name))
+					if(re.search(pattern, message.author.name) != None):
+						await message.channel.send("banned " + message.author.name)
+						await message.author.ban()
 		#remove blacklisted content
 		if os.getenv('ENABLE_BLACKLIST') == "1":
 			if hasattr(message.author, 'roles') and not any(role.name == os.getenv('MOD_ROLE') or role.name == os.getenv('') for role in message.author.roles):
@@ -85,21 +84,23 @@ async def on_message(message):
 		if os.getenv('ENABLE_EASTER_EGG') == 1 and message.content.find(os.getenv('EASTER_EGG_TRIGGER')) != -1 and randrange(100) <= int(os.getenv('EASTER_EGG_PERCENT_CHANCE')):
 			await message.channel.send(os.getenv('EASTER_EGG'))
 	#handle DM's
-	elif message.author != bot.user and os.getenv('ENABLE_ANTI_BOT') == 1:
+	elif os.getenv('ENABLE_ANTI_BOT') == "1" and message.author.name != bot.user.name:
+		print(message.author.name)
 		print(bot.user.name)
 		member = message.author
 		#look for possible captcha response
-		print('captcha : ' + str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))))
-		if message.content == str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))):
-			#give perms if they dont have already
-			if not hasattr(message.author, 'roles') or not any(role.name == os.getenv('USER_ROLE') for role in message.author.roles):
-				await member.add_roles(os.getenv('USER_ROLE'))
-				await member.send("Thank you, welcome to the chat.")
-
-		else:
-			if message.content[0:1] != os.getenv('BOT_PREFIX'):
-				await member.send(os.getenv('ERROR'))
-				#rate limit
+		print('captcha : ' + str(hashlib.sha256(str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))).encode("utf-8")).hexdigest())[:8].upper())
+		print('message: ' + message.content.upper())
+		if message.content.upper() == str(hashlib.sha256(str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))).encode("utf-8")).hexdigest())[:8].upper():
+			for guild in bot.guilds:
+				role = discord.utils.get(guild.roles, id=int(os.getenv('USER_ROLE')))
+				if role == None:
+					print("can't find role in " + guild.name)
+					continue
+				member = guild.get_member(message.author.id)
+				print(member)
+				await member.add_roles(role)
+			await message.channel.send("Thank you, welcome to the chat.")
 
 	await bot.process_commands(message)
 
@@ -110,8 +111,12 @@ async def on_member_join(member):
 		await member.send(os.getenv('NEW_USER_MSG'))
 		await member.send("Please complete the following captcha:")
 		image = ImageCaptcha()
-		data = image.generate(str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))))
+		data = image.generate(str(hashlib.sha256(str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))).encode("utf-8")).hexdigest())[:8].upper())
 		await member.send(file=discord.File(data, 'captcha.png'))
+
+@bot.event
+async def on_message_delete(message):
+	print("new message deleted: " + message.content)
 
 # Disables the default help command from discord.py
 bot.remove_command('help')

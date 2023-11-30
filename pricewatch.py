@@ -13,7 +13,7 @@ class pricewatch():
 			try:
 				api = "https://api.coincap.io/v2/assets/bitcoin"
 
-				r = requests.get(api)
+				r = requests.get(api, timeout=5)
 				data = json.loads(r.text)
 
 				price = data["data"]["priceUsd"]

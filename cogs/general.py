@@ -129,14 +129,15 @@ class General(commands.Cog):
 		#call the api for our currency
 		try:
 			api = "https://api.coincap.io/v2/assets/bitcoin"
-			r = requests.get(api)
+			r = requests.get(api, timeout=10)
 			data = json.loads(r.text)
 
 			api_rates = "https://api.coincap.io/v2/rates/"
-			r_rates = requests.get(api_rates)
+			r_rates = requests.get(api_rates, timeout=10)
 			data_rates = json.loads(r_rates.text)
 
 		except:
+			await ctx.send("Price APi is currently slow to respond. Try again later.")
 			return
 
 		price = data["data"]["priceUsd"]

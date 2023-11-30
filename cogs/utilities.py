@@ -7,6 +7,7 @@ import os
 from dotenv import load_dotenv
 from captcha.image import ImageCaptcha
 import math
+import hashlib
 
 class Utilities(commands.Cog):
 	def __init__(self, bot):
@@ -24,7 +25,7 @@ class Utilities(commands.Cog):
 						if ctx.message.reference is not None:
 							reply = await ctx.channel.fetch_message(ctx.message.reference.message_id)
 							msg += " - " + reply.author.mention + ": " + reply.content + " - " + reply.jump_url
-						await channel.send(msg);
+						await channel.send(msg)
 
 			await ctx.message.delete()
 
@@ -186,12 +187,23 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def captcha(self, ctx, *args):
-		print("in captcha")
-		member = ctx.message.author
-		await member.send("Please complete the following captcha:")
-		image = ImageCaptcha()
-		data = image.generate(str(round(math.sqrt(int(ctx.message.author.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))))
-		await member.send(file=discord.File(data, 'captcha.png'))
+		if os.getenv('ENABLE_ANTI_BOT') == "1":
+			member = ctx.message.author
+			await member.send("Please complete the following captcha:")
+			image = ImageCaptcha()
+			data = image.generate(str(hashlib.sha256(str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))).encode("utf-8")).hexdigest())[:8].upper())
+			await member.send(file=discord.File(data, 'captcha.png'))
+
+	@commands.command()
+	async def modmail(self, ctx, *args):
+		if os.getenv('ENABLE_MODMAIL') == "1" and os.getenv('MODMAIL_CHANNEL') != None:
+			for guild in self.bot.guilds:
+				for channel in guild.channels:
+					if channel.name == os.getenv('MODMAIL_CHANNEL'):
+						msg = "Dear benevolant and respected moderators,\n" + ctx.message.content.replace(os.getenv('BOT_PREFIX') + "modmail ", "") +"\nThank you for everything you do. In every way you are magnificent and inspire me to be better each day.\nWith all the love in my heart," + ctx.message.author.mention
+						await channel.send(msg)
+			await ctx.message.delete()
+
 
 	# Fetches Bitcoin TX by hash
 	@commands.command()
