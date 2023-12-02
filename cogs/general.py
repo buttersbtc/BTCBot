@@ -6,9 +6,6 @@ import json
 from random import randrange
 import math
 import datetime
-import matplotlib.pyplot as plt
-import numpy as np
-from scipy import stats
 
 class General(commands.Cog):
 	"""General commands"""
@@ -273,6 +270,37 @@ class General(commands.Cog):
 		data = json.loads(r.text)
 		price = data[0]["ath"]
 		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(float(price))
+		await ctx.send(message_string)
+
+	# convert between two currencies
+	@commands.command()
+	async def convert(self, ctx, *args):
+		if len(args) < 3:
+			await ctx.send("To use convert use the format: !convert 15.00 USD BTC or !convert 10000 sat mBTC")
+			return
+		def toUpper(msg):
+			return msg.upper()
+		
+		sourceCurrencyRate = 0
+		comparisons = []
+		args = args.map(toUpper)
+		api_rates = "https://api.coincap.io/v2/rates/"
+		r_rates = requests.get(api_rates, timeout=10)
+		data_rates = json.loads(r_rates.text)
+		sourceCurrency = args[1].upper()
+		message_string = args[0] + " " + args[1] + " is equal to: "
+		args = args.remove(args[1])
+		for currency in data_rates:
+			if currency['symbol'].upper() == sourceCurrency:
+				sourceCurrencyRate = currency['rateUsd']
+			if currency['symbol'] in args:
+				comparisons.push([currency['symbol'], currency['rateUsd']])
+		
+		for comparison in comparisons:
+			message_string += '{:,.2f}'.format(comparison[0] * sourceCurrencyRate) + " " + sourceCurrency + ","
+
+		message_string = message_string[:len(message_string)-1]
+
 		await ctx.send(message_string)
 
 async def setup(bot):

@@ -1,3 +1,4 @@
+import threading
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -5,6 +6,7 @@ import os
 import asyncio
 import requests
 import json
+from ipc import ipc
 from pricewatch import pricewatch
 from random import randrange
 import datetime
@@ -12,6 +14,8 @@ from captcha.image import ImageCaptcha
 import math
 import re
 import hashlib
+import asyncio
+from websockets.sync.client import connect
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
@@ -19,17 +23,23 @@ PREFIX = os.getenv('BOT_PREFIX')
 
 
 bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all(), description="BTC Bot")
-
-
+ipcsocket = ipc()
+def ipc_loop():
+	loop = asyncio.new_event_loop()
+	loop.create_task(ipc.listen(None, bot))
+	asyncio.set_event_loop(loop)
+	loop.run_forever()
 
 @bot.event
 async def on_ready():
-	# Loads all commands from the cogs directory
 	print('Logged in as {0.user}'.format(bot))
 	print(discord.__version__)
+	if(os.getenv('ENABLE_TIPS') == "1"):
+		thread = threading.Thread(target=ipc_loop)
+		thread.start()
 	watcher = pricewatch()
 	await watcher.watch(bot)
-
+	
 @bot.event
 async def setup_hook() -> None:
 	cogs = [i for i in os.listdir("cogs") if i.endswith(".py")]
@@ -39,7 +49,6 @@ async def setup_hook() -> None:
 
 @bot.event
 async def on_message(message):
-	print(os.getenv('ENABLE_ANTI_BOT')=="1")
 	#handle public channels
 	if(str(message.channel.type) != "private"):
 		if(message.channel.name == "new-joins"):
@@ -85,12 +94,8 @@ async def on_message(message):
 			await message.channel.send(os.getenv('EASTER_EGG'))
 	#handle DM's
 	elif os.getenv('ENABLE_ANTI_BOT') == "1" and message.author.name != bot.user.name:
-		print(message.author.name)
-		print(bot.user.name)
 		member = message.author
 		#look for possible captcha response
-		print('captcha : ' + str(hashlib.sha256(str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))).encode("utf-8")).hexdigest())[:8].upper())
-		print('message: ' + message.content.upper())
 		if message.content.upper() == str(hashlib.sha256(str(round(math.sqrt(int(member.id)/int(os.getenv('SALT1')) + int(os.getenv('SALT2'))))).encode("utf-8")).hexdigest())[:8].upper():
 			for guild in bot.guilds:
 				role = discord.utils.get(guild.roles, id=int(os.getenv('USER_ROLE')))
@@ -117,6 +122,14 @@ async def on_member_join(member):
 @bot.event
 async def on_message_delete(message):
 	print("new message deleted: " + message.content)
+	for guild in bot.guilds:
+				for channel in guild.channels:
+					if channel.name == os.getenv('REPORT_CHANNEL'):
+						msg = "new message deleted: " + message.content + " " + "-" + message.author.mention
+						await channel.send(msg)
+
+
+
 
 # Disables the default help command from discord.py
 bot.remove_command('help')

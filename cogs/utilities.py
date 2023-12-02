@@ -164,6 +164,9 @@ class Utilities(commands.Cog):
 	@commands.command()
 	async def ban(self, ctx, *args):
 		if hasattr(ctx.message.author, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles):
+			print(ctx.message.author.roles)
+			print(os.getenv('MOD_ROLE'))
+			print(any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles))
 			n=0
 			for user in ctx.message.mentions:
 				await user.ban()
@@ -305,6 +308,14 @@ The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte a
 			  range20='{:,.0f}'.format(brackets[2][0]/1000000), range21='{:,.0f}'.format(brackets[2][1]/1000000), range2bottomMB='{:,.0f}'.format(brackets[2][3]), range2topMB='{:,.0f}'.format(brackets[2][2]),
 			  range30='{:,.0f}'.format(brackets[3][0]/1000000), range31='{:,.0f}'.format(brackets[3][1]/1000000), range3bottomMB='{:,.0f}'.format(brackets[3][3]), range3topMB='{:,.0f}'.format(brackets[3][2]))
 		await ctx.send(message_string)
+
+	@commands.command()
+	async def tip(self, ctx, *args):
+		user = args[0]
+		amount = args[1]
+		member = ctx.message.author
+
+
 
 async def setup(bot):
 	await bot.add_cog(Utilities(bot))
