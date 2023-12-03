@@ -1,6 +1,7 @@
 from operator import truediv
 import discord
 from discord.ext import commands
+import numpy
 import requests
 import json
 from random import randrange
@@ -278,26 +279,26 @@ class General(commands.Cog):
 		if len(args) < 3:
 			await ctx.send("To use convert use the format: !convert 15.00 USD BTC or !convert 10000 sat mBTC")
 			return
-		def toUpper(msg):
-			return msg.upper()
-		
 		sourceCurrencyRate = 0
 		comparisons = []
-		args = args.map(toUpper)
+		_args = []
+		for arg in args:
+			_args.append(arg.upper())
 		api_rates = "https://api.coincap.io/v2/rates/"
 		r_rates = requests.get(api_rates, timeout=10)
 		data_rates = json.loads(r_rates.text)
-		sourceCurrency = args[1].upper()
-		message_string = args[0] + " " + args[1] + " is equal to: "
-		args = args.remove(args[1])
-		for currency in data_rates:
+		sourceCurrency = _args[1].upper()
+		message_string = _args[0] + " " + _args[1] + " is equal to:"
+		_args.remove(_args[1])
+		for currency in data_rates['data']:
 			if currency['symbol'].upper() == sourceCurrency:
 				sourceCurrencyRate = currency['rateUsd']
-			if currency['symbol'] in args:
-				comparisons.push([currency['symbol'], currency['rateUsd']])
+			if currency['symbol'].upper() in _args:
+				comparisons.append([currency['symbol'], currency['rateUsd']])
 		
 		for comparison in comparisons:
-			message_string += '{:,.2f}'.format(comparison[0] * sourceCurrencyRate) + " " + sourceCurrency + ","
+			val = (float(sourceCurrencyRate) * float(_args[0])) / float(comparison[1]) 
+			message_string += " " + '{:,.2f}'.format(val) + " " + comparison[0] + ","
 
 		message_string = message_string[:len(message_string)-1]
 
