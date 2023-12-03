@@ -1,4 +1,5 @@
 from operator import truediv
+import os
 import discord
 from discord.ext import commands
 import numpy
@@ -318,6 +319,13 @@ class General(commands.Cog):
 		message_string = message_string[:len(message_string)-1]
 
 		await ctx.send(message_string)
+
+	@commands.command()
+	async def help(self, ctx, *args):
+		message_string = "Commands this bot accepts:"
+		for cmd in self.bot.commands:
+			message_string +=  " " + os.getenv('BOT_PREFIX') + f"{cmd},"
+		await ctx.send(message_string[:len(message_string)-1])
 
 async def setup(bot):
 	await bot.add_cog(General(bot))
