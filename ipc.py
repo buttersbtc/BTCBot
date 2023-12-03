@@ -8,6 +8,7 @@ import json
 from websockets.sync.client import connect
 class ipc():
 	async def listen(self, bot):
+			print("Started IPC Watch")
 			with connect(os.getenv('TIPS_WEBSOCKET')) as websocket:
 				#websocket.send('{"action":"register", "msg":"please"}')
 				while(1):
@@ -21,5 +22,3 @@ class ipc():
 							return
 					except:
 						print("ipc watch fail")
-	def __init__(self):
-		print("Started IPC Watch")

@@ -237,7 +237,7 @@ class Utilities(commands.Cog):
 
 		
 
-		message_string = '''```TX {txid}
+		message_string = '''View in [bitcointech.wiki/editor](<https://bitcointech.wiki/editor?d={txid}>)```TX {txid}
 {confirmed} {block} {time}
 Sent {amount} sat for {fee} sat fee ({feerate} sat/vbtye, {feepercent}%)
 {inputs} inputs, {outputs} outputs, {size} vbytes
@@ -258,7 +258,7 @@ Sent {amount} sat for {fee} sat fee ({feerate} sat/vbtye, {feepercent}%)
 		balance = data["chain_stats"]["funded_txo_sum"] - data["chain_stats"]["spent_txo_sum"]
 		mempoolAmt = data["mempool_stats"]["funded_txo_sum"] - data["mempool_stats"]["spent_txo_sum"]
 
-		message_string = '''```Address {address}
+		message_string = '''View in [bitcointech.wiki/editor](<https://bitcointech.wiki/editor?d={address}>)```Address {address}
 Balance is {balance} sat
 Received {receivedCount} TXO for {receivedAmt} sat
 Sent {sentCount} TXO for {sentAmt} sat

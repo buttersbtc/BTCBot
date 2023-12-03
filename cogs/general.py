@@ -282,7 +282,12 @@ class General(commands.Cog):
 		sourceCurrencyRate = 0
 		comparisons = []
 		_args = []
+		sat = False
 		for arg in args:
+			if(arg.upper() == "SAT"):
+				sat = True
+				_args.append("BTC")
+				continue
 			_args.append(arg.upper())
 		api_rates = "https://api.coincap.io/v2/rates/"
 		r_rates = requests.get(api_rates, timeout=10)
@@ -294,11 +299,21 @@ class General(commands.Cog):
 			if currency['symbol'].upper() == sourceCurrency:
 				sourceCurrencyRate = currency['rateUsd']
 			if currency['symbol'].upper() in _args:
-				comparisons.append([currency['symbol'], currency['rateUsd']])
-		
+				print(sat)
+				print(currency['symbol'].upper())
+				if sat and currency['symbol'].upper() == "BTC":
+					comparisons.append(["SAT", float(currency['rateUsd'])/100000000])
+				else:
+					comparisons.append([currency['symbol'], currency['rateUsd']])
+		print(comparisons)
+		if len(comparisons) != len(args) - 2:
+			print("something fucky in here")
 		for comparison in comparisons:
 			val = (float(sourceCurrencyRate) * float(_args[0])) / float(comparison[1]) 
-			message_string += " " + '{:,.2f}'.format(val) + " " + comparison[0] + ","
+			if val > 0.01:
+				message_string += " " + '{:,.2f}'.format(val) + " " + comparison[0] + ","
+			else:
+				message_string += " " + '{:,.8f}'.format(val) + " " + comparison[0] + ","
 
 		message_string = message_string[:len(message_string)-1]
 
