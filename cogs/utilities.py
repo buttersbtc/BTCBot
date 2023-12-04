@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 from captcha.image import ImageCaptcha
 import math
 import hashlib
+import datetime
+import time
 
 class Utilities(commands.Cog):
 	def __init__(self, bot):
@@ -116,16 +118,17 @@ class Utilities(commands.Cog):
 			"coldcard": {"tags": ["hardware", "cold", "requires-wallet", "multisig", "node-compatible", "psbt", "airgap", "recommended"], "link":"https://coldcardwallet.com/"},
 			"green": {"tags": ["android", "ios", "2fa", "pc", "windows", "linux", "mac", "multisig", "hot", "spv"], "link":"https://blockstream.com/green/"},
 			"phoenix": {"tags": ["android", "hot", "lightning", "easy"], "link":"https://phoenix.acinq.co/"},
-			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "node-compatible", "advanced", "partial-custody"], "link":"https://github.com/lightningnetwork/lnd/releases"},
+			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "node-compatible", "advanced"], "link":"https://github.com/lightningnetwork/lnd/releases"},
 			"c-lightning": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "node-compatible", "advanced"], "link":"https://github.com/ElementsProject/lightning/releases"},
-			"blue": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy", "node-compatible"], "link":"https://bluewallet.io/"},
+			"blue": {"tags": ["android", "ios", "hot", "lightning", "self-custody", "node-compatible", "lightning-node-required"], "link":"https://bluewallet.io/"},
 			"mycelium": {"tags": ["android", "ios", "hot", "local-trader"], "link":"https://wallet.mycelium.com/"},
 			"seedsigner": {"tags": ["hardware", "airgap", "diy", "cold", "recommended"], "link":"https://seedsigner.com/"},
 			"yeticold": {"tags": ["hardware", "airgap", "diy", "cold", "recommended"], "link":"https://yeticold.com/"},
 			"glacier-protocol": {"tags": ["hardware", "airgap", "diy", "cold"], "link":"https://glacierprotocol.org/"},
 			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy"], "link":"https://breez.technology/"},
 			"wallet-of-satoshi": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://www.walletofsatoshi.com/"},
-			"liana": {"tags": ["pc", "mac", "windows", "hot", "timelocks", "multisig", "cold", "easy", "advanced"], "link":"https://lightning-wallet.com/"},
+			"liana": {"tags": ["pc", "mac", "windows", "linux", "hot", "timelocks", "multisig", "cold", "easy", "advanced"], "link":"https://lightning-wallet.com/"},
+			"rtl": {"tags": ["pc", "mac", "windows", "linux", "web", "self-hosted", "hot", "lightning-node-required", "advanced"], "link":"https://lightning-wallet.com/"},
 			}
 		resp = " \n"
 		for wallet in walletDic:
@@ -309,12 +312,78 @@ The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte a
 			  range30='{:,.0f}'.format(brackets[3][0]/1000000), range31='{:,.0f}'.format(brackets[3][1]/1000000), range3bottomMB='{:,.0f}'.format(brackets[3][3]), range3topMB='{:,.0f}'.format(brackets[3][2]))
 		await ctx.send(message_string)
 
+	
+	# Fetches Bitcoin tip height
+	@commands.command()
+	async def height(self, ctx, *args):
+		api = "https://blockstream.info/api/blocks/tip/height"
+		r = requests.get(api)
+		height = r.text
+		message_string = "The current block height is " + r.text
+		await ctx.send(message_string)
+
+	# Fetches Bitcoin mempool info from blockstreams mempool
+	@commands.command()
+	async def fee(self, ctx, *args):
+		api = "https://blockstream.info/api/mempool"
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+		except:
+			await ctx.send("Unable to parse mempool data. Try again later.")
+			return
+		
+		brackets = [[0, 1000000], [1000000, 4000000], [4000000, 12000000], [12000000, 36000000]]
+		n=0
+		pendingVsize = 0
+		for entry in data["fee_histogram"]:
+			if n > len(brackets) - 1:
+				break
+			fee = entry[0]
+			vsize = entry[1]
+			if len(brackets[n]) <= 2:
+				brackets[n].append(fee)
+			sizeRange = brackets[n][1] - brackets[n][0]
+			if vsize + pendingVsize >= sizeRange:
+				brackets[n].append(fee)
+				brackets[n].append(vsize + pendingVsize)
+				n+=1
+				pendingVsize = vsize + pendingVsize - sizeRange
+			else:
+				pendingVsize+=vsize
+
+		high = '{:,.0f}'.format(brackets[0][3])
+		medium = '{:,.0f}'.format((brackets[1][3] + brackets[1][2]) / 2)
+		low = '{:,.0f}'.format(brackets[2][2])
+		vlow = '{:,.0f}'.format((brackets[3][3] + brackets[3][2]) / 2)
+
+
+		message_string = '''```
+High Priority (1-2 blocks/10m-20m) = {high} sat/vbyte
+Medium Priority (2-6 blocks/20m-1h) = {medium} sat/vbyte
+Low Priority (6 blocks+/1h+) = {low} sat/vbyte
+Very Low Priority (144 blocks+/1d+) {vlow} sat/vbyte
+```'''.format(high=high, medium=medium, low=low, vlow=vlow)
+		await ctx.send(message_string)
+
+
 	@commands.command()
 	async def tip(self, ctx, *args):
 		user = args[0]
 		amount = args[1]
 		member = ctx.message.author
 
+	@commands.command()
+	async def halving(self, ctx, *args):
+		api = "https://blockstream.info/api/blocks/tip/height"
+		r = requests.get(api)
+		height = r.text
+		remainder = int(height) % 52500
+		days = (remainder * 10 / 60 / 24)
+		date = datetime.datetime.now() + datetime.timedelta(minutes=remainder*10)
+		timestamp = time.mktime(date.timetuple())
+		message_string = "The halving will happen in " + '{:,.0f}'.format(remainder) + " blocks, or approximately " + '{:,.0f}'.format(days) + " days or around <t:" + '{:.0f}'.format(timestamp) +">"
+		await ctx.send(message_string)
 
 
 async def setup(bot):

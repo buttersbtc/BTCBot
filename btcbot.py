@@ -121,12 +121,13 @@ async def on_member_join(member):
 
 @bot.event
 async def on_message_delete(message):
-	print("new message deleted: " + message.content)
-	for guild in bot.guilds:
-				for channel in guild.channels:
-					if channel.name == os.getenv('REPORT_CHANNEL'):
-						msg = "new message deleted: " + message.content + " " + "-" + message.author.mention
-						await channel.send(msg)
+	if os.getenv('ENABLE_DELETE_LOG') == "1":
+		print("new message deleted: " + message.content)
+		for guild in bot.guilds:
+					for channel in guild.channels:
+						if channel.name == os.getenv('REPORT_CHANNEL'):
+							msg = "new message deleted: " + message.content + " " + "-" + message.author.mention
+							await channel.send(msg)
 
 
 
