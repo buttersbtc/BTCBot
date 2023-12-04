@@ -148,7 +148,7 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def dev(self, ctx, *args):
-		msg = "\n<https://github.com/bitcoin/bitcoin> <- the repo\n<https://web.libera.chat/#bitcoin-core-dev> <- the irc\n<https://github.com/bitcoin-core/bitcoin-devwiki/wiki/General-IRC-meeting> <- the dev meetings\n<https://bitcoincore.reviews/> the PR review club meetings\n<https://bitcoin.stackexchange.com> <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack, <https://delvingbitcoin.org/> <- technical discussion community"
+		msg = "\n<https://github.com/bitcoin/bitcoin> <- the repo\n<https://web.libera.chat/#bitcoin-core-dev> <- the irc\n<https://github.com/bitcoin-core/bitcoin-devwiki/wiki/General-IRC-meeting> <- the dev meetings\n<https://bitcoincore.reviews/> the PR review club meetings\n<https://bitcoin.stackexchange.com> <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack\n<https://delvingbitcoin.org/> <- technical discussion community\n<https://bitcoin.design/guide/> <- the development design guide\n<https://www.bitcointech.wiki/editor> <- the online transaction editor"
 		await ctx.channel.send(msg)
 
 	@commands.command()
@@ -163,10 +163,10 @@ class Utilities(commands.Cog):
 	
 	@commands.command()
 	async def ban(self, ctx, *args):
+		print(ctx.message.author.roles)
+		print(os.getenv('MOD_ROLE'))
+		print(any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles))
 		if hasattr(ctx.message.author, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles):
-			print(ctx.message.author.roles)
-			print(os.getenv('MOD_ROLE'))
-			print(any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles))
 			n=0
 			for user in ctx.message.mentions:
 				await user.ban()
