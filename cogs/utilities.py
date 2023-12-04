@@ -362,7 +362,7 @@ The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte a
 High Priority (1-2 blocks/10m-20m) = {high} sat/vbyte
 Medium Priority (2-6 blocks/20m-1h) = {medium} sat/vbyte
 Low Priority (6 blocks+/1h+) = {low} sat/vbyte
-Very Low Priority (144 blocks+/1d+) {vlow} sat/vbyte
+Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 ```'''.format(high=high, medium=medium, low=low, vlow=vlow)
 		await ctx.send(message_string)
 
