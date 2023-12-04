@@ -378,7 +378,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		api = "https://blockstream.info/api/blocks/tip/height"
 		r = requests.get(api)
 		height = r.text
-		remainder = int(height) % 52500
+		remainder = int(height) % 210000
 		days = (remainder * 10 / 60 / 24)
 		date = datetime.datetime.now() + datetime.timedelta(minutes=remainder*10)
 		timestamp = time.mktime(date.timetuple())
