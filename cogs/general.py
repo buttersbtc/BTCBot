@@ -1,13 +1,8 @@
-from operator import truediv
 import os
-import discord
-from discord.ext import commands
-import numpy
-import requests
 import json
-from random import randrange
-import math
-import datetime
+
+import requests
+from discord.ext import commands
 
 class General(commands.Cog):
 	"""General commands"""

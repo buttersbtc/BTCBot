@@ -1,15 +1,15 @@
+import datetime
+import hashlib
+import json
+import math
+import os
+import time
+
+import requests
+from dotenv import load_dotenv
 import discord
 from discord.ext import commands
-import requests
-import json
-import datetime
-import os
-from dotenv import load_dotenv
 from captcha.image import ImageCaptcha
-import math
-import hashlib
-import datetime
-import time
 
 class Utilities(commands.Cog):
 	def __init__(self, bot):

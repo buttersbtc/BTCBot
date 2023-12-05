@@ -1,21 +1,19 @@
+import asyncio
+import hashlib
+import math
+import os
+import re
 import threading
+
+from captcha.image import ImageCaptcha
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
-import os
-import asyncio
-import requests
-import json
+from random import randrange
+
 from ipc import ipc
 from pricewatch import pricewatch
-from random import randrange
-import datetime
-from captcha.image import ImageCaptcha
-import math
-import re
-import hashlib
-import asyncio
-from websockets.sync.client import connect
+
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
