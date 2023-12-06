@@ -127,8 +127,8 @@ class Utilities(commands.Cog):
 			"glacier-protocol": {"tags": ["hardware", "airgap", "diy", "cold"], "link":"https://glacierprotocol.org/"},
 			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy"], "link":"https://breez.technology/"},
 			"wallet-of-satoshi": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://www.walletofsatoshi.com/"},
-			"liana": {"tags": ["pc", "mac", "windows", "linux", "hot", "timelocks", "multisig", "cold", "easy", "advanced"], "link":"https://lightning-wallet.com/"},
-			"rtl": {"tags": ["pc", "mac", "windows", "linux", "web", "self-hosted", "hot", "lightning-node-required", "advanced"], "link":"https://lightning-wallet.com/"},
+			"liana": {"tags": ["pc", "mac", "windows", "linux", "hot", "timelocks", "multisig", "cold", "easy", "advanced"], "link":"https://wizardsardine.com/liana/"},
+			"rtl": {"tags": ["pc", "mac", "windows", "linux", "web", "self-hosted", "hot", "lightning-node-required", "advanced"], "link":"https://github.com/Ride-The-Lightning/RTL"},
 			}
 		resp = " \n"
 		for wallet in walletDic:
@@ -151,7 +151,7 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def dev(self, ctx, *args):
-		msg = "\n<https://github.com/bitcoin/bitcoin> <- the repo\n<https://web.libera.chat/#bitcoin-core-dev> <- the irc\n<https://github.com/bitcoin-core/bitcoin-devwiki/wiki/General-IRC-meeting> <- the dev meetings\n<https://bitcoincore.reviews/> the PR review club meetings\n<https://bitcoin.stackexchange.com> <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack\n<https://delvingbitcoin.org/> <- technical discussion community\n<https://bitcoin.design/guide/> <- the development design guide\n<https://www.bitcointech.wiki/editor> <- the online transaction editor"
+		msg = "\n<https://github.com/bitcoin/bitcoin> <- the repo\n<https://web.libera.chat/#bitcoin-core-dev> <- the irc\n<https://github.com/bitcoin-core/bitcoin-devwiki/wiki/General-IRC-meeting> <- the dev meetings\n<https://bitcoincore.reviews/> the PR review club meetings\n<https://bitcoin.stackexchange.com> <- the stack exchange\n<https://lists.linuxfoundation.org/pipermail/bitcoin-dev/> <- the general dev mailinglist\n<https://lists.linuxfoundation.org/pipermail/bitcoin-core-dev/> <- core dev mailinglist\n<https://bitcoinops.org/en/newsletters/> <- optech newsletters dev summary\n<https://bitcoincoreslack.herokuapp.com/> <- core slack\n<https://delvingbitcoin.org/> <- technical discussion community\n<https://bitcoin.design/guide/> <- the development design guide\n<https://www.bitcointech.wiki/editor> <- the online transaction editor\n<https://bitcoincore.academy/> <- Bitcoin Core Onboarding\n<https://github.com/bitcoin/bips> <- Bitcoin Improvement Proposals"
 		await ctx.channel.send(msg)
 
 	@commands.command()
@@ -166,9 +166,6 @@ class Utilities(commands.Cog):
 	
 	@commands.command()
 	async def ban(self, ctx, *args):
-		print(ctx.message.author.roles)
-		print(os.getenv('MOD_ROLE'))
-		print(any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles))
 		if hasattr(ctx.message.author, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles):
 			n=0
 			for user in ctx.message.mentions:
@@ -210,6 +207,27 @@ class Utilities(commands.Cog):
 						await channel.send(msg)
 			await ctx.message.delete()
 
+	@commands.command()
+	async def tools(self, ctx, *args):
+		msg = '''
+<https://www.bitcointech.wiki/editor> <- Transaction Editor
+<https://bitcoinsearch.xyz/> <- Bitcoin Technical Search
+<https://btcpayserver.org/> <- Bitcoin Point of Sale Software
+<https://bisq.network/> <- P2P Trading Software
+<https://wizardsardine.com/liana/> <- Liana Simple Inhereitance and Multisig Wallet
+<https://github.com/JoinMarket-Org/joinmarket-clientserver> <- Joinmarket Coinjoins
+<https://github.com/lightninglabs/pool> <- Lightning Pool Low Trust Liquidity Marketplace
+<https://blockstream.com/satellite-api/> <- Blockstream Satellite Bitcoin Accessibility
+<https://github.com/Blockstream/esplora/tree/master> <- Self Hosted Block Explorer
+<https://blockstream.info/> <- Block Explorer
+<https://github.com/jhoenicke/mempool> <- Self Hosted Mempool Statistics
+<https://jochen-hoenicke.de/queue/#BTC,24h,weight> <- Mempool Statistics
+<https://blockstream.info/tx/push> <- Broadcast a TX
+<https://1ml.com/> <- Lightning Explorer
+<https://github.com/BoltzExchange/boltz-lnd> <- Atomic Swaps for LND
+<https://github.com/lightningd/plugins> <- Plugins for C-Lightning
+		'''
+		await ctx.channel.send(msg)
 
 	# Fetches Bitcoin TX by hash
 	@commands.command()
