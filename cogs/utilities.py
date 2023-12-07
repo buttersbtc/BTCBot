@@ -10,6 +10,7 @@ import math
 import hashlib
 import datetime
 import time
+import ipc
 
 class Utilities(commands.Cog):
 	def __init__(self, bot):
@@ -383,13 +384,21 @@ Low Priority (6 blocks+/1h+) = {low} sat/vbyte
 Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 ```'''.format(high=high, medium=medium, low=low, vlow=vlow)
 		await ctx.send(message_string)
-
+	
+	@commands.command()
+	async def fees(self, ctx, *args):
+		await Utilities(self).fee(self, ctx, args)
 
 	@commands.command()
 	async def tip(self, ctx, *args):
 		user = args[0]
 		amount = args[1]
 		member = ctx.message.author
+
+	@commands.command()
+	async def register(self, ctx, *args):
+		member = ctx.message.author
+		ipc.websocket.send('{"action":"register", "id":"' + str(ctx.message.author) + '"}')
 
 	@commands.command()
 	async def halving(self, ctx, *args):
@@ -402,6 +411,10 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		timestamp = time.mktime(date.timetuple())
 		message_string = "The halving will happen in " + '{:,.0f}'.format(remainder) + " blocks, or approximately " + '{:,.0f}'.format(days) + " days or around <t:" + '{:.0f}'.format(timestamp) +">"
 		await ctx.send(message_string)
+
+	@commands.command()
+	async def halvening(self, ctx, *args):
+		await Utilities(self).halving(self, ctx, args)
 
 
 async def setup(bot):

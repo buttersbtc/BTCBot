@@ -6,7 +6,7 @@ import os
 import asyncio
 import requests
 import json
-from ipc import ipc
+import ipc
 from pricewatch import pricewatch
 from random import randrange
 import datetime
@@ -23,10 +23,9 @@ PREFIX = os.getenv('BOT_PREFIX')
 
 
 bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all(), description="BTC Bot")
-ipcsocket = ipc()
 def ipc_loop():
 	loop = asyncio.new_event_loop()
-	loop.create_task(ipc.listen(None, bot))
+	loop.create_task(ipc.listen(bot))
 	asyncio.set_event_loop(loop)
 	loop.run_forever()
 
@@ -111,7 +110,6 @@ async def on_message(message):
 
 @bot.event
 async def on_member_join(member):
-	print("new join: " + member.mention)
 	if os.getenv('ENABLE_ANTI_BOT') == "1" and os.getenv('NEW_USER_MSG') != "":
 		await member.send(os.getenv('NEW_USER_MSG'))
 		await member.send("Please complete the following captcha:")
@@ -122,7 +120,6 @@ async def on_member_join(member):
 @bot.event
 async def on_message_delete(message):
 	if os.getenv('ENABLE_DELETE_LOG') == "1":
-		print("new message deleted: " + message.content)
 		for guild in bot.guilds:
 					for channel in guild.channels:
 						if channel.name == os.getenv('REPORT_CHANNEL'):
