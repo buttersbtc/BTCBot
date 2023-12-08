@@ -274,6 +274,34 @@ class General(commands.Cog):
 		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(float(price))
 		await ctx.send(message_string)
 
+	@commands.command()
+	async def ff(self, ctx, *args):
+		fun_facts = ["**Fun Fact:** Bitcoin is the first decentralized digital currency",
+					 "**Fun Fact:** Bitcoin was created by Satoshi Nakamoto in 2009",
+					 "**Fun Fact:** Bitcoin is the first cryptocurrency",
+					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use blockchain technology",
+					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use proof of work",
+					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use a distributed ledger",
+					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use a peer-to-peer network",
+					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use a SHA-256 hash function",
+					 "**Fun Fact:** The smallest unit of Bitcoin is called a Satoshi, worth one hundred millionth of a single Bitcoin.",
+					 "**Fun Fact:** In 2021, El Salvador became the first country to adopt Bitcoin as legal tender.",
+					 "**Fun Fact:** At one point, the FBI was one of the world’s largest owners of Bitcoin, due to seizures from the Silk Road, an online black market.",
+					 "**Fun Fact:** The world's first Bitcoin ATM was installed in Vancouver, Canada, in 2013.",
+					 "**Fun Fact:** The first Bitcoin transaction was made by Satoshi Nakamoto to Hal Finney in 2009.",
+					 "**Fun Fact:** It’s estimated that around 20% of all Bitcoins are lost or inaccessible, mainly due to forgotten passwords or broken hard drives.",
+					 "**Fun Fact:** The first real-world transaction using Bitcoin was in 2010, when a programmer named Laszlo Hanyecz bought two pizzas for 10,000 Bitcoins.",
+					 "**Fun Fact:** In 2010, a vulnerability in the Bitcoin protocol was exploited, creating billions of Bitcoins. The bug was quickly fixed, and the extra Bitcoins were erased.",
+					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use a distributed timestamp server to verify transactions.",
+					 "**Fun Fact:** Bitcoin operates on a decentralized network, meaning it isn’t controlled by any single entity or government.",
+					 "**Fun Fact:** Bitcoins are created through a process called mining, which involves using computer power to solve complex mathematical problems.",
+					 "**Fun Fact:** Approximately every four years, the reward for Bitcoin mining halves, an event known as “halving.” This reduces the rate at which new Bitcoins are created.",
+					 "**Fun Fact:** There will only ever be 21 million Bitcoins in existence, making it a deflationary currency."
+					 ]
+
+		message_string = fun_facts[randrange(len(fun_facts))]
+		await ctx.send(message_string)
+
 	# convert between two currencies
 	@commands.command()
 	async def convert(self, ctx, *args):
@@ -323,7 +351,8 @@ class General(commands.Cog):
 	@commands.command()
 	async def help(self, ctx, *args):
 		message_string = "Commands this bot accepts:"
-		for cmd in self.bot.commands:
+		sorted_cmd = sorted(self.bot.commands, key=lambda cmd: cmd.name)
+		for cmd in sorted_cmd:
 			message_string +=  " " + os.getenv('BOT_PREFIX') + f"{cmd},"
 		await ctx.send(message_string[:len(message_string)-1])
 
