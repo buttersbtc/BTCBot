@@ -351,7 +351,8 @@ class General(commands.Cog):
 	@commands.command()
 	async def help(self, ctx, *args):
 		message_string = "Commands this bot accepts:"
-		for cmd in self.bot.commands:
+		sorted_cmd = sorted(self.bot.commands, key=lambda cmd: cmd.name)
+		for cmd in sorted_cmd:
 			message_string +=  " " + os.getenv('BOT_PREFIX') + f"{cmd},"
 		await ctx.send(message_string[:len(message_string)-1])
 
