@@ -23,9 +23,9 @@ PREFIX = os.getenv('BOT_PREFIX')
 
 
 bot = commands.Bot(command_prefix=PREFIX, intents=discord.Intents.all(), description="BTC Bot")
-def ipc_loop():
+def ipc_loop(og_loop):
 	loop = asyncio.new_event_loop()
-	loop.create_task(ipc.listen(bot))
+	task = loop.create_task(ipc.listen(bot, og_loop))
 	asyncio.set_event_loop(loop)
 	loop.run_forever()
 
@@ -34,8 +34,11 @@ async def on_ready():
 	print('Logged in as {0.user}'.format(bot))
 	print(discord.__version__)
 	if(os.getenv('ENABLE_TIPS') == "1"):
-		thread = threading.Thread(target=ipc_loop)
+		#asyncio.to_thread(ipc_loop)
+		og_loop = asyncio.get_event_loop()
+		thread = threading.Thread(target=ipc_loop, args=[og_loop])
 		thread.start()
+		
 	watcher = pricewatch()
 	await watcher.watch(bot)
 	
@@ -51,7 +54,6 @@ async def on_message(message):
 	#handle public channels
 	if(str(message.channel.type) != "private"):
 		if(message.channel.name == "new-joins"):
-			print("new join " + message.author.name)
 			if os.getenv('ENABLE_BAN_PATTERNS'):
 				for pattern in os.getenv('BAN_PATTERNS'):
 					print(re.search(pattern, message.author.name))
@@ -102,7 +104,6 @@ async def on_message(message):
 					print("can't find role in " + guild.name)
 					continue
 				member = guild.get_member(message.author.id)
-				print(member)
 				await member.add_roles(role)
 			await message.channel.send("Thank you, welcome to the chat.")
 
