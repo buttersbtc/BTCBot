@@ -340,6 +340,13 @@ The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte a
 		message_string = "The current block height is " + r.text
 		await ctx.send(message_string)
 
+	@commands.command()
+	async def total(self, ctx, *args):
+		api = "https://blockchain.info/q/totalbc"
+		r = requests.get(api)
+		await ctx.send("There are " + '{:,.0f}'.format(int(r.text)/100000000) + " BTC in circulation.")
+
+
 	# Fetches Bitcoin mempool info from blockstreams mempool
 	@commands.command()
 	async def fee(self, ctx, *args):
