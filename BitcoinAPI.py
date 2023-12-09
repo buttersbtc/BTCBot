@@ -40,14 +40,14 @@ class BitcoinAPI:
 
         return currency_symbol, rateUsd, error
 
-    def get_current_price_in_currency(self, currency: str) -> tuple[None, str] | tuple[float, None]:
+    def get_current_price_in_currency(self, currency: str) -> tuple[None, None, str] | tuple[float, str, None]:
         currency_symbol, rateUsd, error = self.get_currency_rates(currency)
         if error:
-            return None, error
+            return None, None, error
 
         price_in_usd, error = self.get_current_price()
         if error:
-            return None, error
+            return None, None, error
 
         price_in_currency = float(price_in_usd) / float(rateUsd)
-        return price_in_currency, None
+        return price_in_currency, currency_symbol, None
