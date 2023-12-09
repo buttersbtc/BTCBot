@@ -34,6 +34,7 @@ async def listen(bot, og_loop):
 		while(1):
 			try:
 				message = websocket.recv()
+				print(f"Received: {message}")
 				try:
 					msg = json.loads(message)
 					if not "id" in msg and not "action" in msg:
@@ -61,6 +62,7 @@ async def listen(bot, og_loop):
 						dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg["msg"]), og_loop)
 						dm.result()
 				except Exception as ex:
+					
 					print("IPC processing message error on line " + str(sys.exc_info()[-1].tb_lineno) + ": " + str(ex) + " message: " + message)
 			except (websockets.exceptions.ConnectionClosed, websockets.exceptions.ConnectionClosedError, websockets.exceptions.ConnectionClosedOK, UnboundLocalError) as ex:
 				print("ipc watch failure " + str(ex))

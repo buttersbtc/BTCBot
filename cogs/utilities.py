@@ -233,6 +233,9 @@ class Utilities(commands.Cog):
 	# Fetches Bitcoin TX by hash
 	@commands.command()
 	async def tx(self, ctx, *args):
+		if len(args) != 1:
+			await ctx.send("The tx command requires a tx hash following it.")
+			return
 		api = "https://blockstream.info/api/tx/" + args[0]
 		r = requests.get(api)
 		try:
@@ -270,6 +273,10 @@ Sent {amount} sat for {fee} sat fee ({feerate} sat/vbtye, {feepercent}%)
 	# Fetches Bitcoin address info
 	@commands.command()
 	async def address(self, ctx, *args):
+		if len(args) != 1:
+			await ctx.send("The address command requires an address following it.")
+			return
+
 		api = "https://blockstream.info/api/address/" + args[0]
 		r = requests.get(api)
 		try:
@@ -398,7 +405,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 
 	@commands.command()
 	async def tip(self, ctx, user: discord.User, amount, *args):
-		if(os.getenv('ENABLE_TIPS') == "1"):
+		if os.getenv('ENABLE_TIPS') == "1":
 			member = ctx.message.author
 			ipc.websocket.send('{"action":"request_invoice", "id":"' + str(user.id) + '", "requestId":"' + str(member.id) + '", "amount":"' + amount + '", "memo":"Bitcoin discord user ' + member.name + '"}')
 
@@ -406,7 +413,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 
 	@commands.command()
 	async def register(self, ctx, *args):
-		if(os.getenv('ENABLE_TIPS') == "1"):
+		if os.getenv('ENABLE_TIPS') == "1":
 			member = ctx.message.author
 			ipc.websocket.send('{"action":"register", "id":"' + str(ctx.message.author.id) + '"}')
 
