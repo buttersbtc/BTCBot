@@ -2,6 +2,8 @@ import requests
 
 
 class BitcoinAPI:
+    TIMEOUT = 10
+
     def __init__(self):
         self.coincap_rates = "https://api.coincap.io/v2/rates/"
         self.coincap_btc = "https://api.coincap.io/v2/assets/bitcoin"
@@ -22,7 +24,7 @@ class BitcoinAPI:
         """
         error = None
         try:
-            response = requests.get(self.coincap_btc)
+            response = requests.get(self.coincap_btc, self.TIMEOUT)
             response.raise_for_status()
             bitcoin_price = float(response.json()["data"]["priceUsd"])
         except requests.RequestException as e:
@@ -53,7 +55,7 @@ class BitcoinAPI:
         error = None
         currency = currency.upper()
         try:
-            response = requests.get(self.coincap_rates)
+            response = requests.get(self.coincap_rates, self.TIMEOUT)
             response.raise_for_status()
             rates = response.json()
             for rate in rates["data"]:
