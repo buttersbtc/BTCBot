@@ -34,7 +34,6 @@ async def on_ready():
 	print('Logged in as {0.user}'.format(bot))
 	print(discord.__version__)
 	if(os.getenv('ENABLE_TIPS') == "1"):
-		#asyncio.to_thread(ipc_loop)
 		og_loop = asyncio.get_event_loop()
 		thread = threading.Thread(target=ipc_loop, args=[og_loop])
 		thread.start()
