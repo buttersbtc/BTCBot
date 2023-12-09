@@ -397,12 +397,10 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		await Utilities(self).fee(self, ctx, args)
 
 	@commands.command()
-	async def tip(self, ctx, *args):
+	async def tip(self, ctx, user: discord.User, amount, *args):
 		if(os.getenv('ENABLE_TIPS') == "1"):
-			user = args[0]
-			amount = args[1]
 			member = ctx.message.author
-			ipc.websocket.send('{"action":"request_invoice", "id":"' + user + '", "requestId":"' + member.name + '", "amount":"' + amount + '", "memo":"Bitcoin discord user ' + member.name + '"}')
+			ipc.websocket.send('{"action":"request_invoice", "id":"' + str(user.id) + '", "requestId":"' + str(member.id) + '", "amount":"' + amount + '", "memo":"Bitcoin discord user ' + member.name + '"}')
 
 
 
@@ -410,7 +408,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	async def register(self, ctx, *args):
 		if(os.getenv('ENABLE_TIPS') == "1"):
 			member = ctx.message.author
-			ipc.websocket.send('{"action":"register", "id":"' + str(ctx.message.author.name) + '"}')
+			ipc.websocket.send('{"action":"register", "id":"' + str(ctx.message.author.id) + '"}')
 
 	@commands.command()
 	async def halving(self, ctx, *args):

@@ -354,6 +354,8 @@ class General(commands.Cog):
 		sorted_cmd = sorted(self.bot.commands, key=lambda cmd: cmd.name)
 		for cmd in sorted_cmd:
 			message_string +=  " " + os.getenv('BOT_PREFIX') + f"{cmd},"
+		message_string = message_string[:len(message_string)-1]
+		message_string += ". For bot support inquire at <https://bitcointech.help> or in the issues at <https://github.com/buttersbtc/BTCBot/issues>"
 		await ctx.send(message_string[:len(message_string)-1])
 
 async def setup(bot):
