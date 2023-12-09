@@ -1,12 +1,9 @@
-import discord
-from discord.ext import commands
-from dotenv import load_dotenv
-import os
 import asyncio
-import requests
-import json
-from BitcoinAPI import BitcoinAPI
 
+import requests
+import discord
+
+from BitcoinAPI import BitcoinAPI
 
 class pricewatch():
     async def watch(self, bot):
