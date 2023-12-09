@@ -1,4 +1,5 @@
 import asyncio
+import logging
 
 import requests
 import discord
@@ -14,7 +15,7 @@ class pricewatch:
             try:
                 price, error = api.get_current_price()
                 if error:
-                    print(error)
+                    logging.log(logging.ERROR, error)
                     continue
                 price = "${:,.2f} USD".format(price)
 
@@ -24,7 +25,7 @@ class pricewatch:
                     )
                 )
             except requests.RequestException as _:
-                print("price watch fail")
+                logging.log(logging.ERROR, "price watch fail")
 
     def __init__(self):
-        print("Started Price Watch")
+        logging.log(logging.INFO, "Starting Price Watch")
