@@ -5,23 +5,24 @@ import os
 import asyncio
 import requests
 import json
+from BitcoinAPI import BitcoinAPI
+
 
 class pricewatch():
-	async def watch(self, bot):
-		while(1):
-			await asyncio.sleep(5)
-			try:
-				api = "https://api.coincap.io/v2/assets/bitcoin"
+    async def watch(self, bot):
+        api = BitcoinAPI()
+        while True:
+            await asyncio.sleep(5)
+            try:
+                price, error = api.get_current_price()
+                if error:
+                    print(error)
+                    continue
+                price = "${:,.2f} USD".format(price)
 
-				r = requests.get(api, timeout=5)
-				data = json.loads(r.text)
+                await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=price))
+            except requests.RequestException as _:
+                print("price watch fail")
 
-				price = data["data"]["priceUsd"]
-				price = round(float(price),2)
-				price = "${:,.2f} USD".format(float(price))
-
-				await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=price))
-			except:
-				print("price watch fail")
-	def __init__(self):
-		print("Started Price Watch")
+    def __init__(self):
+        print("Started Price Watch")
