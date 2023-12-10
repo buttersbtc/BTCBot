@@ -1,27 +1,31 @@
-import discord
-from discord.ext import commands
-from dotenv import load_dotenv
-import os
 import asyncio
+import logging
+
 import requests
-import json
+import discord
 
-class pricewatch():
-	async def watch(self, bot):
-		while(1):
-			await asyncio.sleep(5)
-			try:
-				api = "https://api.coincap.io/v2/assets/bitcoin"
+from BitcoinAPI import BitcoinAPI
 
-				r = requests.get(api, timeout=5)
-				data = json.loads(r.text)
 
-				price = data["data"]["priceUsd"]
-				price = round(float(price),2)
-				price = "${:,.2f} USD".format(float(price))
+class pricewatch:
+    async def watch(self, bot):
+        api = BitcoinAPI()
+        while True:
+            await asyncio.sleep(5)
+            try:
+                price, error = api.get_current_price()
+                if error:
+                    logging.log(logging.ERROR, error)
+                    continue
+                price = "${:,.2f} USD".format(price)
 
-				await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name=price))
-			except:
-				print("price watch fail")
-	def __init__(self):
-		print("Started Price Watch")
+                await bot.change_presence(
+                    activity=discord.Activity(
+                        type=discord.ActivityType.watching, name=price
+                    )
+                )
+            except requests.RequestException as _:
+                logging.log(logging.ERROR, "price watch fail")
+
+    def __init__(self):
+        logging.log(logging.INFO, "Starting Price Watch")
