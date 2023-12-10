@@ -1,3 +1,4 @@
+from BitcoinAPI import BitcoinAPI
 from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BLACKLIST
 from operator import truediv
 import os
@@ -21,140 +22,63 @@ class General(commands.Cog):
 	# Price - All currencies enabled by the APi are automatically supported. Add a currency formatting string to change the way a given currency is displayed
 	#To add a new item to the price call make a new entry in the itemDic with the cost and formatStr, the key being the string  used to call that item
 	@commands.command()
-	async def price(self, ctx, *args):
-		if len(args) == 0:
-			arg="noargs"
-		else:
-			arg = args[0].lower()
+	async def price(self, ctx, arg):
+		if arg is None:
+			await ctx.send('Invalid price command passed...')
 
-		if len(args) >= 2:
-			arg = args[0].lower()
-			arg2 = args[1].lower()
-		else:
-			arg2 = "noarg"
+		arg = arg.lower()
 
-		if arg in BLACKLIST:
-			return
-
-		if arg =="sats":
-			await ctx.channel.send("**1 Bitcoin** is equal to **100,000,000 Satoshis**")
-			return
-			
-		if arg == "help":
-			await ctx.channel.send("**Currency Eamples**: !p gbp, !p cad, !p xau")
-			keys = ""
-			for k in ITEM_DICT.keys():
-				keys += k + ", "
-			keys = keys[0:len(keys)-2]
-			await ctx.channel.send("**Other Supported Items**: " + keys)
-			await ctx.channel.send("**!p <item> sats** will give you the cost of the item in satoshis")
-			return
-
-		#route to other func if exists
-		func = getattr(self, arg , None)
-		if(callable(func)):
-			await func(ctx)
-			return
-
-		#handle items first, fallback to currencies
-		isItem = arg in ITEM_DICT
-		item = ""
-		if isItem:
-			item = arg
-
-		if arg == "noargs" or isItem:
-			arg = "usd"
-		#call the api for our currency
-		try:
-			api = "https://api.coincap.io/v2/assets/bitcoin"
-			r = requests.get(api, timeout=10)
-			data = json.loads(r.text)
-
-			api_rates = "https://api.coincap.io/v2/rates/"
-			r_rates = requests.get(api_rates, timeout=10)
-			data_rates = json.loads(r_rates.text)
-
-		except:
-			await ctx.send("Price APi is currently slow to respond. Try again later.")
-			return
-
-		price = data["data"]["priceUsd"]
-		skipConvert = False
-
-		#convert if necessary or do item calcs.
-		found_currency = False
-
-		if arg != "usd" and not skipConvert:
-		
-			for i in data_rates["data"]:
-				if i["symbol"] == arg.upper():
-					found_currency = True
-					price = float(price) / float(i["rateUsd"])
-		
-		if found_currency == False:
-			arg = "USD"
-		
-		if isItem:
-			if ITEM_DICT[item]["single"] == False:
-				if ITEM_DICT[item]["cost"] < float(price) and arg2=="sats":
-					price = ITEM_DICT[item]["cost"]/float(price) * 100000000
-				else:
-					price = float(price)/ITEM_DICT[item]["cost"]
-					if arg2 == "sats":
-						price = price * 100000000
-
-			else:
-				price = ITEM_DICT[item]["cost"]/float(price)
-				if arg2 == "sats":
-					price = price * 100000000
-		else:
-			if arg2 == "sats":
-				price = 100000000/float(price)
-
-
-
-		currencyStr = ""
 		if arg in CURRENCY_FORMAT_DICT:
-			if arg2 == "sats":
-				currencyStr = "**1 " + arg.upper()  + "** is **" + "{:,.0f} Satoshis**"
-			else:
-				currencyStr = CURRENCY_FORMAT_DICT[arg]
+			await self.price_currency(ctx, arg)
+			return
+		if arg in ITEM_DICT:
+			await self.price_item(ctx, arg)
+			return
+		if arg == "sats":
+			await self.price_sats(ctx, arg)
+			return
+		return await ctx.send('Invalid price command passed...')
 
-		elif isItem:
-			if ITEM_DICT[item]["single"] == False:
-				if arg2 == "sats":
-					currencyStr = "**" + ITEM_DICT[item]["emoji"] + " 1 " + ITEM_DICT[item]["name"] + "**" + " costs **" + "{:,.0f}" + " Satoshis**"
-				else:
-					currencyStr = "**1 Bitcoin** is worth **" + ITEM_DICT[item]["emoji"] + " {:,.0f}" + " " + ITEM_DICT[item]["name"] + "**"
-			else:
-				if arg2 == "sats":
-					currencyStr = "**" + ITEM_DICT[item]["emoji"] + " 1 " + ITEM_DICT[item]["name"] + "**" + " costs **" + "{:,.0f}" + " Satoshis**"
-				else:
-					currencyStr = "**" + ITEM_DICT[item]["emoji"] + " 1 " + ITEM_DICT[item]["name"] + "**" + " costs **" + "{:,.2f}" + " Bitcoin**"
-		else:
-			if arg2 == "sats":
-				currencyStr = "**1 " + arg.upper()  + "** is **" + "{:,.0f} Satoshis**"
-			else:
-				currencyStr = CURRENCY_FORMAT_DICT["default"] + arg.upper()
+	async def price_sats(self, ctx, *args):
+		await ctx.channel.send("**1 Bitcoin** is equal to **100,000,000 Satoshis**")
 
-		
-		price = currencyStr.format(float(price))
-		
-		message_string = ""
-		if isItem:
-			message_string = price
+	async def price_currency(self, ctx, currency):
+		if currency not in CURRENCY_FORMAT_DICT:
+			await ctx.channel.send("Currency not supported")
+			return
+		api = BitcoinAPI()
+		price, error = api.get_current_price()
+		if error:
+			await ctx.channel.send("Price API is currently slow to respond. Try again later.")
+			return
+		price, _, _ = api.get_current_price_in_currency(currency)
+		price = CURRENCY_FORMAT_DICT[currency].format(price)
+		await ctx.channel.send(price)
+
+	async def price_item(self, ctx, item):
+		if not item in ITEM_DICT:
+			await ctx.channel.send("Item not supported")
+			return
+		api = BitcoinAPI()
+		price, error = api.get_current_price()
+		if error:
+			await ctx.channel.send("Price API is currently slow to respond. Try again later.")
+			return
+		item_map = ITEM_DICT[item]
+		emoji = item_map["emoji"]
+		name = item_map["name"]
+		if item_map["single"]:
+			price = item_map["cost"] / price
+			await ctx.channel.send(f"{emoji} {name} costs {price:,.2f} Bitcoin")
 		else:
-			if arg2 == "sats":
-				message_string = price
-			else:	
-				message_string = "**1 Bitcoin** is worth **" + price + "**"
-		
-		await ctx.send(message_string)
+			price = price / ITEM_DICT[item]["cost"]
+			await ctx.channel.send(f"1 Bitcoin is worth {emoji} {price:,.2f} {name}")
+			return
 
 	# price synonym
 	@commands.command()
-	async def p(self, ctx, *args):
-		await General(self).price(self, ctx, *args)
+	async def p(self, ctx, arg):
+		await General(self).price(self, ctx, arg)
 
 	# Bitcoin is a btc
 	@commands.command()
