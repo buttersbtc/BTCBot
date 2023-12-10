@@ -88,3 +88,25 @@ def get_current_price_in_currency(currency: str) -> tuple[None, None, str] | tup
         return None, None, error
     price_in_currency = float(price_in_usd) / float(rateUsd)
     return price_in_currency, currency_symbol, None
+
+
+def get_bitcoin_ath() -> tuple[None, str] | tuple[float, None]:
+    """
+    Retrieve the all-time high price of Bitcoin from the CoinGecko API.
+    This function sends a GET request to the CoinGecko API to fetch the all-time
+    high price of Bitcoin. If the request is successful, it parses the response to
+    extract the price in USD. In case of any exceptions during the request, it
+    captures the exception and returns an error message.
+    Returns:
+    tuple[float, None]: On success, the all-time high price of Bitcoin in USD and None for error.
+    tuple[None, str]: On failure, None for the price and an error message.
+    """
+    error = None
+    try:
+        response = requests.get(coingecko, timeout=TIMEOUT)
+        response.raise_for_status()
+        bitcoin_ath = float(response.json()[0]["ath"])
+    except requests.RequestException as e:
+        error = f"Failed to fetch price with error: {e}"
+        return None, error
+    return bitcoin_ath, error

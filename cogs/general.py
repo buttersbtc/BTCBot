@@ -138,11 +138,11 @@ class General(commands.Cog):
 	# Fetches Bitcoin all time high (ATH) price
 	@commands.command()
 	async def ath(self, ctx):
-		api = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false"
-		r = requests.get(api)
-		data = json.loads(r.text)
-		price = data[0]["ath"]
-		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(float(price))
+		ath, error = api.get_bitcoin_ath()
+		if error:
+			return await ctx.send(error)
+
+		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(ath)
 		await ctx.send(message_string)
 
 	@commands.command()
