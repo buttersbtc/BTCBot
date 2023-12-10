@@ -1,15 +1,11 @@
 import asyncio
 import logging
-
 import requests
 import discord
-
-from BitcoinAPI import BitcoinAPI
-
+import BitcoinAPI as api
 
 class pricewatch:
     async def watch(self, bot):
-        api = BitcoinAPI()
         while True:
             await asyncio.sleep(5)
             try:
@@ -28,4 +24,5 @@ class pricewatch:
                 logging.log(logging.ERROR, "price watch fail")
 
     def __init__(self):
+        logging.basicConfig(level=logging.INFO, handlers=[logging.StreamHandler()])
         logging.log(logging.INFO, "Starting Price Watch")
