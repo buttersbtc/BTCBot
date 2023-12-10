@@ -56,7 +56,7 @@ Create a new file named .env in the same directory as btcbot.py with the followi
 # Run
 Once the `BOT_PREFIX` and `DISCORD_TOKEN` are configured, you can run the bot by executing the `btcbot.py` module.
 
-#How to Contribute to the Discord Bot
+# How to Contribute to the Discord Bot
 
 Contributing to this Discord bot project is straightforward. Just follow these simple steps:
 
