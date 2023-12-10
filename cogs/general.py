@@ -296,7 +296,7 @@ class General(commands.Cog):
 					 "**Fun Fact:** Bitcoin operates on a decentralized network, meaning it isn’t controlled by any single entity or government.",
 					 "**Fun Fact:** Bitcoins are created through a process called mining, which involves using computer power to solve complex mathematical problems.",
 					 "**Fun Fact:** Approximately every four years, the reward for Bitcoin mining halves, an event known as “halving.” This reduces the rate at which new Bitcoins are created.",
-					 "**Fun Fact:** There will only ever be 21 million Bitcoins in existence, making it a deflationary currency."
+					 "**Fun Fact:** There will only ever be 21 million Bitcoins in existence, making it a deflationary currency once it is all printed or the loss rate is greater than the printed rate. Until then it is inflationary. As of this writing 95% of all Bitcoin have been mined."
 					 ]
 
 		message_string = fun_facts[randrange(len(fun_facts))]
