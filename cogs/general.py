@@ -141,12 +141,12 @@ class General(commands.Cog):
 	async def ff(self, ctx, *args):
 		fun_facts = ["**Fun Fact:** Bitcoin is the first decentralized digital currency",
 					 "**Fun Fact:** Bitcoin was created by Satoshi Nakamoto in 2009",
-					 "**Fun Fact:** Bitcoin is the first cryptocurrency",
-					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use blockchain technology",
-					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use proof of work",
-					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use a distributed ledger",
-					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use a peer-to-peer network",
-					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use a SHA-256 hash function",
+					 "**Fun Fact:** Bitcoin is not a cryptocurrency, it predates them and the term only exists to create a false association to Bitcoin",
+					 "**Fun Fact:** Blockchain technology is neither novel nor valuable. It'has none of the properties commonly ascribed to it like immutability or decentralization or security.",
+					 "**Fun Fact:** Proof of work is where Bitcoin's cost to attack and economic mutability come from.",
+					 "**Fun Fact:** Bitcoin's distributed ledger, the blockchain, is simply where we store the data for Bitcoin network state. It has no other valuable function or properties.",
+					 "**Fun Fact:** Bitcoin's p2p network is where most of the valuable properties associated with Bitcoin emerge from, specifically the behaviour of the network actors verifying all transactions and acting in a self interested manner.",
+					 "**Fun Fact:** Bitcoin has a super-majority of SHA-256 computing in the world, and without that super majority it would be vulnerable to attacks",
 					 "**Fun Fact:** The smallest unit of Bitcoin is called a Satoshi, worth one hundred millionth of a single Bitcoin.",
 					 "**Fun Fact:** In 2021, El Salvador became the first country to adopt Bitcoin as legal tender.",
 					 "**Fun Fact:** At one point, the FBI was one of the world’s largest owners of Bitcoin, due to seizures from the Silk Road, an online black market.",
@@ -155,7 +155,7 @@ class General(commands.Cog):
 					 "**Fun Fact:** It’s estimated that around 20% of all Bitcoins are lost or inaccessible, mainly due to forgotten passwords or broken hard drives.",
 					 "**Fun Fact:** The first real-world transaction using Bitcoin was in 2010, when a programmer named Laszlo Hanyecz bought two pizzas for 10,000 Bitcoins.",
 					 "**Fun Fact:** In 2010, a vulnerability in the Bitcoin protocol was exploited, creating billions of Bitcoins. The bug was quickly fixed, and the extra Bitcoins were erased.",
-					 "**Fun Fact:** Bitcoin is the first cryptocurrency to use a distributed timestamp server to verify transactions.",
+					 "**Fun Fact:** Bitcoin is the only decentralized entity in the 'crypto' space and 'cryptocurrency' is generally a by-word for scams.",
 					 "**Fun Fact:** Bitcoin operates on a decentralized network, meaning it isn’t controlled by any single entity or government.",
 					 "**Fun Fact:** Bitcoins are created through a process called mining, which involves using computer power to solve complex mathematical problems.",
 					 "**Fun Fact:** Approximately every four years, the reward for Bitcoin mining halves, an event known as “halving.” This reduces the rate at which new Bitcoins are created.",
@@ -217,6 +217,8 @@ class General(commands.Cog):
 		sorted_cmd = sorted(self.bot.commands, key=lambda cmd: cmd.name)
 		for cmd in sorted_cmd:
 			message_string +=  " " + os.getenv('BOT_PREFIX') + f"{cmd},"
+		message_string = message_string[:len(message_string)-1]
+		message_string += ". For bot support inquire at <http://bitcointech.help> or in the issues at <https://github.com/buttersbtc/BTCBot/issues\>"
 		await ctx.send(message_string[:len(message_string)-1])
 
 async def setup(bot):
