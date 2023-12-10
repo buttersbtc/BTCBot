@@ -183,3 +183,5 @@ ITEM_DICT = {
 }
 
 BLACKLIST = {"xdg": True, "ltc": True, "eth": True, "xrp": True, "bch": True}
+
+BITCOIN_IN_SATS = 100000000

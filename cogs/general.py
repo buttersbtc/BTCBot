@@ -1,5 +1,7 @@
+import math
+
 import BitcoinAPI as api
-from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BLACKLIST
+from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BLACKLIST, BITCOIN_IN_SATS
 from operator import truediv
 import os
 from discord.ext import commands
@@ -103,38 +105,29 @@ class General(commands.Cog):
 	# Fetches hours worked for a bitcoin at a rate.
 	@commands.command()
 	async def wage(self, ctx, *args):
-
-		if len(args) != 2:
+		if len(args) != 2 or not args[0].isdigit() or math.floor(int(args[0])) == 0:
 			await ctx.send("To use wage include the amount earned in the wage and a currency. ex. !wage 15.00 USD")
 			return
 
 		arg = args[1].lower()
-		wage = args[0]
+		wage = float(args[0])
+		format_string = "**1 Bitcoin** costs **{:,.0f}** hours"
 
-		try:
-			api = "https://api.coincap.io/v2/assets/bitcoin"
-			r = requests.get(api)
-			data = json.loads(r.text)
+		if arg == "usd":
+			price, error = api.get_current_price()
+			if error:
+				return await ctx.send("The price API is currently unavailable")
 
-			api_rates = "https://api.coincap.io/v2/rates/"
-			r_rates = requests.get(api_rates)
-			data_rates = json.loads(r_rates.text)
+			return await ctx.send(format_string.format(price/wage))
 
-		except:
-			await ctx.send("The price API is currently unavailable")
-			return
-		price = data["data"]["priceUsd"]
-		if arg != "usd":
-			for currency in data_rates["data"]:
-				if currency["symbol"].lower() == arg:
-					conversion = currency["rateUsd"]
-					price = float(price)/float(conversion)
+		if arg == "sats":
+			return await ctx.send(format_string.format(BITCOIN_IN_SATS/wage))
+		price, _, error = api.get_current_price_in_currency(arg)
+		if error:
+			return await ctx.send(error)
 
-		price = float(price)/float(wage)
-		message_string = "**1 Bitcoin** costs **{:,.0f}** hours".format(float(price))
+		await ctx.send(format_string.format(price/wage))
 
-		await ctx.send(message_string)
-		
 	# Fetches Bitcoin all time high (ATH) price
 	@commands.command()
 	async def ath(self, ctx):
