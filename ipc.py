@@ -42,7 +42,7 @@ async def listen(bot, og_loop):
 					if msg["action"] == "registered":
 						dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg["msg"], True), og_loop)
 						dm.result()
-					elif "requestID" in msg and "amount" in msg and msg["action"] == "user_unregistered":
+					elif "requestId" in msg and "amount" in msg and msg["action"] == "user_unregistered":
 						sender = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["requestId"]), og_loop).result()
 						receiver = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["id"]), og_loop).result()
 						msg1 = receiver.name + " is not currently registered using the `" + os.getenv('BOT_PREFIX') + "register` command on the PayMeBTC Bitcoin tip bot. We have sent them a DM letting them know you are trying to tip them."
