@@ -35,3 +35,49 @@ BAN_PATTERN=regex pattern array matching auto-banned users
 
 # Run
 ```python btcbot.py```
+
+# How to Contribute to the Discord Bot
+
+Contributing to this Discord bot project is straightforward. Just follow these simple steps:
+
+**Step 1: Install Git**
+- Download and install Git Bash from [https://git-scm.com/downloads](https://git-scm.com/downloads) if you haven't already.
+
+**Step 2: Create a GitHub Account**
+- If you don't have a GitHub account, create one at [https://github.com/](https://github.com/).
+
+**Step 3: Configure Git**
+- After installing Git Bash, you need to configure your Git credentials. This helps in identifying the author of the commits you make.
+- Open Git Bash and enter the following commands:
+`git config --global user.name "Your Name"`
+`git config --global user.email "YourGitHubEmail@example.com"`
+
+- **Note for Anonymity:** If you prefer to stay anonymous, you can use any name. To keep your email private, use the no-reply email provided by GitHub.
+- Go to your GitHub account, click your profile icon in the top right corner, and go to 'Settings'.
+- Navigate to 'Emails' and copy your `@users.noreply.github.com` email.
+- Use this email in the git config command for `user.email`.
+
+
+Go to the https://github.com/buttersbtc/BTCBot page and **Fork the repository**. You can achieve this by pressing the Fork button. Once you have forked it, click your icon again in the top right corner and go to "your repository". Select the BTCBot, press the green button <> Code and copy the HTTPS URL.
+
+**Step 4: Clone the Repository**
+- Open Git Bash where you want to add the bot directory. The easiest way is to right-click in the folder and select "Git Bash Here".
+- Now type: `git clone [URL you copied here]`
+
+**Step 5: Edit the Code**
+- Make the necessary changes or additions to the code in your local repository.
+
+**Step 6: Prepare and Push Your Changes**
+- Type `git status` into Git Bash to see what files you have changed. You can even do `git diff fileName` to see the changes in that particular file.
+- Create your own branch by writing: `git branch yourBranchName`
+- Switch to your branch with `git checkout yourBranchName`.
+- Stage your changes with `git add fileName` (note: add the files you changed and want to push for review).
+- Commit your changes with `git commit -m "add a short message here on what you did, try not to exceed 50 characters"`.
+- Push your changes with `git push origin yourBranchName`.
+
+**Step 7: Create a Pull Request**
+- Go to your repository on GitHub. GitHub should suggest you can do a pull request (PR).
+- Click on the suggestion to create a PR. If you'd like, give the PR a descriptive title and add a description.
+- Submit the PR.
+
+Congratulations, you have just completed your first pull request!
