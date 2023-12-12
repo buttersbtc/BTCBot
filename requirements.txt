@@ -1,4 +1,4 @@
-discord.py
+discord
 requests
 python-dotenv
 captcha
