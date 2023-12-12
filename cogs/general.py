@@ -165,7 +165,7 @@ class General(commands.Cog):
 					 "**Fun Fact:** In 2010, a vulnerability in the Bitcoin protocol was exploited, creating billions of Bitcoins. The bug was quickly fixed, and the extra Bitcoins were erased.",
 					 "**Fun Fact:** Bitcoin is the only decentralized entity in the 'crypto' space and 'cryptocurrency' is generally a by-word for scams.",
 					 "**Fun Fact:** Bitcoin operates on a decentralized network, meaning it isn’t controlled by any single entity or government.",
-					 "**Fun Fact:** Bitcoins are created through a process called mining, which involves using computer power to solve complex mathematical problems.",
+					 "**Fun Fact:** Bitcoins are created through a process called mining, which involves using power to run special computers called ASIC's used to search for the correct random number that entitles them to mint new bitcoins, publish bitcoin transactions, and take their fees",
 					 "**Fun Fact:** Approximately every four years, the reward for Bitcoin mining halves, an event known as “halving.” This reduces the rate at which new Bitcoins are created.",
 					 "**Fun Fact:** There will only ever be 21 million Bitcoins in existence, making it a deflationary currency once it is all printed or the loss rate is greater than the printed rate. Until then it is inflationary. As of this writing 95% of all Bitcoin have been mined."
 					 ]

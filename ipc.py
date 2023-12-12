@@ -8,20 +8,34 @@ import requests
 import json
 from websockets.sync.client import connect
 import websockets
+import qrcode
+import io
 
 websocket = None
-async def send_dm(bot, id, msg, send_file = False):
+async def send_dm(bot, id, msg, send_file = False, filename = ""):
 		member = await bot.fetch_user(id)
 		if member != None:
 			channel = await member.create_dm()
-			if send_file:
-				#r = requests.get("https://raw.githubusercontent.com/MrRGnome/PayMeBTC/master/client/client.html")
-				#r.text
-				#await channel.send(msg, file=discord.File(r.text, 'PayMeBTC.html'))
-				await channel.send(msg)
-			else:
-				await channel.send(msg)
-			return
+			try:
+				if send_file:
+					await channel.send(msg, file=discord.File(send_file, filename))
+				else:
+					await channel.send(msg)
+			except:
+				await send_channel(bot, id, msg, send_file, filename)
+async def send_channel(bot, id, msg, send_file = False, filename = ""):
+	member = await bot.fetch_user(id)
+	msg = member.mention + " " + msg
+	send_file.seek(0)
+	if member != None and os.getenv('TIPS_CHANNEL'):
+			for guild in bot.guilds:
+				for channel in guild.channels:
+					if channel.name == os.getenv('TIPS_CHANNEL'):
+						if send_file:
+							await channel.send(msg, file=discord.File(send_file, filename))
+						else:
+							await channel.send(msg)
+	
 
 async def listen(bot, og_loop):
 	global websocket
@@ -40,8 +54,9 @@ async def listen(bot, og_loop):
 						print("Invalid message missing id and action fields")
 						continue
 					if msg["action"] == "registered":
-						dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg["msg"], True), og_loop)
-						dm.result()
+						#r = requests.get("https://raw.githubusercontent.com/MrRGnome/PayMeBTC-client/master/client.html")
+						#r.text
+						dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg["msg"]), og_loop).result()
 					elif "requestId" in msg and "amount" in msg and msg["action"] == "user_unregistered":
 						sender = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["requestId"]), og_loop).result()
 						receiver = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["id"]), og_loop).result()
@@ -56,12 +71,18 @@ async def listen(bot, og_loop):
 						msg2 = sender.name + " is trying to send you " + msg["amount"] + " satoshi but can't because your PayMeBTC server is offline. Please restart PayMeBTC.html or re-register with the  `" + os.getenv('BOT_PREFIX') + "register` command."
 						dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1), og_loop).result()
 						dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg2), og_loop).result()
-
-					elif "msg" in msg:
-						dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg["msg"]), og_loop)
+					elif "amount" in msg and "data" in msg and msg["action"] == "new_invoice":
+						receiver = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["id"]), og_loop).result()
+						msg1 = "To tip " + receiver.name + " " + msg["amount"] + " satoshi scan or paste the following lightning invoice in your lightning wallet: **" + msg["data"] + "**"
+						img = qrcode.make(msg["data"])
+						buf = io.BytesIO()
+						img.save(buf)
+						buf.seek(0)
+						dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1, buf, "invoice.png"), og_loop)
 						dm.result()
+					elif "msg" in msg:
+						dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg["msg"]), og_loop).result()
 				except Exception as ex:
-					
 					print("IPC processing message error on line " + str(sys.exc_info()[-1].tb_lineno) + ": " + str(ex) + " message: " + message)
 			except (websockets.exceptions.ConnectionClosed, websockets.exceptions.ConnectionClosedError, websockets.exceptions.ConnectionClosedOK, UnboundLocalError) as ex:
 				print("ipc watch failure " + str(ex))
