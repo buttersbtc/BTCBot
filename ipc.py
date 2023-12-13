@@ -26,12 +26,12 @@ async def send_dm(bot, id, msg, send_file = False, filename = ""):
 async def send_channel(bot, id, msg, send_file = False, filename = ""):
 	member = await bot.fetch_user(id)
 	msg = member.mention + " " + msg
-	send_file.seek(0)
 	if member != None and os.getenv('TIPS_CHANNEL'):
 			for guild in bot.guilds:
 				for channel in guild.channels:
 					if channel.name == os.getenv('TIPS_CHANNEL'):
 						if send_file:
+							send_file.seek(0)
 							await channel.send(msg, file=discord.File(send_file, filename))
 						else:
 							await channel.send(msg)
