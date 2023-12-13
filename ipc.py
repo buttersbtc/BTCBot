@@ -22,8 +22,8 @@ async def send_dm(bot, id, msg, send_file = False, filename = ""):
 				else:
 					await channel.send(msg)
 			except:
-				await send_channel(bot, id, msg, send_file, filename)
-async def send_channel(bot, id, msg, send_file = False, filename = ""):
+				await send_channel(bot, id, msg)
+async def send_channel(bot, id, msg):
 	member = await bot.fetch_user(id)
 	msg = "You must add this bot as a friend or unblock DM's in order to use the tip features on discord"
 	msg = member.mention + " " + msg
@@ -31,11 +31,7 @@ async def send_channel(bot, id, msg, send_file = False, filename = ""):
 			for guild in bot.guilds:
 				for channel in guild.channels:
 					if channel.name == os.getenv('TIPS_CHANNEL'):
-						if send_file:
-							send_file.seek(0)
-							await channel.send(msg, file=discord.File(send_file, filename))
-						else:
-							await channel.send(msg)
+						await channel.send(msg)
 	
 
 async def listen(bot, og_loop):
