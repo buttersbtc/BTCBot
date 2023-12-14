@@ -122,7 +122,7 @@ async def on_message_delete(message):
 	if os.getenv('ENABLE_DELETE_LOG') == "1":
 		for guild in bot.guilds:
 					for channel in guild.channels:
-						if channel.name == os.getenv('REPORT_CHANNEL'):
+						if channel.name == os.getenv('REPORT_CHANNEL') and message.channel.id != channel.id:
 							msg = "new message deleted: " + message.content + " " + "-" + message.author.mention
 							await channel.send(msg)
 
