@@ -328,9 +328,9 @@ Sent {sentCount} TXO for {sentAmt} sat
 		message_string = '''```Blockstream's mempool has {count} TX and is {size} MB
 Total fees in mempool are {fees} BTC
 The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte and {range0topMB} sat/vbyte
-{range10}MB- {range11}MB = {range1bottomMB}-{range1topMB} sat/vbyte
-{range20}MB- {range21}MB = {range2bottomMB}-{range2topMB} sat/vbyte
-{range30}MB- {range31}MB  = {range3bottomMB}-{range3topMB} sat/vbyte
+{range10}MB - {range11}MB = {range1bottomMB}-{range1topMB} sat/vbyte
+{range20}MB - {range21}MB = {range2bottomMB}-{range2topMB} sat/vbyte
+{range30}MB - {range31}MB  = {range3bottomMB}-{range3topMB} sat/vbyte
 ```'''.format(count='{:,.0f}'.format(data["count"]), size='{:,.2f}'.format(data["vsize"]/1000000), fees='{:,.2f}'.format(data["total_fee"]/100000000), 
 			  range01='{:,.0f}'.format(brackets[0][1]/1000000), range0bottomMB='{:,.0f}'.format(brackets[0][3]), range0topMB='{:,.0f}'.format(brackets[0][2]), 
 			  range10='{:,.0f}'.format(brackets[1][0]/1000000), range11='{:,.0f}'.format(brackets[1][1]/1000000), range1bottomMB='{:,.0f}'.format(brackets[1][3]), range1topMB='{:,.0f}'.format(brackets[1][2]),
