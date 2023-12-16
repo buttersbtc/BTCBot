@@ -161,7 +161,7 @@ class Utilities(commands.Cog):
 		await ctx.channel.send(msg)
 
 	@commands.command()
-	async def josb(self, ctx, *args):
+	async def jobs(self, ctx, *args):
 		await Utilities(self).job(self, ctx, args)
 
 	@commands.command()
