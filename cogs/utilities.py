@@ -148,7 +148,7 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def w(self, ctx, *args):
-		
+		await Utilities(self).wallets(self, ctx, args)
 
 	@commands.command()
 	async def dev(self, ctx, *args):
