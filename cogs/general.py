@@ -190,7 +190,6 @@ class General(commands.Cog):
 		for arg in args:
 			for unit in btcUnits:
 				if(arg.upper() == unit[0]):
-					print(arg)
 					btcUnitConversions.append(unit)
 					continue
 			_args.append(arg.upper())
@@ -215,7 +214,6 @@ class General(commands.Cog):
 				comparisons.append([currency['symbol'], float(currency['rateUsd'])])
 		
 		for unit in btcUnits:
-			print(unit in btcUnitConversions)
 			if unit[0] == sourceCurrency:
 				sourceCurrencyRate = bitcoinRate / unit[1]
 			elif unit in btcUnitConversions:
