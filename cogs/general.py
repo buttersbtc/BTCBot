@@ -179,43 +179,59 @@ class General(commands.Cog):
 		if len(args) < 3:
 			await ctx.send("To use convert use the format: !convert 15.00 USD BTC or !convert 10000 sat mBTC")
 			return
+		
 		sourceCurrencyRate = 0
 		comparisons = []
 		_args = []
-		sat = False
+		btcUnits = [["SAT",100000000, "sat"], ["SATS", 100000000, "sats"], ["ΜBTC", 1000000, "μBTC"], ["UBTC", 1000000, "μBTC"], ["MBTC", 1000, "mBTC"], ["CBTC", 100, "cBTC"], ["DBTC", 10, "dBTC"], ["BTC", 1, "BTC"]]
+		bitcoinRate = 0
+		btcUnitConversions = []
+
 		for arg in args:
-			if(arg.upper() == "SAT"):
-				sat = True
-				_args.append("BTC")
-				continue
+			for unit in btcUnits:
+				if(arg.upper() == unit[0]):
+					print(arg)
+					btcUnitConversions.append(unit)
+					continue
 			_args.append(arg.upper())
+
 		api_rates = "https://api.coincap.io/v2/rates/"
 		r_rates = requests.get(api_rates, timeout=10)
 		data_rates = json.loads(r_rates.text)
-		sourceCurrency = _args[1].upper()
-		message_string = _args[0] + " " + _args[1] + " is equal to:"
+		sourceCurrency = _args[1]
+		arg1Formatted = _args[1]
+		for unit in btcUnitConversions:
+			if _args[1] == unit[0]:
+				arg1Formatted = unit[2]
+		
+		message_string = _args[0] + " " + arg1Formatted + " is equal to:"
 		_args.remove(_args[1])
 		for currency in data_rates['data']:
-			if currency['symbol'].upper() == sourceCurrency:
-				sourceCurrencyRate = currency['rateUsd']
-			if currency['symbol'].upper() in _args:
-				print(sat)
-				print(currency['symbol'].upper())
-				if sat and currency['symbol'].upper() == "BTC":
-					comparisons.append(["SAT", float(currency['rateUsd'])/100000000])
-				else:
-					comparisons.append([currency['symbol'], currency['rateUsd']])
-		print(comparisons)
-		if len(comparisons) != len(args) - 2:
-			print("something fucky in here")
+			if currency['symbol'].upper() == "BTC":
+				bitcoinRate = float(currency['rateUsd'])
+			if currency['symbol'].upper() == sourceCurrency.upper():
+				sourceCurrencyRate = float(currency['rateUsd'])
+			if currency['symbol'].upper() in _args and currency['symbol'].upper() != "BTC":
+				comparisons.append([currency['symbol'], float(currency['rateUsd'])])
+		
+		for unit in btcUnits:
+			print(unit in btcUnitConversions)
+			if unit[0] == sourceCurrency:
+				sourceCurrencyRate = bitcoinRate / unit[1]
+			elif unit in btcUnitConversions:
+				comparisons.append([unit[2], bitcoinRate / unit[1]])
+
 		for comparison in comparisons:
-			val = (float(sourceCurrencyRate) * float(_args[0])) / float(comparison[1]) 
+			val = sourceCurrencyRate * float(_args[0]) / comparison[1] 
 			if val > 0.01:
 				message_string += " " + '{:,.2f}'.format(val) + " " + comparison[0] + ","
 			else:
 				message_string += " " + '{:,.8f}'.format(val) + " " + comparison[0] + ","
 
 		message_string = message_string[:len(message_string)-1]
+			
+		if len(comparisons) == 0:
+			message_string = "Unable to find the requested currencies for conversion."
 
 		await ctx.send(message_string)
 
