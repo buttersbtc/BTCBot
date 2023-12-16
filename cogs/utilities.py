@@ -148,7 +148,7 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def w(self, ctx, *args):
-		await Utilities(self).wallets(self, ctx, args)
+		
 
 	@commands.command()
 	async def dev(self, ctx, *args):
@@ -159,6 +159,10 @@ class Utilities(commands.Cog):
 	async def job(self, ctx, *args):
 		msg = "Bitcoin job boards and resources:\n<https://cash.app/careers>\n<https://reddit.com/r/Jobs4Bitcoins>\n<https://strike.me/jobs>\n<https://www.bitmex.com/careers>\n<https://angel.co/company/river-financial/jobs>\n<https://bitcoinerjobs.co/>"
 		await ctx.channel.send(msg)
+
+	@commands.command()
+	async def josb(self, ctx, *args):
+		await Utilities(self).job(self, ctx, args)
 
 	@commands.command()
 	async def quantum(self, ctx, *args):
@@ -407,7 +411,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	async def tip(self, ctx, user: discord.User, amount, *args):
 		if os.getenv('ENABLE_TIPS') == "1":
 			member = ctx.message.author
-			ipc.websocket.send('{"action":"request_invoice", "id":"' + str(user.id) + '", "requestId":"' + str(member.id) + '", "amount":"' + amount + '", "memo":"Bitcoin discord user ' + member.name + '"}')
+			ipc.websocket.send('{"action":"request_invoice", "id":"' + str(user.id) + '", "requestId":"' + str(member.id) + '", "amount":"' + amount + '", "memo":"Bitcoin discord user ' + member.name + ' to ' + user.name + '"}');
 
 
 
