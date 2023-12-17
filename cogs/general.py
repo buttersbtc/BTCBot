@@ -147,7 +147,7 @@ class General(commands.Cog):
 
 	@commands.command()
 	async def ff(self, ctx, *args):
-		fun_facts = ["**Fun Fact:** Bitcoin is the first decentralized digital currency",
+		fun_facts = ["**Fun Fact:** Bitcoin is the first and only decentralized digital currency",
 					"**Fun Fact:** Bitcoin was created by Satoshi Nakamoto in 2009",
 					"**Fun Fact:** Bitcoin is not a cryptocurrency, it predates them and the term only exists to create a false association to Bitcoin",
 					"**Fun Fact:** Blockchain technology is neither novel nor valuable. It'has none of the properties commonly ascribed to it like immutability or decentralization or security.",
@@ -172,13 +172,13 @@ class General(commands.Cog):
 					"**Fun Fact:** Bitcoin is for enemies. it doesn't care about you or your ideology or grudges. It cators to your political opponents, it cators to those you believe unethical. If it did any less, then it would be subject to the whims of popular culture and tyranny of the majority. Bitcoin is a tool and it can be used for many ends, even those you may disagree with.",
 					"**Fun Fact:** When Bitcoin is attacked it relies on the decentralized-economic security model. What this means is that those misusing blockspace will pay for it as a function of time, bankrupting them. Failing that, nodes have the power to fork and defend themselves. These are the economic and decentralized foundations of Bitcoin's security model, so run a node!",
 					"**Fun Fact:** Bitcoin is thankless. It owes you nothing, so expect nothing. Your node and your will defines Bitcoin, so use it and stand for yourself.",
-					"**Fun Fact:** Bitcoin addresses are most commonly the hash of 'smart contracts' and the process of spending enables verification their execution.",
-					"**Fun Fact:** A scam built on Bitcoin is a still a scam, is still fraud, is still worthless. NFT's Ordinals, Shitcoin emulating layers, federations, stablecoins, and others fall into this category.",
+					"**Fun Fact:** Bitcoin addresses are most commonly the hash of 'smart contracts' and the process of spending enables verification of their execution.",
+					"**Fun Fact:** A scam built on Bitcoin is a still a scam, is still fraud, is still worthless. NFT's, ordinals, shitcoin emulating layers, federations, stablecoins, and others fall into this category.",
 					"**Fun Fact:** Custodying your own Bitcoin isn't difficult. If you don't, please do. Download a wallet, create some keys offline in an air gapped environment, ideally provide your own entropy with dice or corrected coin flips, and backup your seed in metal. These simple steps make you more secure than LukeJr.",
 					"**Fun Fact:** The speaker doesn't matter, the message matters. Evaluate and verify the things you're told in Bitcoin and this discord. Trust no one and verify everything.",
 					"**Fun Fact:** Bitcoin hasn't slept since 2013 when it took a 6 hour nap to reorg. I don't think I've slept since then either, come to mention it.",
 					"**Fun Fact:** In 2018 a [vulnerability was discovered](https://bitcoincore.org/en/2018/09/20/notice/), originally introduced in 2017, which enabled DoS attacks against nodes as well as inflation of the Bitcoin supply. This was all BlueMatts fault. The issue was patched and deployed before being exploited, but stands to remind us that we must peer review code and run diverse node clients.",
-					"**Fun Fact:** Between 2015 and 2017 the community engaged in what has become known as the Blocksize Wars, wherein over 80% of the traditionally powerful actors of any ecosystem - the rich, the businesses, and in our case the miners as well - attempted to change Bitcoin's consensus to reduce their technical costs at the expense of node runners. A minority of node runners threatening a user activated soft fork effectively stopped the attack by holding an economic gun tot he businesses heads.",
+					"**Fun Fact:** Between 2015 and 2017 the community engaged in what has become known as the Blocksize Wars, wherein over 80% of the traditionally powerful actors of any ecosystem - the rich, the businesses, and in our case the miners as well - attempted to change Bitcoin's consensus to reduce their technical costs at the expense of node runners. A minority of node runners threatening a user activated soft fork effectively stopped the attack by holding an economic gun to the businesses heads.",
 					"**Fun Fact:** There are no shortcuts to verification or security.",
 					"**Fun Fact:** Those obsessed with the Bitcoin price would (and have tried to) destroy its valuable properties such as decentralization (ability to run a node) and economic security (cost to transact) because they are too short sighted to care about Bitcoin, they only care about fiat.",
 					"**Not Fun Fact:** People end their life every cycle by failing to plan for the turmoil of shitcoins crashing and middlemen collapsing, entire lives and families have been ruined. Don't be one of them. Don't borrow, don't over leverage, don't shitcoin, and don't use middlemen. Bitcoin fixes this.",
