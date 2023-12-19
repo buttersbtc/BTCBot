@@ -1,4 +1,5 @@
 import math
+import random
 
 import BitcoinAPI as api
 from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BLACKLIST, BITCOIN_IN_SATS, FUN_FACTS
@@ -13,6 +14,7 @@ class General(commands.Cog):
 	"""General commands"""
 	def __init__(self, bot):
 		self.bot = bot
+		self.fact_generator = self.get_fact()
 
 	async def on_ready(self):
 		print("General commands loaded")
@@ -138,10 +140,16 @@ class General(commands.Cog):
 		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(ath)
 		await ctx.send(message_string)
 
+	@staticmethod
+	def get_fact():
+		while True:
+			random.shuffle(FUN_FACTS)
+			for fact in FUN_FACTS:
+				yield fact
+
 	@commands.command()
-	async def ff(self, ctx, *args):
-		message_string = FUN_FACTS[randrange(len(FUN_FACTS))]
-		await ctx.send(message_string)
+	async def ff(self, ctx):
+		await ctx.send(next(self.fact_generator))
 
 	# convert between two currencies
 	@commands.command()
