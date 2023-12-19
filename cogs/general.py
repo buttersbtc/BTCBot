@@ -185,7 +185,8 @@ class General(commands.Cog):
 					"**Fun Fact:** Michael Saylor told noobies to buy the top with debt and remortgage their homes, says Bitcoin isn't a currency, spreads environmental FUD, and attempts to coordinate large groups of miners. If you listen to him you're as big of a fool as he is.",
 					"**Fun Fact:** Andreas Antonopoulos is a scamming shitcoiner who spreads FUD and misinformation out of both ignorance and a desire to lead his followers.",
 					"**Fun Fact:** Bitcoin Magazine is actually all about shitcoins, NFT's and scams. They even make and sell their own. They were founded by one of the most prolific shitcoiners in history as well.",
-					"**Fun Fact:** Middlemen want to capture you and your business, but Bitcoin means you don't need them. So stop enabling middlemen, especially custodians. Opt for low trust businesses that leverage Bitcoin's innate features to keep your coins in your possession."
+					"**Fun Fact:** Middlemen want to capture you and your business, but Bitcoin means you don't need them. So stop enabling middlemen, especially custodians. Opt for low trust businesses that leverage Bitcoin's innate features to keep your coins in your possession.",
+					"**Fun Fact:** Did you know the 50 Bitcoin coinbase reward in the first Bitcoin Block Minted by Satoshi, Block 0, is unspendable even by him?"
 					]
 
 		message_string = fun_facts[randrange(len(fun_facts))]
