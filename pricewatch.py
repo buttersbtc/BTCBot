@@ -7,7 +7,7 @@ import BitcoinAPI as api
 class pricewatch:
     async def watch(self, bot):
         while True:
-            await asyncio.sleep(5)
+            await asyncio.sleep(10)
             try:
                 price, error = api.get_current_price()
                 if error:
