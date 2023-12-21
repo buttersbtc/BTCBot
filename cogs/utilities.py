@@ -501,5 +501,91 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 
 		ctx.send(message_string)
 
+
+	@commands.command()
+	async def mine(self, ctx, *args):
+		if len(args) != 4 {
+			await ctx.send("The !mine command requires four arguments: period (block/hour/day/year), sats/KWh (electricity cost), mining wats (eg: 3247 for an S19j XP), and joules per terahash (eg: 21.5 for an S19j XP).")
+			return
+		}
+
+		period = args[0].lower()
+		sats_kwh = Decimal(args[1])
+		mining_watts = Decimal(args[2])
+		joules_per_terahash = Decimal(args[3])
+
+		if mining_watts <= 0 {
+			await ctx.send("Invalid mining watts; mining requires energy!")
+			return
+		}
+
+		if joules_per_terahash <= 0 {
+			await ctx.send("Invalid joules per terahash; hashing requires energy!")
+			return
+		}
+
+		match period:
+			case "block":
+				period_block_count = 1
+			case "hour":
+				period_block_count = 6
+			case "day":
+				period_block_count = 6 * 24
+			case "year":
+				period_block_count = 6 * 24 * 365.2425
+			case _:
+				await ctx.send("Invalid calculation period; allowed values are 'block', 'hour', 'day', and 'year'.")
+				return
+
+		api = "https://blockchain.info/q/hashrate"
+		r = requests.get(api)
+		network_hashrate = (Decimal(r.text) / 1000)
+
+		api = "https://mempool.space/api/v1/mining/blocks/rewards/1m"
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+		except:
+			return
+		average_reward = Decimal(data[0]["avgRewards"]) / 100000000
+
+		hash_rate = mining_watts / joules_per_terahash
+		hash_share = hash_rate / network_hashrate
+
+		watts_per_block = mining_watts / 6
+        block_cost = watts_per_block * price_kwh / 1000
+		reward_per_block = average_reward * hash_share
+
+		watts = watts_per_block * period_block_count
+		electricity_cost = block_cost * period_block_count
+		gross_income = reward_per_block * period_block_count
+
+		net_income = gross_income - electricity_cost
+
+		watts = '{:,.2f}'.format(watts)
+		hashrate = '{:,.2f}'.format(hashrate)
+		net_income = '{:,.8f}'.format(net_income)
+		gross_income = '{:,.8f}'.format(gross_income)
+		electricity_cost = '{:,.8f}'.format(electricity_cost)
+		if electricity_cost == 0 {
+			message_string = string.format(
+				"Your hashrate is {} TH/s, and your expected income each {} is {} BTC, using {} watts.",
+				hashrate,
+				period,
+				net_income,
+				watts)
+		} else {
+			message_string = string.format(
+				"Your hashrate is {} TH/s, and your expected income each {} is {} BTC. Using {} watts costing {} BTC, your expected net is {} BTC.",
+				hashrate,
+				period,
+				gross_income,
+				watts,
+				electricity_cost,
+				net_income)
+		}
+
+		ctx.send(message_string)
+
 async def setup(bot):
 	await bot.add_cog(Utilities(bot))
