@@ -9,6 +9,7 @@ from captcha.image import ImageCaptcha
 import math
 import hashlib
 import datetime
+from decimal import Decimal
 import time
 import ipc
 
@@ -437,6 +438,37 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	async def halvening(self, ctx, *args):
 		await Utilities(self).halving(self, ctx, args)
 
+	@commands.command()
+	async def hashrate(self, ctx, *args):
+		api = "https://blockchain.info/q/hashrate"
+		r = requests.get(api)
+		network_hashrate = (Decimal(r.text) / 1000)
+		message_string = string.format(
+			"The current network hashrate is {} TH/s."
+			'{:,.2f}'.format(network_hashrate))
+		ctx.send(message_string)
+
+	@commands.command()
+	async def reward(self, ctx, *args):
+		period = args[0]
+		if not args[0] {
+			period = "1m"
+		}
+
+		api = string.format("https://mempool.space/api/v1/mining/blocks/rewards/{}", period)
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+		except:
+			await ctx.send("Invalid average reward period; allowed values are (24h, 3d, 1w, 1m, 3m, 6m, 1y, 2y, 3y).")
+			return
+
+		average_reward = Decimal(data[0]["avgRewards"]) / 100000000
+		message_string = string.format(
+			"The {} average block reward is {} BTC.",
+			period,
+			'{:,.4f}'.format(average_reward))
+		ctx.send(message_string)
 
 async def setup(bot):
 	await bot.add_cog(Utilities(bot))
