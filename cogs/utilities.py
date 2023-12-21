@@ -470,5 +470,36 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 			'{:,.4f}'.format(average_reward))
 		ctx.send(message_string)
 
+	@commands.command()
+	async def solomine(self, ctx, *args):
+		solo_hash_rate = args[0]
+		if not solo_hash_rate {
+			await ctx.send("Please specify a hashrate in TH/s.")
+			return
+		}
+
+		api = "https://blockchain.info/q/hashrate"
+		r = requests.get(api)
+		network_hashrate = (Decimal(r.text) / 1000)
+
+		hash_share = solo_hash_rate / network_hashrate
+		blocks = 1 / hash_share
+		days = blocks / 6 / 24
+
+		if days > 365.2425 {
+			time_description = string.format("{} years", '{:,.2f}'.format(days / 365.2425))
+		} else {
+			time_description = string.format("{} days", '{:,.2f}'.format(days))
+		}
+
+		message_string = string.format(
+			"With a hashrate of {} TH/s, and a network hashrate of {}, it would take on average {} blocks, or {} to mine a block.",
+			solo_hash_rate,
+			network_hashrate,
+			blocks,
+			time_description)
+
+		ctx.send(message_string)
+
 async def setup(bot):
 	await bot.add_cog(Utilities(bot))
