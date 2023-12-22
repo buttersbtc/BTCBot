@@ -464,11 +464,6 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		if os.getenv('ENABLE_TIPS') == "1":
 			msg = ''
 			validPrefix = ["1", "3", "bc1", "2", "m", "n", "tb1"]
-			print(args[0])
-			print(len(args) > 0)
-			print((args[0][:1] in validPrefix or args[0][:1] in validPrefix))
-			print(args[0][:1] in validPrefix)
-			print(args[0][:3] in validPrefix)
 			if len(args) > 0 and (args[0][:1] in validPrefix or args[0][:3] in validPrefix):
 				msg = '{"action":"register", "id":"' + str(ctx.message.author.id) + '", "staticBTC":"'+ args[0] +'"}'
 			else:
