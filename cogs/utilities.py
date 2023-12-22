@@ -460,7 +460,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		r = requests.get(api)
 		try:
 			data = json.loads(r.text)
-			average_reward = Decimal(data[0]["avgRewards"]) / 100000000
+			average_reward = Decimal(data[-1]["avgRewards"]) / 100000000
 		except:
 			await ctx.send("Failed to get the average reward.")
 			return
@@ -561,7 +561,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		r = requests.get(api)
 		try:
 			data = json.loads(r.text)
-			average_reward = Decimal(data[0]["avgRewards"]) / 100000000
+			average_reward = Decimal(data[-1]["avgRewards"]) / 100000000
 		except:
 			await ctx.send("Mining calculation failed; something went wrong when getting the average reward.")
 			return
