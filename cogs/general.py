@@ -1,7 +1,7 @@
 import math
 
 import BitcoinAPI as api
-from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BLACKLIST, BITCOIN_IN_SATS, FUN_FACTS
+from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BLACKLIST, BITCOIN_IN_SATS, FUN_FACTS, REMOVE_HELP
 from operator import truediv
 import os
 from discord.ext import commands
@@ -208,7 +208,8 @@ class General(commands.Cog):
 		message_string = "Commands this bot accepts:"
 		sorted_cmd = sorted(self.bot.commands, key=lambda cmd: cmd.name)
 		for cmd in sorted_cmd:
-			message_string +=  " " + os.getenv('BOT_PREFIX') + f"{cmd},"
+			if f"{cmd}" not in REMOVE_HELP:
+				message_string +=  " " + os.getenv('BOT_PREFIX') + f"{cmd},"
 		message_string = message_string[:len(message_string)-1]
 		message_string += ". For bot support inquire at <http://bitcointech.help> or in the issues at <https://github.com/buttersbtc/BTCBot/issues>"
 		await ctx.send(message_string)

@@ -236,6 +236,8 @@ FUN_FACTS = ["**Fun Fact:** Bitcoin is the first and only decentralized digital 
 					"**Fun Fact:** China banned Bitcoin a dozen times with different price results each time. An ETF was denied a dozen times in the USA with a different price outcome each time. Price is not directly correlated to events the way you might think."
 					]
 
+REMOVE_HELP = ["tipUser", "help", "ban", "banafter"]
+
 BLACKLIST = {"xdg": True, "ltc": True, "eth": True, "xrp": True, "bch": True}
 
 BITCOIN_IN_SATS = 100000000

@@ -1,3 +1,4 @@
+import re
 import discord
 from discord.ext import commands
 import requests
@@ -408,18 +409,70 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		await Utilities(self).fee(self, ctx, args)
 
 	@commands.command()
-	async def tip(self, ctx, user: discord.User, amount, *args):
-		if os.getenv('ENABLE_TIPS') == "1":
-			member = ctx.message.author
-			ipc.websocket.send('{"action":"request_invoice", "id":"' + str(user.id) + '", "requestId":"' + str(member.id) + '", "amount":"' + amount + '", "memo":"Bitcoin discord user ' + member.name + ' to ' + user.name + '"}');
+	async def tipUser(self, ctx, user: discord.User, amount, *args):
+		member = ctx.message.author
+		msg = '{"action":"new_invoice", "id":"' + str(user.id) + '", "requestId":"' + str(member.id) + '", "amount":' + str(amount) + ', "memo":"Bitcoin discord user ' + member.name + ' to ' + user.name + '"'
+		btc = False
+		ln = False
+		if "btc" in args or ("btc" not in args and "ln" not in args):
+			btc = True
+			msg += ', "btc": true'
+		if "ln" in args or ("btc" not in args and "ln" not in args):
+			ln = True
+			msg += ', "ln": true'
+		msg += '}'
 
+		ipc.websocket.send(msg)
+
+	@commands.command()
+	async def tip(self, ctx, *args):
+		if os.getenv('ENABLE_TIPS') == "1":
+			user = None
+			amount = None
+			if ctx.message.reference is not None:
+				reply = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+				user = reply.author
+			if len(args) == 0:
+				amount = 0
+			
+			for arg in args:
+				userMention = re.search("<@([0-9]*)>",arg)
+				if userMention:
+					user = self.bot.get_user(int(userMention[1]))
+					continue
+				try:
+					amount = int(arg)
+				finally:
+					continue
+
+			if amount is None:
+				amount = 0
+
+			if user is None:
+				return await ctx.send("You can pay others using the "+os.getenv('BOT_PREFIX')+"tip commmand with the format of the following examples: `"+os.getenv('BOT_PREFIX')+"tip @user amount`,  `"+os.getenv('BOT_PREFIX')+"tip @user`, `"+os.getenv('BOT_PREFIX')+"tip @user amount ln`, `"+os.getenv('BOT_PREFIX')+"tip @user btc`, or as a reply to a user you wish to pay in the form `"+os.getenv('BOT_PREFIX')+"tip amount`, `"+os.getenv('BOT_PREFIX')+"tip btc` and `"+os.getenv('BOT_PREFIX')+"tip amount ln`. If no amount is provided 0 amounts are assumed. If no btc or ln flag is provided both are assumed.")
+
+			await Utilities(self).tipUser(self, ctx, user, amount, *args)
+			
+	@commands.command()
+	async def pay(self, ctx, user: discord.User, amount, *args):
+		await Utilities(self).tip(self, ctx, user, amount, args)
 
 
 	@commands.command()
 	async def register(self, ctx, *args):
 		if os.getenv('ENABLE_TIPS') == "1":
-			member = ctx.message.author
-			ipc.websocket.send('{"action":"register", "id":"' + str(ctx.message.author.id) + '"}')
+			msg = ''
+			validPrefix = ["1", "3", "bc1", "2", "m", "n", "tb1"]
+			print(args[0])
+			print(len(args) > 0)
+			print((args[0][:1] in validPrefix or args[0][:1] in validPrefix))
+			print(args[0][:1] in validPrefix)
+			print(args[0][:3] in validPrefix)
+			if len(args) > 0 and (args[0][:1] in validPrefix or args[0][:3] in validPrefix):
+				msg = '{"action":"register", "id":"' + str(ctx.message.author.id) + '", "staticBTC":"'+ args[0] +'"}'
+			else:
+				msg = '{"action":"register", "id":"' + str(ctx.message.author.id) + '"}'
+			ipc.websocket.send(msg)
 
 	@commands.command()
 	async def halving(self, ctx, *args):
