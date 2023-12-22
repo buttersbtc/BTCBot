@@ -136,6 +136,8 @@ async def user_offline(msg, bot, og_loop):
 	msg2 = sender.name + " is trying to send you " + str(msg["amount"]) + " satoshi but can't because your PayMeBTC server is offline. Please restart PayMeBTC.html or re-register with the  `" + os.getenv('BOT_PREFIX') + "register` command."
 	dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1), og_loop).result()
 	dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg2), og_loop).result()
+	if "channel" in msg:
+		dm3 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1, True), og_loop).result()
 
 async def user_unregistered(msg, bot, og_loop):
 	sender = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["requestId"]), og_loop).result()
@@ -144,6 +146,8 @@ async def user_unregistered(msg, bot, og_loop):
 	msg2 = sender.name + " is trying to tip you " + str(msg["amount"]) + " satoshi but they can't because you have not registered on the Bitcoin Discord tip bot. Type `" + os.getenv('BOT_PREFIX') + "register` to begin. The tip bot is non-custodial, self hosted, and interfaces with your lightning node. When you register you'll be given a link and setup instructions. You can verify this bot and DM by comparing its user ID to the user ID of BitcoinChat on the Bitcoin discord at <https://bitcointech.help>"
 	dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1), og_loop).result()
 	dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg2), og_loop).result()
+	if "channel" in msg:
+		dm3 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1, True), og_loop).result()
 
 async def static_btc(msg, bot, og_loop):
 	receiver = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["id"]), og_loop).result()
