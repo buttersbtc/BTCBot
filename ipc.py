@@ -21,7 +21,6 @@ async def send_dm(bot, id, msg, send_file = False, sendChannel = False):
 			for guild in bot.guilds:
 				for gchannel in guild.channels:
 					if gchannel.id == int(id):
-						print("found channel")
 						returnChannel = gchannel
 		else:
 			member = await bot.fetch_user(id)
