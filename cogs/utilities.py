@@ -421,6 +421,9 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		if "ln" in args or ("btc" not in args and "ln" not in args):
 			ln = True
 			msg += ', "ln": true'
+		if "public" in args:
+			print(str(ctx.channel.id))
+			msg += ', "channel": "' + str(ctx.channel.id) + '", "noPending": true'
 		msg += '}'
 
 		ipc.websocket.send(msg)
@@ -435,7 +438,6 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 				user = reply.author
 			if len(args) == 0:
 				amount = 0
-			
 			for arg in args:
 				userMention = re.search("<@([0-9]*)>",arg)
 				if userMention:

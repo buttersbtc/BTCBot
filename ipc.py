@@ -14,8 +14,17 @@ from PIL import Image
 import io
 
 websocket = None
-async def send_dm(bot, id, msg, send_file = False):
-		member = await bot.fetch_user(id)
+async def send_dm(bot, id, msg, send_file = False, sendChannel = False):
+		member = None
+		returnChannel = None
+		if sendChannel:
+			for guild in bot.guilds:
+				for gchannel in guild.channels:
+					if gchannel.id == int(id):
+						print("found channel")
+						returnChannel = gchannel
+		else:
+			member = await bot.fetch_user(id)
 		if member != None:
 			channel = await member.create_dm()
 			try:
@@ -25,6 +34,11 @@ async def send_dm(bot, id, msg, send_file = False):
 					await channel.send(msg)
 			except:
 				await send_channel(bot, id, msg)
+		if returnChannel != None:
+			if send_file:
+				await returnChannel.send(msg, files=send_file)
+			else:
+				await returnChannel.send(msg)
 				
 async def send_channel(bot, id, msg):
 	member = await bot.fetch_user(id)
@@ -110,7 +124,10 @@ async def new_invoice(msg, bot, og_loop):
 		buf2.seek(0)
 		file2 = discord.File(buf2, "btc.png")
 		bufList.append(file2)
-	dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1, bufList), og_loop).result()
+	if "channel" in msg:
+		dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1, bufList, True), og_loop).result()
+	else:
+		dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1, bufList), og_loop).result()
 
 async def user_offline(msg, bot, og_loop):
 	sender = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["requestId"]), og_loop).result()
@@ -138,4 +155,7 @@ async def static_btc(msg, bot, og_loop):
 	img.save(buf)
 	buf.seek(0)
 	file = discord.File(buf, "btc.png")
-	dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1, [file]), og_loop).result()
+	if "channel" in msg:
+		dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1, [file], True), og_loop).result()
+	else:
+		dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1, [file]), og_loop).result()
