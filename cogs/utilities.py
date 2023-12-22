@@ -10,6 +10,7 @@ from captcha.image import ImageCaptcha
 import math
 import hashlib
 import datetime
+from decimal import Decimal
 import time
 import ipc
 
@@ -490,6 +491,175 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	async def halvening(self, ctx, *args):
 		await Utilities(self).halving(self, ctx, args)
 
+	@commands.command()
+	async def hashrate(self, ctx, *args):
+		api = "https://blockchain.info/q/hashrate"
+		r = requests.get(api)
+		network_hashrate = (Decimal(r.text) / 1000)
+		message_string = "The current network hashrate is {} TH/s.".format(floatFormat(round(network_hashrate, 2)))
+		await ctx.send(message_string)
+
+	@commands.command()
+	async def reward(self, ctx, *args):
+		if len(args) == 0:
+			period = "1m"
+		else:
+			period = args[0].lower()
+			if not period in ["24h", "3d", "1w", "1m", "3m", "6m", "1y", "2y", "3y"]:
+				await ctx.send("Invalid average reward period; allowed values are: 24h, 3d, 1w, 1m, 3m, 6m, 1y, 2y, 3y.")
+				return
+
+		api = "https://mempool.space/api/v1/mining/blocks/rewards/{}".format(period)
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+			average_reward = Decimal(data[0]["avgRewards"]) / 100000000
+		except:
+			await ctx.send("Failed to get the average reward.")
+			return
+
+		message_string = "The {} average block reward is {} BTC.".format(period, floatFormat(round(average_reward, 8)))
+		await ctx.send(message_string)
+
+	@commands.command()
+	async def solomine(self, ctx, *args):
+		if len(args) == 0:
+			await ctx.send("Please specify a hashrate in TH/s, eg '150'.")
+			return
+
+		try:
+			solo_hash_rate = Decimal(args[0])
+		except:
+			await ctx.send("Invalid hashrate specified.")
+			return
+
+		if solo_hash_rate <= 0:
+			await ctx.send("With a hashrate of 0 or less, it'll take you forever to mine a block!")
+			return
+
+		api = "https://blockchain.info/q/hashrate"
+		r = requests.get(api)
+		network_hashrate = (Decimal(r.text) / 1000)
+
+		hash_share = solo_hash_rate / network_hashrate
+		blocks = 1 / hash_share
+		days = blocks / 6 / 24
+
+		if days > 365.2425:
+			time_description = "{} years".format(floatFormat(round(days / Decimal(365.2425), 2)))
+		else:
+			time_description = "{} days".format(floatFormat(round(days, 2)))
+
+		message_string = "With a hashrate of {} TH/s, and a network hashrate of {} TH/s, it would take on average {} blocks, or {} to mine a block.".format(
+			floatFormat(solo_hash_rate),
+			floatFormat(round(network_hashrate, 4)),
+			floatFormat(round(blocks, 2)),
+			time_description)
+
+		await ctx.send(message_string)
+
+
+	@commands.command()
+	async def mine(self, ctx, *args):
+		if len(args) != 4:
+			await ctx.send("The !mine command requires four arguments: `period` (block/hour/day/week/month/year), `sats/kWh` (electricity cost), `mining watts` (eg: 3247 for an S19j XP), and `joules per terahash` (eg: 21.5 for an S19j XP).")
+			return
+
+		period = args[0].lower()
+		try:
+			sats_kwh = Decimal(args[1])
+		except:
+			await ctx.send("Invalid sats/KWh.")
+
+		try:
+			mining_watts = Decimal(args[2])
+		except:
+			await ctx.send("Invalid mining watts.")
+
+		try:
+			joules_per_terahash = Decimal(args[3])
+		except:
+			await ctx.send("Invalid joules/TH.")
+
+		if mining_watts <= 0:
+			await ctx.send("Invalid mining watts; mining requires energy!")
+			return
+
+		if joules_per_terahash <= 0:
+			await ctx.send("Invalid joules per terahash; hashing requires energy!")
+			return
+
+		match period:
+			case "block":
+				period_block_count = 1
+			case "hour":
+				period_block_count = 6
+			case "day":
+				period_block_count = 6 * 24
+			case "week":
+				period_block_count = 6 * 24 * 7
+			case "month":
+				period_block_count = 6 * 24 * 30
+			case "year":
+				period_block_count = 6 * 24 * 365.2425
+			case _:
+				await ctx.send("Invalid calculation period; allowed values are: 'block', 'hour', 'day', week, month, and 'year'.")
+				return
+
+		api = "https://blockchain.info/q/hashrate"
+		r = requests.get(api)
+		network_hashrate = (Decimal(r.text) / 1000)
+
+		api = "https://mempool.space/api/v1/mining/blocks/rewards/1m"
+		r = requests.get(api)
+		try:
+			data = json.loads(r.text)
+			average_reward = Decimal(data[0]["avgRewards"]) / 100000000
+		except:
+			await ctx.send("Mining calculation failed; something went wrong when getting the average reward.")
+			return
+
+		hash_rate = mining_watts / joules_per_terahash
+		hash_share = hash_rate / network_hashrate
+
+		watts_per_block = mining_watts / 6
+		block_cost = watts_per_block * sats_kwh / 1000 / 100000000
+		reward_per_block = average_reward * hash_share
+
+		watts = watts_per_block * period_block_count
+		electricity_cost = block_cost * period_block_count
+		gross_income = reward_per_block * period_block_count
+
+		net_income = gross_income - electricity_cost
+
+		if watts >= 1000:
+			energy_string = '{} kWh'.format(floatFormat(round(watts / 1000, 2)))
+		else:
+			energy_string = "{:,.0f} Wh".format(watts)
+
+		hash_rate = floatFormat(round(hash_rate, 4))
+		net_income = floatFormat(round(net_income, 8))
+		gross_income = floatFormat(round(gross_income, 8))
+		electricity_cost = floatFormat(round(electricity_cost, 8))
+		if sats_kwh == 0.0:
+			message_string = "Your hashrate is {} TH/s, and your expected income each {} is {} BTC, using {}.".format(
+				hash_rate,
+				period,
+				net_income,
+				energy_string)
+		else:
+			message_string = "Your hashrate is {} TH/s, and your expected income each {} is {} BTC. Using {} costing {} BTC, your expected net is {} BTC.".format(
+				hash_rate,
+				period,
+				gross_income,
+				energy_string,
+				electricity_cost,
+				net_income)
+
+		await ctx.send(message_string)
 
 async def setup(bot):
 	await bot.add_cog(Utilities(bot))
+
+def floatFormat(value):
+    return ("{:,.15f}".format(value)).rstrip('0').rstrip('.')
