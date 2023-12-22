@@ -509,7 +509,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	@commands.command()
 	async def mine(self, ctx, *args):
 		if len(args) != 4:
-			await ctx.send("The !mine command requires four arguments: `period` (block/hour/day/week/month/year), `sats/KWh` (electricity cost), `mining watts` (eg: 3247 for an S19j XP), and `joules per terahash` (eg: 21.5 for an S19j XP).")
+			await ctx.send("The !mine command requires four arguments: `period` (block/hour/day/week/month/year), `sats/kWh` (electricity cost), `mining watts` (eg: 3247 for an S19j XP), and `joules per terahash` (eg: 21.5 for an S19j XP).")
 			return
 
 		period = args[0].lower()
@@ -580,9 +580,9 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		net_income = gross_income - electricity_cost
 
 		if watts >= 1000:
-			energy_string = '{} kW'.format(floatFormat(round(watts / 1000, 2)))
+			energy_string = '{} kWh'.format(floatFormat(round(watts / 1000, 2)))
 		else:
-			energy_string = "{:,.0f} W".format(watts)
+			energy_string = "{:,.0f} Wh".format(watts)
 
 		net_income = '{:,.8f}'.format(net_income)
 		hash_rate = floatFormat(round(hash_rate, 4))
