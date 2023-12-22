@@ -465,7 +465,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 			await ctx.send("Failed to get the average reward.")
 			return
 
-		message_string = "The {} average block reward is {} BTC.".format(period, '{:,.8f}'.format(average_reward))
+		message_string = "The {} average block reward is {} BTC.".format(period, floatFormat(round(average_reward, 8)))
 		await ctx.send(message_string)
 
 	@commands.command()
@@ -584,10 +584,10 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		else:
 			energy_string = "{:,.0f} Wh".format(watts)
 
-		net_income = '{:,.8f}'.format(net_income)
 		hash_rate = floatFormat(round(hash_rate, 4))
-		gross_income = '{:,.8f}'.format(gross_income)
-		electricity_cost = '{:,.8f}'.format(electricity_cost)
+		net_income = floatFormat(round(net_income, 8))
+		gross_income = floatFormat(round(gross_income, 8))
+		electricity_cost = floatFormat(round(electricity_cost, 8))
 		if sats_kwh == 0.0:
 			message_string = "Your hashrate is {} TH/s, and your expected income each {} is {} BTC, using {}.".format(
 				hash_rate,
