@@ -499,18 +499,26 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	@commands.command()
 	async def reward(self, ctx, *args):
 		if len(args) == 0:
+			calculate_average = False
 			period = "1m"
 		else:
 			period = args[0].lower()
-			if not period in ["24h", "3d", "1w", "1m", "3m", "6m", "1y", "2y", "3y"]:
-				await ctx.send("Invalid average reward period; allowed values are: 24h, 3d, 1w, 1m, 3m, 6m, 1y, 2y, 3y.")
+			if not period in ["24h", "3d", "1m", "3m", "6m", "1y", "2y", "3y"]:
+				await ctx.send("Invalid average reward period; allowed values are: 24h, 3d, 1m, 3m, 6m, 1y, 2y, 3y.")
 				return
+			calculate_average = period in ["24h", "3d"]
 
 		api = "https://mempool.space/api/v1/mining/blocks/rewards/{}".format(period)
 		r = requests.get(api)
 		try:
 			data = json.loads(r.text)
-			average_reward = Decimal(data[0]["avgRewards"]) / 100000000
+			if calculate_average:
+				reward_sum = Decimal(0)
+				for block in data:
+					reward_sum += Decimal(block["avgRewards"]) 
+				average_reward = reward_sum / len(data) / 100000000
+			else:
+				average_reward = Decimal(data[-1]["avgRewards"]) / 100000000
 		except:
 			await ctx.send("Failed to get the average reward.")
 			return
@@ -611,7 +619,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		r = requests.get(api)
 		try:
 			data = json.loads(r.text)
-			average_reward = Decimal(data[0]["avgRewards"]) / 100000000
+			average_reward = Decimal(data[-1]["avgRewards"]) / 100000000
 		except:
 			await ctx.send("Mining calculation failed; something went wrong when getting the average reward.")
 			return
