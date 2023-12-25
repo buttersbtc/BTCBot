@@ -1,4 +1,7 @@
 import requests
+import json
+from chart import chart
+import discord
 
 TIMEOUT = 10
 coincap_rates = "https://api.coincap.io/v2/rates/"
@@ -110,3 +113,15 @@ def get_bitcoin_ath() -> tuple[None, str] | tuple[float, None]:
         error = f"Failed to fetch price with error: {e}"
         return None, error
     return bitcoin_ath, error
+
+def get_chart(name, timespan = "10weeks"):
+    error = None
+    file = None
+    try:
+        response = requests.get('https://api.blockchain.info/charts/' + name + '?timespan=' + timespan+ "&format=json", timeout=TIMEOUT)
+        responseJson = json.loads(response.content)
+        file = discord.File(chart(responseJson), "chart.png")
+    except requests.RequestException as e:
+        error = f"Failed to fetch chart with error: {e}"
+        return None, error
+    return file, error

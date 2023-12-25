@@ -2,7 +2,7 @@ import math
 import random
 
 import BitcoinAPI as api
-from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BLACKLIST, BITCOIN_IN_SATS, FUN_FACTS, REMOVE_HELP
+from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BLACKLIST, BITCOIN_IN_SATS, FUN_FACTS, REMOVE_HELP, CHART_TYPES
 from operator import truediv
 import os
 from discord.ext import commands
@@ -210,6 +210,29 @@ class General(commands.Cog):
 			message_string = "Unable to find the requested currencies for conversion."
 
 		await ctx.send(message_string)
+
+	@commands.command()
+	async def chart(self, ctx, *args):
+		if len(args) != 2:
+			return await ctx.send('''Please use the chart command in the format `'''+os.getenv('BOT_PREFIX')+'''chart chartname timespan` where chartname is one of: 
+```
+''' + ", ".join(CHART_TYPES) + '''
+```
+and timespan is in the format #weeks, #days, #months etc. ex. `'''+os.getenv('BOT_PREFIX')+'''chart median-confirmation-time 10weeks`
+
+''')
+		name = args[0]
+		timespan = args[1]
+
+		if name in CHART_TYPES :
+			file, err = api.get_chart(name, timespan)
+		
+		if err != None:
+			print(err)
+			return await ctx.send("There was an error creating your chart. Make sure your chart name was correct and your timespan had no spaces - ex. `"+os.getenv('BOT_PREFIX')+"chart median-confirmation-time 10weeks`")
+		
+		await ctx.send(files=[file])
+
 
 	@commands.command()
 	async def help(self, ctx, *args):

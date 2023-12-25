@@ -238,6 +238,8 @@ FUN_FACTS = ["**Fun Fact:** Bitcoin is the first and only decentralized digital 
 
 REMOVE_HELP = ["tipUser", "help", "ban", "banafter"]
 
+CHART_TYPES = ["total-bitcoins", "market-price", "market-cap", "trade-volume", "bitcoin-profitable-days", "200w-moving-avg-heatmap", "blocks-size", "avg-block-size", "n-transactions-per-block", "n-payments-per-block", "n-transactions-total", "median-confirmation-time", "avg-confirmation-time", "hash-rate", "difficulty", "miners-revenue", "transaction-fees", "transaction-fees-usd", "fees-usd-per-transaction", "cost-per-transaction-percent", "cost-per-transaction", "n-unique-addresses", "n-transactions", "n-payments", "transactions-per-second", "output-volume", "mempool-count", "mempool-growth", "mempool-size", "utxo-count"]
+
 BLACKLIST = {"xdg": True, "ltc": True, "eth": True, "xrp": True, "bch": True}
 
 BITCOIN_IN_SATS = 100000000
