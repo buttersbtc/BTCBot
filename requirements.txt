@@ -4,3 +4,4 @@ python-dotenv
 captcha
 websockets
 qrcode[pil]
+matplotlib
