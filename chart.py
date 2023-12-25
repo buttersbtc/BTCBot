@@ -15,7 +15,7 @@ def chart(api_response):
 	pyplot.title(api_response['name'])
 	pyplot.ylabel(api_response['unit'])
 	pyplot.xlabel(api_response['period'])
-	x = [datetime.datetime.fromtimestamp(value['x']).strftime("%d %b %y") for value in api_response['values']]
+	x = [datetime.datetime.utcfromtimestamp(value['x']) for value in api_response['values']]
 	y = [(float(value['y']) * multiplier) for value in api_response['values']]
 	pyplot.plot_date(x, y, linestyle='-', markersize=0.0)
 	pyplot.xticks(rotation=45)
