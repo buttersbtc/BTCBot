@@ -218,7 +218,7 @@ class General(commands.Cog):
 ```
 ''' + ", ".join(CHART_TYPES) + '''
 ```
-and timespan is in the format #weeks, #days, #months etc. ex. `'''+os.getenv('BOT_PREFIX')+'''chart median-confirmation-time 10weeks`
+and timespan is in the format #days, #weeks, #months, #years etc. ex. `'''+os.getenv('BOT_PREFIX')+'''chart median-confirmation-time 10weeks`
 
 ''')
 		name = args[0]
@@ -226,11 +226,9 @@ and timespan is in the format #weeks, #days, #months etc. ex. `'''+os.getenv('BO
 
 		if name in CHART_TYPES :
 			file, err = api.get_chart(name, timespan)
-		
 		if err != None:
 			print(err)
 			return await ctx.send("There was an error creating your chart. Make sure your chart name was correct and your timespan had no spaces - ex. `"+os.getenv('BOT_PREFIX')+"chart median-confirmation-time 10weeks`")
-		
 		await ctx.send(files=[file])
 
 

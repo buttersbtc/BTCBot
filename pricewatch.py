@@ -20,7 +20,7 @@ class pricewatch:
                         type=discord.ActivityType.watching, name=price
                     )
                 )
-            except requests.RequestException as _:
+            except:
                 logging.log(logging.ERROR, "price watch fail")
 
     def __init__(self):
