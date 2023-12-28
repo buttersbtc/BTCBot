@@ -84,7 +84,7 @@ class General(commands.Cog):
 			await ctx.channel.send(f"{emoji} {name} costs {price:,.2f} Bitcoin")
 		else:
 			price = price / ITEM_DICT[item]["cost"]
-			await ctx.channel.send(f"**1 Bitcoin*** is worth **{emoji} {price:,.2f} {name}**")
+			await ctx.channel.send(f"**1 Bitcoin** is worth **{emoji} {price:,.2f} {name}**")
 			return
 
 	# price synonym
