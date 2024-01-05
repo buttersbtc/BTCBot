@@ -334,6 +334,8 @@ Sent {sentCount} TXO for {sentAmt} sat
 		for bracket in brackets:
 			if len(bracket) == 2:
 				bracket.append(0)
+			if len(bracket) == 3:
+				bracket.append(0)
 
 		message_string = '''```Blockstream's mempool has {count} TX and is {size} MB
 Total fees in mempool are {fees} BTC
