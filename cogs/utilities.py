@@ -331,6 +331,10 @@ Sent {sentCount} TXO for {sentAmt} sat
 			else:
 				pendingVsize+=vsize
 
+		for bracket in brackets:
+			if len(bracket) == 2:
+				bracket.append(0)
+
 		message_string = '''```Blockstream's mempool has {count} TX and is {size} MB
 Total fees in mempool are {fees} BTC
 The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte and {range0topMB} sat/vbyte
