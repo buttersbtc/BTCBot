@@ -213,6 +213,8 @@ class Utilities(commands.Cog):
 						msg = "Dear benevolant and respected moderators,\n```" + ctx.message.content.replace(os.getenv('BOT_PREFIX') + "modmail ", "") +"```\nLove, " + ctx.message.author.mention
 						await channel.send(msg)
 			await ctx.message.delete()
+		if args.length <= 1:
+			await channel.send("Please include a message with your modmail. ex. `!modmail You moderators are the worst. I hope you fall down the stairs and break your legs, and your stairs.`")
 
 	@commands.command()
 	async def tools(self, ctx, *args):
