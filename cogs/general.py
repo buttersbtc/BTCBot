@@ -1,3 +1,4 @@
+import hashlib
 import math
 import random
 
@@ -151,13 +152,51 @@ class General(commands.Cog):
 	async def ff(self, ctx):
 		await ctx.send(next(self.fact_generator))
 
+	def bin_to_hex(self, bin_str):
+		if len(bin_str) % 4 != 0 or any(bit not in '01' for bit in bin_str):
+			return "invalid binary"
+
+		HEX_MAP = {'0000': '0', '0001': '1', '0010': '2', '0011': '3',
+				   '0100': '4', '0101': '5', '0110': '6', '0111': '7',
+				   '1000': '8', '1001': '9', '1010': 'A', '1011': 'B',
+				   '1100': 'C', '1101': 'D', '1110': 'E', '1111': 'F'}
+
+		return ''.join(HEX_MAP[bin_str[i:i + 4]] for i in range(0, len(bin_str), 4))
+
+	@commands.command()
+	async def sha256(self, ctx, *args):
+		if(len(args) == 0) or args[0] == "help" or len(args) < 3:
+			return await ctx.send("To use sha256 use the format: `!sha256 <ENT> <base> <entropy>` where base is b (binary) or h (hexadecimal) and ENT is 128, 160, 192, 224, or 256")
+		m = hashlib.sha256()
+		supported_entropy = ["128", "160", "192", "224", "256"]
+		supported_base = ["b", "h"]
+		ENT, BASE, ENTROPY = args
+		if BASE not in supported_base:
+			return await ctx.send("base must be b (binary) or h (hexadecimal)")
+		if ENT not in supported_entropy:
+			return await ctx.send("entropy must be 128, 160, 192, 224, or 256")
+		try:
+			if BASE == "b":
+				if len(ENTROPY) != int(ENT):
+					return await ctx.send(f"entropy length must be {ENT}")
+				m.update(bytes.fromhex(self.bin_to_hex(ENTROPY)))
+				return await ctx.send("0x" + m.hexdigest())
+			else:
+				ENT = int(ENT)
+				if len(ENTROPY) != ENT / 4:
+					return await ctx.send("entropy length must be " + str(int(ENT / 4)))
+				m.update(bytes.fromhex(ENTROPY))
+				return await ctx.send("0x" + m.hexdigest())
+		except ValueError as _:
+			return await ctx.send(f"entropy must be a valid {ENT} bit {BASE} number")
+
 	# convert between two currencies
 	@commands.command()
 	async def convert(self, ctx, *args):
 		if len(args) < 3:
 			await ctx.send("To use convert use the format: !convert 15.00 USD BTC or !convert 10000 sat mBTC")
 			return
-		
+
 		sourceCurrencyRate = 0
 		comparisons = []
 		_args = []
@@ -180,7 +219,7 @@ class General(commands.Cog):
 		for unit in btcUnitConversions:
 			if _args[1] == unit[0]:
 				arg1Formatted = unit[2]
-		
+
 		message_string = _args[0] + " " + arg1Formatted + " is equal to:"
 		_args.remove(_args[1])
 		for currency in data_rates['data']:
@@ -190,7 +229,7 @@ class General(commands.Cog):
 				sourceCurrencyRate = float(currency['rateUsd'])
 			if currency['symbol'].upper() in _args and currency['symbol'].upper() != "BTC":
 				comparisons.append([currency['symbol'], float(currency['rateUsd'])])
-		
+
 		for unit in btcUnits:
 			if unit[0] == sourceCurrency:
 				sourceCurrencyRate = bitcoinRate / unit[1]
@@ -198,14 +237,14 @@ class General(commands.Cog):
 				comparisons.append([unit[2], bitcoinRate / unit[1]])
 
 		for comparison in comparisons:
-			val = sourceCurrencyRate * float(_args[0]) / comparison[1] 
+			val = sourceCurrencyRate * float(_args[0]) / comparison[1]
 			if val > 0.01:
 				message_string += " " + '{:,.2f}'.format(val) + " " + comparison[0] + ","
 			else:
 				message_string += " " + '{:,.8f}'.format(val) + " " + comparison[0] + ","
 
 		message_string = message_string[:len(message_string)-1]
-			
+
 		if len(comparisons) == 0:
 			message_string = "Unable to find the requested currencies for conversion."
 
