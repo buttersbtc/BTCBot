@@ -206,14 +206,14 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def modmail(self, ctx, *args):
-		if os.getenv('ENABLE_MODMAIL') == "1" and os.getenv('MODMAIL_CHANNEL') != None and args.length > 1:
+		if os.getenv('ENABLE_MODMAIL') == "1" and os.getenv('MODMAIL_CHANNEL') != None and len(args) > 1:
 			for guild in self.bot.guilds:
 				for channel in guild.channels:
 					if channel.name == os.getenv('MODMAIL_CHANNEL'):
 						msg = "Dear benevolant and respected moderators,\n```" + ctx.message.content.replace(os.getenv('BOT_PREFIX') + "modmail ", "") +"```\nLove, " + ctx.message.author.mention
 						await channel.send(msg)
 			await ctx.message.delete()
-		if args.length <= 1:
+		if len(args) <= 1:
 			await channel.send("Please include a message with your modmail. ex. `!modmail You moderators are the worst. I hope you fall down the stairs and break your legs, and your stairs.`")
 
 	@commands.command()
