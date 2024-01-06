@@ -206,13 +206,15 @@ class Utilities(commands.Cog):
 
 	@commands.command()
 	async def modmail(self, ctx, *args):
-		if os.getenv('ENABLE_MODMAIL') == "1" and os.getenv('MODMAIL_CHANNEL') != None:
+		if os.getenv('ENABLE_MODMAIL') == "1" and os.getenv('MODMAIL_CHANNEL') != None and args.length > 1:
 			for guild in self.bot.guilds:
 				for channel in guild.channels:
 					if channel.name == os.getenv('MODMAIL_CHANNEL'):
-						msg = "Dear benevolant and respected moderators,\n" + ctx.message.content.replace(os.getenv('BOT_PREFIX') + "modmail ", "") +"\nThank you for everything you do. In every way you are magnificent and inspire me to be better each day.\nWith all the love in my heart," + ctx.message.author.mention
+						msg = "Dear benevolant and respected moderators,\n```" + ctx.message.content.replace(os.getenv('BOT_PREFIX') + "modmail ", "") +"```\nLove, " + ctx.message.author.mention
 						await channel.send(msg)
 			await ctx.message.delete()
+		if args.length <= 1:
+			await channel.send("Please include a message with your modmail. ex. `!modmail You moderators are the worst. I hope you fall down the stairs and break your legs, and your stairs.`")
 
 	@commands.command()
 	async def tools(self, ctx, *args):
@@ -458,7 +460,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 				amount = 0
 
 			if user is None:
-				return await ctx.send("You can pay others using the "+os.getenv('BOT_PREFIX')+"tip commmand with the format of the following examples: `"+os.getenv('BOT_PREFIX')+"tip @user amount`,  `"+os.getenv('BOT_PREFIX')+"tip @user`, `"+os.getenv('BOT_PREFIX')+"tip @user amount ln`, `"+os.getenv('BOT_PREFIX')+"tip @user btc`, or as a reply to a user you wish to pay in the form `"+os.getenv('BOT_PREFIX')+"tip amount`, `"+os.getenv('BOT_PREFIX')+"tip btc` and `"+os.getenv('BOT_PREFIX')+"tip amount ln`. If no amount is provided 0 amounts are assumed. If no btc or ln flag is provided both are assumed. To receive tips use the command `"+os.getenv('BOT_PREFIX')+"register <btc_address>`")
+				return await ctx.send("You can pay others using the "+os.getenv('BOT_PREFIX')+"tip commmand with the format of the following examples: `"+os.getenv('BOT_PREFIX')+"tip @user <amount>`,  `"+os.getenv('BOT_PREFIX')+"tip @user`, `"+os.getenv('BOT_PREFIX')+"tip @user <amount> ln`, `"+os.getenv('BOT_PREFIX')+"tip @user btc`, or as a reply to a user you wish to pay in the form `"+os.getenv('BOT_PREFIX')+"tip <amount>`, `"+os.getenv('BOT_PREFIX')+"tip btc` and `"+os.getenv('BOT_PREFIX')+"tip amount ln`. If no amount is provided 0 amounts are assumed. If no btc or ln flag is provided both are assumed. To receive tips use the command `"+os.getenv('BOT_PREFIX')+"register <btc_address>`")
 
 			await Utilities(self).tipUser(self, ctx, user, amount, *args)
 			
