@@ -31,9 +31,11 @@ class Utilities(commands.Cog):
 			return
 
 		msg = ctx.author.mention + " reporting: " + ctx.message.content.replace("!report ", "")
-		if ctx.message.reference is not None:
-			reply = await ctx.channel.fetch_message(ctx.message.reference.message_id)
-			msg += " - " + reply.author.mention + ": " + reply.content + " - " + reply.jump_url
+		if ctx.message.reference is None:
+			return
+
+		reply = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+		msg += " - " + reply.author.mention + ": " + reply.content + " - " + reply.jump_url
 		await reportChannel.send(msg)
 
 		await ctx.message.delete()
