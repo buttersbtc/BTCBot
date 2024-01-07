@@ -2,6 +2,8 @@ import hashlib
 import math
 import random
 
+import discord
+
 import BitcoinAPI as api
 from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BLACKLIST, BITCOIN_IN_SATS, FUN_FACTS, REMOVE_HELP, CHART_TYPES
 from operator import truediv
@@ -157,6 +159,17 @@ class General(commands.Cog):
 		await ctx.send("Processing request, please wait...")
 		nodes = api.get_nodes_online()
 		await ctx.send(f"There are currently **{nodes}** nodes online")
+
+	@commands.command()
+	async def memspace(self, ctx):
+		embed = discord.Embed(title="Transaction fees", color=0x00ff00)
+		low, medium, high = api.get_transaction_fees()
+		if low is None:
+			return await ctx.send("The mempool API is currently unavailable")
+		embed.add_field(name="**Low Priority**", value=f'`{low}`', inline=True)
+		embed.add_field(name="**Medium Priority**", value=f'`{medium}`', inline=True)
+		embed.add_field(name="**High Priority**", value=f'`{high}`', inline=True)
+		return await ctx.send(embed=embed)
 
 	def bin_to_hex(self, bin_str):
 		if len(bin_str) % 4 != 0 or any(bit not in '01' for bit in bin_str):

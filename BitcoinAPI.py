@@ -161,3 +161,17 @@ def get_nodes_online() -> int:
     driver.close()
 
     return node_count
+
+
+def get_transaction_fees():
+    options = webdriver.ChromeOptions()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
+    driver.get('https://mempool.space/')
+    time.sleep(3)
+    element = driver.find_elements(By.CLASS_NAME, 'fee-text')
+    if element is None:
+        return "", "", ""
+    fees = [e.text for e in element if e.text != ""]
+    driver.close()
+    return fees
