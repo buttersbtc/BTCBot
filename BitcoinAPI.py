@@ -1,7 +1,12 @@
-import requests
 import json
-from chart import chart
+import time
+
 import discord
+import requests
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+from chart import chart
 
 TIMEOUT = 10
 coincap_rates = "https://api.coincap.io/v2/rates/"
@@ -114,7 +119,8 @@ def get_bitcoin_ath() -> tuple[None, str] | tuple[float, None]:
         return None, error
     return bitcoin_ath, error
 
-def get_chart(name, timespan = "10weeks"):
+
+def get_chart(name, timespan="10weeks"):
     error = None
     file = None
     try:
@@ -125,3 +131,33 @@ def get_chart(name, timespan = "10weeks"):
         error = f"Failed to fetch chart with error: {e}"
         return None, error
     return file, error
+
+
+def get_nodes_online() -> int:
+    """
+    Retrieves the current total number of online nodes.
+
+    This function initiates a headless Chrome browser session to access and scrape data from
+    'https://luke.dashjr.org/programs/bitcoin/files/charts/software.html'. It specifically targets
+    div elements on the webpage, extracts their textual content, and parses these to identify and
+    sum the counts of online nodes. A hardcoded delay of 5 seconds is implemented to allow for complete
+    loading of the webpage's dynamic content before data extraction commences.
+
+    Returns:
+        int: An integer representing the aggregate count of online nodes.
+
+    """
+
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")
+    driver = webdriver.Chrome(options=options)
+    driver.get("https://luke.dashjr.org/programs/bitcoin/files/charts/software.html")
+    time.sleep(5)
+
+    child_divs = driver.find_elements(By.XPATH, ".//div")
+
+    text = [child.text for child in child_divs if child.text != ""]
+    node_count = sum(set([int(value.split(" ")[0]) for value in text]))
+    driver.close()
+
+    return node_count

@@ -152,6 +152,12 @@ class General(commands.Cog):
 	async def ff(self, ctx):
 		await ctx.send(next(self.fact_generator))
 
+	@commands.command(aliases=["nodes"])
+	async def node(self, ctx):
+		await ctx.send("Processing request, please wait...")
+		nodes = api.get_nodes_online()
+		await ctx.send(f"There are currently **{nodes}** nodes online")
+
 	def bin_to_hex(self, bin_str):
 		if len(bin_str) % 4 != 0 or any(bit not in '01' for bit in bin_str):
 			return "invalid binary"
