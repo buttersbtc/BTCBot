@@ -418,26 +418,31 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		await Utilities(self).fee(self, ctx, args)
 
 	@commands.command()
-	async def tipUser(self, ctx, user: discord.User, amount, *args):
+	async def tipuser(self, ctx, user: discord.User, amount, ephemeral = None, *args):
 		member = ctx.message.author
 		msg = '{"action":"new_invoice", "id":"' + str(user.id) + '", "requestId":"' + str(member.id) + '", "amount":' + str(amount) + ', "memo":"Bitcoin discord user ' + member.name + ' to ' + user.name + '"'
 		btc = False
 		ln = False
 		if "btc" in args or ("btc" not in args and "ln" not in args):
-			btc = True
 			msg += ', "btc": true'
 		if "ln" in args or ("btc" not in args and "ln" not in args):
-			ln = True
 			msg += ', "ln": true'
 		if "public" in args:
-			print(str(ctx.channel.id))
 			msg += ', "channel": "' + str(ctx.channel.id) + '", "noPending": true'
+		if ephemeral is not None:
+			msg += ', "ephemeral": "' + ephemeral + '"'
 		msg += '}'
 
 		ipc.websocket.send(msg)
 
-	@commands.command()
-	async def tip(self, ctx, *args):
+
+	@commands.hybrid_command(name='tip', with_app_command=True, ephemeral = True)
+	async def tip(self, ctx: commands.Context, target: str = commands.parameter(default=""), amount: str = commands.parameter(default=""), ln: str = commands.parameter(default=""), btc: str = commands.parameter(default=""), public: str = commands.parameter(default=""), private: str = commands.parameter(default="")):
+		
+		if str(ctx.message.type) == "MessageType.unknown_MessageType.chat_input_command":
+			ephemeral = str(ctx.message.id)
+			ipc.tipCallbacks["abcd"] = ctx
+		args = [target, amount, ln, btc, public, private]
 		if os.getenv('ENABLE_TIPS') == "1":
 			user = None
 			amount = None
@@ -447,6 +452,9 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 			if len(args) == 0:
 				amount = 0
 			for arg in args:
+				print(arg)
+				if arg == "":
+					continue
 				userMention = re.search("<@([0-9]*)>",arg)
 				if userMention:
 					user = self.bot.get_user(int(userMention[1]))
@@ -460,15 +468,12 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 				amount = 0
 
 			if user is None:
-				return await ctx.send("You can pay others using the "+os.getenv('BOT_PREFIX')+"tip commmand with the format of the following examples: `"+os.getenv('BOT_PREFIX')+"tip @user <amount>`,  `"+os.getenv('BOT_PREFIX')+"tip @user`, `"+os.getenv('BOT_PREFIX')+"tip @user <amount> ln`, `"+os.getenv('BOT_PREFIX')+"tip @user btc`, or as a reply to a user you wish to pay in the form `"+os.getenv('BOT_PREFIX')+"tip <amount>`, `"+os.getenv('BOT_PREFIX')+"tip btc` and `"+os.getenv('BOT_PREFIX')+"tip amount ln`. If no amount is provided 0 amounts are assumed. If no btc or ln flag is provided both are assumed. To receive tips use the command `"+os.getenv('BOT_PREFIX')+"register <btc_address>`")
+				return await ctx.send("You can pay others using the "+os.getenv('BOT_PREFIX')+"tip commmand with the format of the following examples: `"+os.getenv('BOT_PREFIX')+"tip @user <amount>`,  `"+os.getenv('BOT_PREFIX')+"tip @user`, `"+os.getenv('BOT_PREFIX')+"tip @user <amount> ln`, `"+os.getenv('BOT_PREFIX')+"tip @user btc`, or as a reply to a user you wish to pay in the form `"+os.getenv('BOT_PREFIX')+"tip <amount>`, `"+os.getenv('BOT_PREFIX')+"tip btc` and `"+os.getenv('BOT_PREFIX')+"tip amount ln`. If no amount is provided 0 amounts are assumed. If no btc or ln flag is provided both are assumed. To receive tips use the command `"+os.getenv('BOT_PREFIX')+"register <btc_address>`", ephemeral=True)
 
-			await Utilities(self).tipUser(self, ctx, user, amount, *args)
+			await Utilities(self).tipuser(self, ctx, user, amount, ephemeral, *args)
+			if ephemeral:
+				await ctx.defer(ephemeral=True)
 			
-	@commands.command()
-	async def pay(self, ctx, user: discord.User, amount, *args):
-		await Utilities(self).tip(self, ctx, user, amount, args)
-
-
 	@commands.command()
 	async def register(self, ctx, *args):
 		if os.getenv('ENABLE_TIPS') == "1":
@@ -673,6 +678,8 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 
 async def setup(bot):
 	await bot.add_cog(Utilities(bot))
+	#await bot.tree.add_command(Utilities(bot).tip)
+	await bot.tree.sync()
 
 def floatFormat(value):
     return ("{:,.15f}".format(value)).rstrip('0').rstrip('.')

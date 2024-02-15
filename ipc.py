@@ -14,31 +14,33 @@ from PIL import Image
 import io
 
 websocket = None
+tipCallbacks = {}
+
 async def send_dm(bot, id, msg, send_file = False, sendChannel = False):
-		member = None
-		returnChannel = None
-		if sendChannel:
-			for guild in bot.guilds:
-				for gchannel in guild.channels:
-					if gchannel.id == int(id):
-						returnChannel = gchannel
-		else:
-			member = await bot.fetch_user(id)
-		if member != None:
-			channel = await member.create_dm()
-			try:
-				if send_file:
-					await channel.send(msg, files=send_file)
-				else:
-					await channel.send(msg)
-			except:
-				await send_channel(bot, id, msg)
-		if returnChannel != None:
+	member = None
+	returnChannel = None
+	if sendChannel:
+		for guild in bot.guilds:
+			for gchannel in guild.channels:
+				if gchannel.id == int(id):
+					returnChannel = gchannel
+	else:
+		member = await bot.fetch_user(id)
+	if member != None:
+		channel = await member.create_dm()
+		try:
 			if send_file:
-				await returnChannel.send(msg, files=send_file)
+				await channel.send(msg, files=send_file)
 			else:
-				await returnChannel.send(msg)
-				
+				await channel.send(msg)
+		except:
+			await send_channel(bot, id, msg)
+	if returnChannel != None:
+		if send_file:
+			await returnChannel.send(msg, files=send_file)
+		else:
+			await returnChannel.send(msg)
+			
 async def send_channel(bot, id, msg):
 	member = await bot.fetch_user(id)
 	msg = "You must add this bot as a friend or unblock DM's in order to use the tip features on discord"
@@ -135,7 +137,10 @@ async def user_offline(msg, bot, og_loop):
 	msg2 = sender.name + " is trying to send you " + str(msg["amount"]) + " satoshi but can't because your PayMeBTC server is offline. Please restart PayMeBTC.html or re-register with the  `" + os.getenv('BOT_PREFIX') + "register` command."
 	dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1), og_loop).result()
 	dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["id"], msg2), og_loop).result()
-	if "channel" in msg:
+	if "ephemeral" in msg:
+		dm4 = asyncio.run_coroutine_threadsafe(tipCallbacks[msg['ephemeral']].send("GUIZ ITS WORKING", ephemeral=True)).result()
+		del tipCallbacks[msg['ephemeral']]
+	elif "channel" in msg:
 		dm3 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1, True), og_loop).result()
 
 async def user_unregistered(msg, bot, og_loop):
@@ -158,7 +163,13 @@ async def static_btc(msg, bot, og_loop):
 	img.save(buf)
 	buf.seek(0)
 	file = discord.File(buf, "btc.png")
-	if "channel" in msg:
+	if "ephemeral" in msg:
+		try:
+			dm4 = asyncio.run_coroutine_threadsafe(tipCallbacks[msg['ephemeral']].send("GUIZ ITS WORKING", ephemeral=True)).result()
+		except Exception as ex:
+			print("tip processing message error on line " + str(sys.exc_info()[-1].tb_lineno) + ": " + str(ex) + ", eph=" + msg['ephemeral'])
+		#del tipCallbacks[msg['ephemeral']]
+	elif "channel" in msg:
 		dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1, [file], True), og_loop).result()
 	else:
 		dm = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1, [file]), og_loop).result()
