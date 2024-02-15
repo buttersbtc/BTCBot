@@ -420,7 +420,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	@commands.command()
 	async def tipUser(self, ctx, user: discord.User, amount, *args):
 		member = ctx.message.author
-		msg = '{"action":"new_invoice", "id":"' + str(user.id) + '", "requestId":"' + str(member.id) + '", "amount":' + str(amount) + ', "memo":"Bitcoin discord user ' + member.name + ' to ' + user.name + '"'
+		msg = '{"action":"new_invoice", "id":"' + str(user.id) + '", "requestId":"' + str(member.id) + '", "amount":' + str(amount) + ', "memo":"Bitcoin discord user ' + member.name + ' to ' + user.name + ': ' + " ".join(args) + '"'
 		btc = False
 		ln = False
 		if "btc" in args or ("btc" not in args and "ln" not in args):
