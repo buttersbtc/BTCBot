@@ -12,7 +12,7 @@ CURRENCY_FORMAT_DICT = {
     "rub": "₽{:,.2f} Russian Rubles",
     "xau": "{:,.2f} ounces of gold",
     "xag": "{:,.2f} ounces of silver",
-	"btc": "{:,.0f} Bitcoin"
+	"btc": "{:,.0f} bitcoin"
 }
 
 ITEM_DICT = {

@@ -26,13 +26,14 @@ class General(commands.Cog):
 	async def price(self, ctx, *args):
 		if len(args) == 0:
 			arg = "usd"
+			args = ["usd"]
 		else:
 			arg = args[0]
 
 		arg = arg.lower()
 
 		if arg == "help":
-			await ctx.channel.send("**Currency Eamples**: !p gbp, !p cad, !p xau")
+			await ctx.channel.send("**Currency Examples**: !p gbp, !p cad, !p xau")
 			keys = ""
 			for k in ITEM_DICT.keys():
 				keys += k + ", "
@@ -41,17 +42,18 @@ class General(commands.Cog):
 			await ctx.channel.send("**!p <item> sats** will give you the cost of the item in satoshis")
 			return
 		if arg in ITEM_DICT:
-			await self.price_item(ctx, arg)
+			await self.price_item(ctx, args)
 			return
 		if arg == "sats":
 			await self.price_sats(ctx, arg)
 			return
-		await self.price_currency(ctx, arg)
+		await self.price_currency(ctx, args)
 
 	async def price_sats(self, ctx, *args):
-		await ctx.channel.send("**1 Bitcoin** is equal to **100,000,000 Satoshis**")
+		await ctx.channel.send("**1 bitcoin** is equal to **100,000,000 satoshis**")
 
-	async def price_currency(self, ctx, currency):
+	async def price_currency(self, ctx, currencies):
+		currency = currencies[0]
 		price, error = api.get_current_price()
 		if error:
 			await ctx.channel.send("Price API is currently slow to respond. Try again later.")
@@ -61,15 +63,20 @@ class General(commands.Cog):
 			await ctx.channel.send("Unable to find currency code: " + currency)
 			return
 		index = "default"
-		prefix = "**1 Bitcoin** is worth "
+		prefix = "**1 bitcoin** is worth "
 		suffix = " " + currency.upper()
 		if currency in CURRENCY_FORMAT_DICT:
 			index = currency
 			suffix = ""
-		price = prefix + "**" + CURRENCY_FORMAT_DICT[index].format(price) + suffix +"**"
-		await ctx.channel.send(price)
+		if "sats" in currencies or "sat" in currencies:
+			price = 100000000 / price
+			await ctx.channel.send("**1 "+ currency.upper() +"** is worth **" + "{:,.0f}".format(price) + " satoshi**")
+		else:
+			price = prefix + "**" + CURRENCY_FORMAT_DICT[index].format(price) + suffix +"**"
+			await ctx.channel.send(price)
 
-	async def price_item(self, ctx, item):
+	async def price_item(self, ctx, items):
+		item = items[0]
 		if not item in ITEM_DICT:
 			await ctx.channel.send("Item not supported")
 			return
@@ -80,13 +87,18 @@ class General(commands.Cog):
 		item_map = ITEM_DICT[item]
 		emoji = item_map["emoji"]
 		name = item_map["name"]
-		if item_map["single"]:
+		suffix = "bitcoin"
+		if "sats" in items or "sat" in items:
+			price = price / 100000000
+			price = ITEM_DICT[item]["cost"] / price
+			await ctx.channel.send(f"**1 {emoji} {name}** is worth **{price:,.0f} satoshi**")
+		elif item_map["single"]:
 			price = item_map["cost"] / price
-			await ctx.channel.send(f"{emoji} {name} costs {price:,.2f} Bitcoin")
+			await ctx.channel.send(f"**1 {emoji} {name}** is worth **{price:,.2f} bitcoin**")
 		else:
 			price = price / ITEM_DICT[item]["cost"]
-			await ctx.channel.send(f"**1 Bitcoin** is worth **{emoji} {price:,.2f} {name}**")
-			return
+			await ctx.channel.send(f"**1 bitcoin** is worth **{price:,.2f} {emoji} {name}**")
+		return
 
 	# price synonym
 	@commands.command()
