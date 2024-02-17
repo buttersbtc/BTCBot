@@ -247,6 +247,12 @@ class General(commands.Cog):
 				sourceCurrencyRate = bitcoinRate / unit[1]
 			elif unit in btcUnitConversions:
 				comparisons.append([unit[2], bitcoinRate / unit[1]])
+		for item in ITEM_DICT:
+			if item.upper() == sourceCurrency.upper():
+				sourceCurrencyRate = ITEM_DICT[item]["cost"]
+				message_string = _args[0] + " " + ITEM_DICT[item]["name"] + " " + ITEM_DICT[item]["emoji"] + " is equal to:"
+			elif item.upper() in _args:
+				comparisons.append([ITEM_DICT[item]["name"] + " " + ITEM_DICT[item]["emoji"], ITEM_DICT[item]["cost"]])
 
 		for comparison in comparisons:
 			val = sourceCurrencyRate * float(_args[0]) / comparison[1]
