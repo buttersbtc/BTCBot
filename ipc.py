@@ -95,60 +95,63 @@ async def listen(bot, og_loop):
 
 
 async def new_invoice(msg, bot, og_loop):
-	receiver = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["id"]), og_loop).result()
-	bufList :list[discord.File] = []
-	msg1 = "To tip " + receiver.name + " "
-	if msg["amount"] != 0:
-		msg1 += str(msg["amount"]) + " satoshi "
-	msg1 += "scan or paste the following "
-	msg2 = ""
-	msg3 = ""
-	msg4 = ""
-	if "data" in msg:
-		msg1 += "lightning invoice in your lightning wallet:"
-		msg2 +=  msg["data"]
-		qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
-		qr.add_data(msg["data"])
-		img1 = qr.make_image(image_factory=StyledPilImage, embeded_image_path=os.path.join("images","Bitcoin_lightning_logo.png"))
-		buf1 = io.BytesIO()
-		img1.save(buf1)
-		buf1.seek(0)
-		file1 = discord.File(buf1, "invoice.png")
-		bufList.append(file1)
-	if "data" in msg and "btc" in msg:
-		msg3 += "or "
-	if "btc" in msg:
-		if msg2 == "":
-			msg1 += "bitcoin address in your bitcoin wallet:"
+	try:
+		receiver = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["id"]), og_loop).result()
+		bufList :list[discord.File] = []
+		msg1 = "To tip " + receiver.name + " "
+		if msg["amount"] != 0:
+			msg1 += str(msg["amount"]) + " satoshi "
+		msg1 += "scan or paste the following "
+		msg2 = ""
+		msg3 = ""
+		msg4 = ""
+		if "data" in msg:
+			msg1 += "lightning invoice in your lightning wallet:"
+			msg2 +=  msg["data"]
+			qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
+			qr.add_data(msg["data"])
+			img1 = qr.make_image(image_factory=StyledPilImage, embeded_image_path=os.path.join("images","Bitcoin_lightning_logo.png"))
+			buf1 = io.BytesIO()
+			img1.save(buf1)
+			buf1.seek(0)
+			file1 = discord.File(buf1, "invoice.png")
+			bufList.append(file1)
+		if "data" in msg and "btc" in msg:
+			msg3 += "or "
+		if "btc" in msg:
+			if msg2 == "":
+				msg1 += "bitcoin address in your bitcoin wallet:"
+			else:
+				msg3 += "bitcoin address in your bitcoin wallet:"
+			msg4 += msg["btcAddress"]
+			qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
+			qr.add_data(msg["btcAddress"])
+			img2 = qr.make_image(image_factory=StyledPilImage, embeded_image_path=os.path.join("images","Bitcoin_logo.png"))
+			buf2 = io.BytesIO()
+			img2.save(buf2)
+			buf2.seek(0)
+			file2 = discord.File(buf2, "btc.png")
+			bufList.append(file2)
+		if "channel" in msg:
+			dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1, False, True), og_loop).result()
+			if msg2 != "":
+				dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg2, False, True), og_loop).result()
+			if msg3 != "":
+				dm3 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg3, False, True), og_loop).result()
+			if msg4 != "":
+				dm4 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg4, False, True), og_loop).result()
+			dm5 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], "", bufList, True), og_loop).result()
 		else:
-			msg3 += "bitcoin address in your bitcoin wallet:"
-		msg4 += msg["btcAddress"]
-		qr = qrcode.QRCode(error_correction=qrcode.constants.ERROR_CORRECT_H)
-		qr.add_data(msg["btcAddress"])
-		img2 = qr.make_image(image_factory=StyledPilImage, embeded_image_path=os.path.join("images","Bitcoin_logo.png"))
-		buf2 = io.BytesIO()
-		img2.save(buf2)
-		buf2.seek(0)
-		file2 = discord.File(buf2, "btc.png")
-		bufList.append(file2)
-	if "channel" in msg:
-		dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1, False, True), og_loop).result()
-		if msg2 != "":
-			dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg2, False, True), og_loop).result()
-		if msg3 != "":
-			dm3 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg3, False, True), og_loop).result()
-		if msg4 != "":
-			dm4 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg4, False, True), og_loop).result()
-		dm5 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], "", bufList, True), og_loop).result()
-	else:
-		dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1), og_loop).result()
-		if msg2 != "":
-			dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg2), og_loop).result()
-		if msg3 != "":
-			dm3 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg3), og_loop).result()
-		if msg4 != "":
-			dm4 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg4), og_loop).result()
-		dm5 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], "", bufList), og_loop).result()
+			dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1), og_loop).result()
+			if msg2 != "":
+				dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg2), og_loop).result()
+			if msg3 != "":
+				dm3 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg3), og_loop).result()
+			if msg4 != "":
+				dm4 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg4), og_loop).result()
+			dm5 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], "", bufList), og_loop).result()
+	except Exception as ex:
+					print("new invoice IPC processing message error on line " + str(sys.exc_info()[-1].tb_lineno) + ": " + str(ex))
 
 async def user_offline(msg, bot, og_loop):
 	sender = asyncio.run_coroutine_threadsafe(bot.fetch_user(msg["requestId"]), og_loop).result()
