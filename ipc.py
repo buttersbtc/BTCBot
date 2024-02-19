@@ -142,14 +142,14 @@ async def new_invoice(msg, bot, og_loop):
 				dm4 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg4, False, True), og_loop).result()
 			dm5 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], "", bufList, True), og_loop).result()
 		else:
-			dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg1), og_loop).result()
+			dm1 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg1), og_loop).result()
 			if msg2 != "":
-				dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg2), og_loop).result()
+				dm2 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg2), og_loop).result()
 			if msg3 != "":
-				dm3 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg3), og_loop).result()
+				dm3 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg3), og_loop).result()
 			if msg4 != "":
-				dm4 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], msg4), og_loop).result()
-			dm5 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["channel"], "", bufList), og_loop).result()
+				dm4 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], msg4), og_loop).result()
+			dm5 = asyncio.run_coroutine_threadsafe(send_dm(bot, msg["requestId"], "", bufList), og_loop).result()
 	except Exception as ex:
 					print("new invoice IPC processing message error on line " + str(sys.exc_info()[-1].tb_lineno) + ": " + str(ex))
 
