@@ -368,7 +368,7 @@ The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte a
 		r = requests.get(api)
 		totalCoins = int(r.text)/100000000
 		percentMined = totalCoins / 21000000 * 100
-		await ctx.send("There are " + '{:,.0f}'.format(totalCoins) + " BTC in circulation. " + '{:,.0f}'.format(percentMined) + "% of all bitcoin have been mined. Only " + '{:,.0f}'.format(100 - percentMined) + "% remain to be mined." )
+		await ctx.send("There are " + '{:,.0f}'.format(totalCoins) + " BTC in circulation. " + '{:,.5f}'.format(percentMined) + "% of all bitcoin have been mined. Only " + '{:,.5f}'.format(100 - percentMined) + "% remain to be mined." )
 
 
 	# Fetches Bitcoin mempool info from blockstreams mempool
