@@ -178,7 +178,14 @@ class Utilities(commands.Cog):
 			for user in ctx.message.mentions:
 				await user.ban()
 				n = n+1
+			for arg in args:
+				userMention = re.search("([0-9]*)",arg)
+				if userMention:
+					user = self.bot.get_user(int(arg))
+					user.ban()
+					n = n+1
 			await ctx.channel.send(str(n) + " users banned")
+
 		else:
 			await ctx.channel.send("No permission.")
 
