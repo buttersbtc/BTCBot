@@ -184,11 +184,11 @@ class Utilities(commands.Cog):
 			for arg in args:
 				userMention = re.search("([0-9]*)",arg)
 				if userMention:
-					user = self.bot.get_user(int(arg))
+					user = await self.bot.fetch_user(int(arg))
 					if hasattr(user, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in user.roles):
 						await ctx.channel.send("Can't ban mods")
-					else:
-						await user.ban()
+					elif user != None:
+						await ctx.guild.ban(user)
 						n = n+1
 			await ctx.channel.send(str(n) + " users banned")
 
