@@ -176,18 +176,26 @@ class Utilities(commands.Cog):
 		if hasattr(ctx.message.author, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles):
 			n=0
 			for user in ctx.message.mentions:
-				await user.ban()
-				n = n+1
+				if hasattr(user, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in user.roles):
+					await ctx.channel.send("Can't ban mods")
+				else:
+					await user.ban()
+					n = n+1
 			for arg in args:
 				userMention = re.search("([0-9]*)",arg)
 				if userMention:
 					user = self.bot.get_user(int(arg))
-					user.ban()
-					n = n+1
+					if hasattr(user, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in user.roles):
+						await ctx.channel.send("Can't ban mods")
+					else:
+						await user.ban()
+						n = n+1
 			await ctx.channel.send(str(n) + " users banned")
 
 		else:
 			await ctx.channel.send("No permission.")
+
+	
 
 	@commands.command()
 	async def banafter(self, ctx, *args):
@@ -196,8 +204,11 @@ class Utilities(commands.Cog):
 			start = (await ctx.fetch_message(args[0])).created_at
 			end = datetime.datetime.now(tz=None) if len(args) < 2 else (await ctx.fetch_message(args[1])).created_at
 			for message in await ctx.message.channel.history(after=start, before=end).flatten():
-				await ctx.guild.ban(message.author)
-				n = n+1
+				if hasattr(message.author, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in message.author.roles):
+					await ctx.channel.send("Can't ban mods")
+				else:
+					await ctx.guild.ban(message.author)
+					n = n+1
 			await ctx.channel.send(str(n) + " users banned")
 		else:
 			await ctx.channel.send("No permission.")
