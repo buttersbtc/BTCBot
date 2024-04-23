@@ -182,10 +182,10 @@ ITEM_DICT = {
         "single": True,
     },
     "osrs": {
-	"cost": 0.0000002,
-	"name": "Oldschool Runescape GP",
-	"emoji": ":crossed_swords:",
-	"single": True,
+        "cost": 0.0000002,
+        "name": "Oldschool Runescape GP",
+        "emoji": ":crossed_swords:",
+        "single": True,
     },
 }
 
