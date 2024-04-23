@@ -185,7 +185,7 @@ ITEM_DICT = {
         "cost": 0.0000002,
         "name": "Oldschool Runescape GP",
         "emoji": ":crossed_swords:",
-        "single": True,
+        "single": False,
     },
 }
 
