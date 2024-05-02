@@ -527,31 +527,29 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	@commands.command()
 	async def reward(self, ctx, *args):
 		if len(args) == 0:
-			calculate_average = False
-			period = "1m"
-		else:
-			period = args[0].lower()
-			if not period in ["24h", "3d", "1m", "3m", "6m", "1y", "2y", "3y"]:
-				await ctx.send("Invalid average reward period; allowed values are: 24h, 3d, 1m, 3m, 6m, 1y, 2y, 3y.")
-				return
-			calculate_average = period in ["24h", "3d"]
+			ctx.send("Please specify the number of blocks to average over.")
+			return
 
-		api = "https://mempool.space/api/v1/mining/blocks/rewards/{}".format(period)
+		try:
+			block_count = int(args[0])
+		except:
+			await ctx.send("An integer block count must be specified.")
+			return
+
+		if block_count < 1:
+			ctx.send("Block count must be at least 1")
+			return
+
+		api = "https://mempool.space/api/v1/mining/reward-stats/{}".format(block_count)
 		r = requests.get(api)
 		try:
 			data = json.loads(r.text)
-			if calculate_average:
-				reward_sum = Decimal(0)
-				for block in data:
-					reward_sum += Decimal(block["avgRewards"]) 
-				average_reward = reward_sum / len(data) / 100000000
-			else:
-				average_reward = Decimal(data[-1]["avgRewards"]) / 100000000
+			average_reward = Decimal(data["totalReward"]) / block_count / 100000000
 		except:
 			await ctx.send("Failed to get the average reward.")
 			return
 
-		message_string = "The {} average block reward is {} BTC.".format(period, floatFormat(round(average_reward, 8)))
+		message_string = "The average block reward over the last {} blocks is {} BTC.".format(block_count, floatFormat(round(average_reward, 8)))
 		await ctx.send(message_string)
 
 	@commands.command()
@@ -643,11 +641,12 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		r = requests.get(api)
 		network_hashrate = (Decimal(r.text) / 1000)
 
-		api = "https://mempool.space/api/v1/mining/blocks/rewards/1m"
+		reward_block_count = max(6 * 24 * 30, round(period_block_count))
+		api = "https://mempool.space/api/v1/mining/blocks/reward-stats/{}"format(reward_block_count)
 		r = requests.get(api)
 		try:
 			data = json.loads(r.text)
-			average_reward = Decimal(data[-1]["avgRewards"]) / 100000000
+			average_reward = Decimal(data["totalReward"]) / reward_block_count / 100000000
 		except:
 			await ctx.send("Mining calculation failed; something went wrong when getting the average reward.")
 			return
