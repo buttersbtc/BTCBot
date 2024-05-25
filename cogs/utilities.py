@@ -128,6 +128,7 @@ class Utilities(commands.Cog):
 			"seedsigner": {"tags": ["hardware", "airgap", "diy", "cold", "recommended"], "link":"https://seedsigner.com/"},
 			"yeticold": {"tags": ["hardware", "airgap", "diy", "cold", "recommended"], "link":"https://yeticold.com/"},
 			"glacier-protocol": {"tags": ["hardware", "airgap", "diy", "cold"], "link":"https://glacierprotocol.org/"},
+            "Krux": {"tags": ["hardware", "airgap", "diy", "cold"], "link":"https://selfcustody.github.io/krux/"},
 			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy"], "link":"https://breez.technology/"},
 			"wallet-of-satoshi": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://www.walletofsatoshi.com/"},
 			"liana": {"tags": ["pc", "mac", "windows", "linux", "hot", "timelocks", "multisig", "cold", "easy", "advanced"], "link":"https://wizardsardine.com/liana/"},
