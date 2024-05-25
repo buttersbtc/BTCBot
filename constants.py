@@ -181,6 +181,12 @@ ITEM_DICT = {
         "emoji": ":flag_gb: :bank:",
         "single": True,
     },
+    "osrs": {
+        "cost": 0.0000002,
+        "name": "Oldschool Runescape GP",
+        "emoji": ":crossed_swords:",
+        "single": False,
+    },
 }
 
 FUN_FACTS = ["**Fun Fact:** Bitcoin is the first and only decentralized digital currency",
