@@ -187,6 +187,12 @@ ITEM_DICT = {
         "emoji": ":crossed_swords:",
         "single": False,
     },
+    "m&c": {
+        "cost": 2.69,
+        "name": "mac & cheese boxes",
+        "emoji": ":cheese:",
+        "single": False,
+    },
 }
 
 FUN_FACTS = ["**Fun Fact:** Bitcoin is the first and only decentralized digital currency",
