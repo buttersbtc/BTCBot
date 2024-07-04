@@ -133,6 +133,7 @@ class Utilities(commands.Cog):
 			"wallet-of-satoshi": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://www.walletofsatoshi.com/"},
 			"liana": {"tags": ["pc", "mac", "windows", "linux", "hot", "timelocks", "multisig", "cold", "easy", "advanced"], "link":"https://wizardsardine.com/liana/"},
 			"rtl": {"tags": ["pc", "mac", "windows", "linux", "web", "self-hosted", "hot", "lightning-node-required", "advanced"], "link":"https://github.com/Ride-The-Lightning/RTL"},
+                        "blixt": {"tags": ["android", "hot", "lightning", "advanced"], "link":"https://blixtwallet.github.io"},
 			}
 		resp = " \n"
 		for wallet in walletDic:
