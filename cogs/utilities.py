@@ -547,7 +547,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 			await ctx.send("Failed to get the average reward.")
 			return
 
-		message_string = "The average block reward over the last {} blocks is {} BTC.".format(block_count, floatFormat(round(average_reward, 8)))
+		message_string = "The average block reward over the last {} blocks is {} BTC.".format(block_count, floatFormatBtc(round(average_reward, 8)))
 		await ctx.send(message_string)
 
 	@commands.command()
