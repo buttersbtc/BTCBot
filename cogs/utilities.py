@@ -43,8 +43,7 @@ class Utilities(commands.Cog):
 		else:
 			user = ""
 		await ctx.channel.send("Welcome to our community Bitcoin chat" + user + "! Please review the #rules while you're here; primarily no altcoin, stock, or off topic discussion. If you’re new to bitcoin, please check out https://lopp.net/bitcoin.html, a community curated list of educational resources, tools, and information.")
-	
-	
+
 	@commands.command()
 	async def exchanges(self, ctx, *args):
 		exchangeDic = {
@@ -171,7 +170,7 @@ class Utilities(commands.Cog):
 	async def quantum(self, ctx, *args):
 		msg = "A general purpose and stable high qubit quantum computer (which doesn't exist and no one is sure if will ever exist) can run an algorithm called shor's. Shor's is used to factor numbers.  You can thus use shor's to derive a private key from a public key. Bitcoin exposes public keys in the scenarios of certain address reuse and when certain transactions are sitting in the mempool, as well as very old 2009 era pay to pubkey coinbases and new taproot transactions. What will happen if such a computer ever exists is slowly attempts to mine the most static of these coins, probably the old coinbases, will occur. Once this happens everyone will know there is a quantum actor and avoid address reuse or in the worst case just move to a new address format. It's also important to remember that a quantum attack takes considerable time, not dissimilar to mining, as it's the process for searching for a private key. Another Algorithm, called grovers, will enable a new kind of mining ASIC, similar to how generations of PoW devices have always functioned."
 		await ctx.channel.send(msg)
-	
+
 	@commands.command()
 	async def ban(self, ctx, *args):
 		if hasattr(ctx.message.author, 'roles') and any(role.name == os.getenv('MOD_ROLE') for role in ctx.message.author.roles):
@@ -195,8 +194,6 @@ class Utilities(commands.Cog):
 
 		else:
 			await ctx.channel.send("No permission.")
-
-	
 
 	@commands.command()
 	async def banafter(self, ctx, *args):
@@ -287,15 +284,12 @@ class Utilities(commands.Cog):
 		inputs = len(data["vin"])
 		outputs = len(data["vout"])
 
-		
-
 		message_string = '''View in [bitcointech.wiki/editor](<https://bitcointech.wiki/editor?d={txid}>)```TX {txid}
 {confirmed} {block} {time}
 Sent {amount} sat for {fee} sat fee ({feerate} sat/vbtye, {feepercent}%)
 {inputs} inputs, {outputs} outputs, {size} vbytes
 ```'''.format(txid=data["txid"], confirmed=confirmed, block=block, time=time, amount='{:,.0f}'.format(amount), fee='{:,.0f}'.format(fee), feerate='{:,.2f}'.format(feerate), feepercent='{:,.2f}'.format(feepercent), inputs=inputs, outputs=outputs, size='{:,.2f}'.format(size))
 		await ctx.send(message_string)
-
 
 	# Fetches Bitcoin address info
 	@commands.command()
@@ -332,7 +326,7 @@ Sent {sentCount} TXO for {sentAmt} sat
 		except:
 			await ctx.send("Unable to parse mempool data. Try again later.")
 			return
-		
+
 		brackets = [[0, 1000000], [1000000, 4000000], [4000000, 12000000], [12000000, 36000000]]
 		n=0
 		pendingVsize = 0
@@ -364,14 +358,13 @@ The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte a
 {range10}MB - {range11}MB = {range1bottomMB}-{range1topMB} sat/vbyte
 {range20}MB - {range21}MB = {range2bottomMB}-{range2topMB} sat/vbyte
 {range30}MB - {range31}MB  = {range3bottomMB}-{range3topMB} sat/vbyte
-```'''.format(count='{:,.0f}'.format(data["count"]), size='{:,.2f}'.format(data["vsize"]/1000000), fees='{:,.2f}'.format(data["total_fee"]/100000000), 
-			  range01='{:,.0f}'.format(brackets[0][1]/1000000), range0bottomMB='{:,.0f}'.format(brackets[0][3]), range0topMB='{:,.0f}'.format(brackets[0][2]), 
+```'''.format(count='{:,.0f}'.format(data["count"]), size='{:,.2f}'.format(data["vsize"]/1000000), fees='{:,.2f}'.format(data["total_fee"]/100000000),
+			  range01='{:,.0f}'.format(brackets[0][1]/1000000), range0bottomMB='{:,.0f}'.format(brackets[0][3]), range0topMB='{:,.0f}'.format(brackets[0][2]),
 			  range10='{:,.0f}'.format(brackets[1][0]/1000000), range11='{:,.0f}'.format(brackets[1][1]/1000000), range1bottomMB='{:,.0f}'.format(brackets[1][3]), range1topMB='{:,.0f}'.format(brackets[1][2]),
 			  range20='{:,.0f}'.format(brackets[2][0]/1000000), range21='{:,.0f}'.format(brackets[2][1]/1000000), range2bottomMB='{:,.0f}'.format(brackets[2][3]), range2topMB='{:,.0f}'.format(brackets[2][2]),
 			  range30='{:,.0f}'.format(brackets[3][0]/1000000), range31='{:,.0f}'.format(brackets[3][1]/1000000), range3bottomMB='{:,.0f}'.format(brackets[3][3]), range3topMB='{:,.0f}'.format(brackets[3][2]))
 		await ctx.send(message_string)
 
-	
 	# Fetches Bitcoin tip height
 	@commands.command()
 	async def height(self, ctx, *args):
@@ -400,7 +393,7 @@ The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte a
 		except:
 			await ctx.send("Unable to parse mempool data. Try again later.")
 			return
-		
+
 		brackets = [[0, 1000000], [1000000, 4000000], [4000000, 12000000], [12000000, 36000000]]
 		n=0
 		pendingVsize = 0
@@ -433,7 +426,7 @@ Low Priority (6 blocks+/1h+) = {low} sat/vbyte
 Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 ```'''.format(high=high, medium=medium, low=low, vlow=vlow)
 		await ctx.send(message_string)
-	
+
 	@commands.command()
 	async def fees(self, ctx, *args):
 		await Utilities(self).fee(self, ctx, args)
@@ -484,7 +477,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 				return await ctx.send("You can pay others using the "+os.getenv('BOT_PREFIX')+"tip commmand with the format of the following examples: `"+os.getenv('BOT_PREFIX')+"tip @user <amount>`,  `"+os.getenv('BOT_PREFIX')+"tip @user`, `"+os.getenv('BOT_PREFIX')+"tip @user <amount> ln`, `"+os.getenv('BOT_PREFIX')+"tip @user btc`, or as a reply to a user you wish to pay in the form `"+os.getenv('BOT_PREFIX')+"tip <amount>`, `"+os.getenv('BOT_PREFIX')+"tip btc` and `"+os.getenv('BOT_PREFIX')+"tip amount ln`. If no amount is provided 0 amounts are assumed. If no btc or ln flag is provided both are assumed. To receive tips use the command `"+os.getenv('BOT_PREFIX')+"register <btc_address>`")
 
 			await Utilities(self).tipUser(self, ctx, user, amount, *args)
-			
+
 	@commands.command()
 	async def pay(self, ctx, user: discord.User, amount, *args):
 		await Utilities(self).tip(self, ctx, user, amount, args)
@@ -517,42 +510,45 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	async def halvening(self, ctx, *args):
 		await Utilities(self).halving(self, ctx, args)
 
+	def get_hashrate(self):
+		api = "https://mempool.space/api/v1/mining/hashrate/current"
+		r = requests.get(api)
+		data = json.loads(r.text)
+		return Decimal(data["currentHashrate"])
+
 	@commands.command()
 	async def hashrate(self, ctx, *args):
-		api = "https://blockchain.info/q/hashrate"
-		r = requests.get(api)
-		network_hashrate = (Decimal(r.text) / 1000)
-		message_string = "The current network hashrate is {} TH/s.".format(floatFormat(round(network_hashrate, 2)))
+		#                                                   kilo   mega   giga   tera   peta   exa
+		network_hashrate = Utilities(self).get_hashrate() / 1000 / 1000 / 1000 / 1000 / 1000 / 1000
+		message_string = "The current network hashrate is {} EH/s.".format(floatFormat(round(network_hashrate, 2)))
 		await ctx.send(message_string)
 
 	@commands.command()
 	async def reward(self, ctx, *args):
 		if len(args) == 0:
-			calculate_average = False
-			period = "1m"
-		else:
-			period = args[0].lower()
-			if not period in ["24h", "3d", "1m", "3m", "6m", "1y", "2y", "3y"]:
-				await ctx.send("Invalid average reward period; allowed values are: 24h, 3d, 1m, 3m, 6m, 1y, 2y, 3y.")
-				return
-			calculate_average = period in ["24h", "3d"]
+			await ctx.send("Please specify the number of blocks to average over.")
+			return
 
-		api = "https://mempool.space/api/v1/mining/blocks/rewards/{}".format(period)
+		try:
+			block_count = int(args[0])
+		except:
+			await ctx.send("An integer block count must be specified.")
+			return
+
+		if block_count < 1:
+			await ctx.send("Block count must be at least 1")
+			return
+
+		api = "https://mempool.space/api/v1/mining/reward-stats/{}".format(block_count)
 		r = requests.get(api)
 		try:
 			data = json.loads(r.text)
-			if calculate_average:
-				reward_sum = Decimal(0)
-				for block in data:
-					reward_sum += Decimal(block["avgRewards"]) 
-				average_reward = reward_sum / len(data) / 100000000
-			else:
-				average_reward = Decimal(data[-1]["avgRewards"]) / 100000000
+			average_reward = Decimal(data["totalReward"]) / block_count / 100000000
 		except:
 			await ctx.send("Failed to get the average reward.")
 			return
 
-		message_string = "The {} average block reward is {} BTC.".format(period, floatFormat(round(average_reward, 8)))
+		message_string = "The average block reward over the last {} blocks is {} BTC.".format(block_count, floatFormatBtc(round(average_reward, 8)))
 		await ctx.send(message_string)
 
 	@commands.command()
@@ -571,9 +567,8 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 			await ctx.send("With a hashrate of 0 or less, it'll take you forever to mine a block!")
 			return
 
-		api = "https://blockchain.info/q/hashrate"
-		r = requests.get(api)
-		network_hashrate = (Decimal(r.text) / 1000)
+		#                                                   kilo   mega   giga   tera
+		network_hashrate = Utilities(self).get_hashrate() / 1000 / 1000 / 1000 / 1000
 
 		hash_share = solo_hash_rate / network_hashrate
 		blocks = 1 / hash_share
@@ -591,7 +586,6 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 			time_description)
 
 		await ctx.send(message_string)
-
 
 	@commands.command()
 	async def mine(self, ctx, *args):
@@ -640,17 +634,17 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 				await ctx.send("Invalid calculation period; allowed values are: 'block', 'hour', 'day', week, month, and 'year'.")
 				return
 
-		api = "https://blockchain.info/q/hashrate"
-		r = requests.get(api)
-		network_hashrate = (Decimal(r.text) / 1000)
+		#                                                   kilo   mega   giga   tera
+		network_hashrate = Utilities(self).get_hashrate() / 1000 / 1000 / 1000 / 1000
 
-		api = "https://mempool.space/api/v1/mining/blocks/rewards/1m"
+		reward_block_count = max(6 * 24 * 30, round(period_block_count))
+		api = "https://mempool.space/api/v1/mining/reward-stats/{}".format(reward_block_count)
 		r = requests.get(api)
 		try:
 			data = json.loads(r.text)
-			average_reward = Decimal(data[-1]["avgRewards"]) / 100000000
+			average_reward = Decimal(data["totalReward"]) / reward_block_count / 100000000
 		except:
-			await ctx.send("Mining calculation failed; something went wrong when getting the average reward.")
+			await ctx.send("Mining calculation failed; something went wrong when getting the average reward. {} blocks".format(reward_block_count))
 			return
 
 		hash_rate = mining_watts / joules_per_terahash
@@ -672,8 +666,8 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 			energy_string = "{:,.0f} Wh".format(watts)
 
 		hash_rate = floatFormat(round(hash_rate, 4))
-		net_income = floatFormat(round(net_income, 8))
-		gross_income = floatFormat(round(gross_income, 8))
+		net_income = floatFormatBtc(round(net_income, 8))
+		gross_income = floatFormatBtc(round(gross_income, 8))
 		electricity_cost = floatFormat(round(electricity_cost, 8))
 		if sats_kwh == 0.0:
 			message_string = "Your hashrate is {} TH/s, and your expected income each {} is {} BTC, using {}.".format(
@@ -697,3 +691,6 @@ async def setup(bot):
 
 def floatFormat(value):
     return ("{:,.15f}".format(value)).rstrip('0').rstrip('.')
+
+def floatFormatBtc(value):
+    return ("{:,.8f}".format(value)).rstrip('.')
