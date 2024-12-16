@@ -145,12 +145,15 @@ class General(commands.Cog):
 
 	# Fetches Bitcoin all time high (ATH) price
 	@commands.command()
-	async def ath(self, ctx):
-		ath, error = api.get_bitcoin_ath()
+	async def ath(self, ctx, *args):
+		if(len(args) == 0):
+			ath, error = api.get_bitcoin_ath("usd")
+		else:
+			ath, error = api.get_bitcoin_ath(args[0].lower())
 		if error:
 			return await ctx.send(error)
 
-		message_string = "**Bitcoin ATH** is currently **${:,.2f}**".format(ath)
+		message_string = f"**Bitcoin ATH** is currently **{ath}**"
 		await ctx.send(message_string)
 
 	@staticmethod
