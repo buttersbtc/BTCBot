@@ -163,12 +163,12 @@ class Utilities(commands.Cog):
 		resp = " \n"
 		tags = []
 		for wallet in walletDic:
-			if len(args[0]) != 0:
-				if args[0][0].lower() == wallet:
+			if len(args) != 0:
+				if args[0].lower() == wallet:
 					await ctx.channel.send(wallet[0].upper() + wallet[1:len(wallet)] + ": " + walletDic[wallet]["link"] + " tags: " + ", ".join(walletDic[wallet]["tags"]))
 					return
-				overlap = list(set(walletDic[wallet]["tags"]) & set(args[0]))
-				if len(overlap) == len(args[0]):
+				overlap = list(set(walletDic[wallet]["tags"]) & set(args))
+				if len(overlap) == len(args):
 					resp += wallet[0].upper() + wallet[1:len(wallet)] + ": <" + walletDic[wallet]["link"] + "> tags: " + ", ".join(walletDic[wallet]["tags"]) + "\n"
 			else:
 				tags = tags + walletDic[wallet]["tags"]
@@ -181,11 +181,11 @@ class Utilities(commands.Cog):
 		await ctx.channel.send(resp)
 
 	@commands.command()
-	async def wallet(self, ctx, *args):
+	async def wallet(self, ctx, args):
 		await Utilities(self).wallets(self, ctx, args)
 
 	@commands.command()
-	async def w(self, ctx, *args):
+	async def w(self, ctx, args):
 		await Utilities(self).wallets(self, ctx, args)
 
 	@commands.command()
