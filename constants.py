@@ -172,7 +172,7 @@ ITEM_DICT = {
     "kid": {
         "cost": 200000,
         "name": "black market kidney",
-        "emoji": ":detective: :aubergine:",
+        "emoji": ":detective: :eggplant:",
         "single": True,
     },
     "ukb": {
