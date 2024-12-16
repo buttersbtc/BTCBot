@@ -14,9 +14,36 @@ from decimal import Decimal
 import time
 import ipc
 
+
 class Utilities(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
+
+	@staticmethod
+	def get_head_hash():
+		git_history = ".git/logs/HEAD"
+		if os.path.exists(git_history) and os.access(git_history, os.R_OK):
+			with open(git_history, "r") as f:
+				for line in f:
+					pass
+				last_line = line.split(" ")
+				return last_line[1]
+		return None
+
+	@commands.command()
+	async def version(self, ctx):
+		head_hash = self.get_head_hash()
+		if head_hash is None:
+			await ctx.send("HEAD log does not exist or cannot be read.")
+		bot_url = "https://github.com/buttersbtc/BTCBot/commit/"
+
+		response = requests.get(f'{bot_url}{head_hash}')
+		if response.status_code == 200:
+			await ctx.send(f"Bot version: <{bot_url}{head_hash}>")
+		else:
+			await ctx.send(f"HEAD is not pushed to remote. Hash: {head_hash}")
+
+		return None
 
 	@commands.command()
 	async def report(self, ctx):
