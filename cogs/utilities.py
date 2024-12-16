@@ -149,27 +149,35 @@ class Utilities(commands.Cog):
 			"phoenix": {"tags": ["android", "hot", "lightning", "easy"], "link":"https://phoenix.acinq.co/"},
 			"lnd": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "node-compatible", "advanced"], "link":"https://github.com/lightningnetwork/lnd/releases"},
 			"c-lightning": {"tags": ["pc", "windows", "linux", "mac", "hot", "node", "lightning", "lightning-node", "node-compatible", "advanced"], "link":"https://github.com/ElementsProject/lightning/releases"},
-			"blue": {"tags": ["android", "ios", "hot", "lightning", "self-custody", "node-compatible", "lightning-node-required"], "link":"https://bluewallet.io/"},
-			"mycelium": {"tags": ["android", "ios", "hot", "local-trader"], "link":"https://wallet.mycelium.com/"},
+			"blue": {"tags": ["android", "ios", "hot", "lightning", "self-custody", "node-compatible", "lightning-node-required", "recommended"], "link":"https://bluewallet.io/"},
 			"seedsigner": {"tags": ["hardware", "airgap", "diy", "cold", "recommended"], "link":"https://seedsigner.com/"},
 			"yeticold": {"tags": ["hardware", "airgap", "diy", "cold", "recommended"], "link":"https://yeticold.com/"},
-            		"glacier-protocol": {"tags": ["hardware", "airgap", "diy", "cold"], "link":"https://glacierprotocol.org/"},
-            		"Krux": {"tags": ["hardware", "airgap", "diy", "cold"], "link":"https://selfcustody.github.io/krux/"},
-			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy"], "link":"https://breez.technology/"},
-			"wallet-of-satoshi": {"tags": ["android", "ios", "hot", "lightning", "partial-custody", "easy"], "link":"https://www.walletofsatoshi.com/"},
+            "glacier-protocol": {"tags": ["hardware", "airgap", "diy", "cold"], "link":"https://glacierprotocol.org/"},
+            "krux": {"tags": ["hardware", "airgap", "diy", "cold"], "link":"https://selfcustody.github.io/krux/"},
+			"breez": {"tags": ["android", "ios", "hot", "lightning", "easy", "lsp"], "link":"https://breez.technology/"},
 			"liana": {"tags": ["pc", "mac", "windows", "linux", "hot", "timelocks", "multisig", "cold", "easy", "advanced"], "link":"https://wizardsardine.com/liana/"},
 			"rtl": {"tags": ["pc", "mac", "windows", "linux", "web", "self-hosted", "hot", "lightning-node-required", "advanced"], "link":"https://github.com/Ride-The-Lightning/RTL"},
-                        "blixt": {"tags": ["android", "hot", "lightning", "advanced"], "link":"https://blixtwallet.github.io"},
-			}
+        	"blixt": {"tags": ["android", "hot", "lightning", "lsp", "easy", "advanced"], "link":"https://blixtwallet.github.io"},
+			"zeus": {"tags": ["android", "ios", "hot", "lightning", "lsp", "lightning-node-required", "advanced"], "link":"https://zeusln.com/"}
+		}
 		resp = " \n"
+		tags = []
 		for wallet in walletDic:
-			if args[0][0].lower() == wallet:
-				await ctx.channel.send(wallet[0].upper() + wallet[1:len(wallet)] + ": " + walletDic[wallet]["link"] + " tags: " + ", ".join(walletDic[wallet]["tags"]))
-				return
-			overlap = list(set(walletDic[wallet]["tags"]) & set(args[0]))
-			if len(overlap) == len(args[0]):
-				resp += wallet[0].upper() + wallet[1:len(wallet)] + ": <" + walletDic[wallet]["link"] + "> tags: " + ", ".join(walletDic[wallet]["tags"]) + "\n"
+			if len(args[0]) != 0:
+				if args[0][0].lower() == wallet:
+					await ctx.channel.send(wallet[0].upper() + wallet[1:len(wallet)] + ": " + walletDic[wallet]["link"] + " tags: " + ", ".join(walletDic[wallet]["tags"]))
+					return
+				overlap = list(set(walletDic[wallet]["tags"]) & set(args[0]))
+				if len(overlap) == len(args[0]):
+					resp += wallet[0].upper() + wallet[1:len(wallet)] + ": <" + walletDic[wallet]["link"] + "> tags: " + ", ".join(walletDic[wallet]["tags"]) + "\n"
+			else:
+				tags = tags + walletDic[wallet]["tags"]
 
+		if resp == " \n":
+			resp += "You can search for a wallet by name or tag in the format `!w tag`, available tags include: ```"
+			tags = set(tags)
+			resp += str(sorted(tags)).replace("[", "").replace("]", "").replace("'", "")
+			resp += "```"
 		await ctx.channel.send(resp)
 
 	@commands.command()
