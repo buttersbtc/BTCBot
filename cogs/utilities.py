@@ -136,7 +136,7 @@ class Utilities(commands.Cog):
 	async def x(self, ctx, *args):
 		await Utilities(self).exchanges(self, ctx, args)
 
-	@commands.command()
+	@commands.command(aliases=["w", "wallet"])
 	async def wallets(self, ctx, *args):
 		walletDic = {
 			"electrum": {"tags": ["pc", "windows", "linux", "mac", "android", "hot", "airgap", "psbt", "timelocks", "recommended", "multisig", "advanced", "lightning", "2fa", "node-compatible", "spv"], "link":"https://electrum.org/"},
@@ -179,14 +179,6 @@ class Utilities(commands.Cog):
 			resp += str(sorted(tags)).replace("[", "").replace("]", "").replace("'", "")
 			resp += "```"
 		await ctx.channel.send(resp)
-
-	@commands.command()
-	async def wallet(self, ctx, args):
-		await Utilities(self).wallets(self, ctx, args)
-
-	@commands.command()
-	async def w(self, ctx, args):
-		await Utilities(self).wallets(self, ctx, args)
 
 	@commands.command()
 	async def dev(self, ctx, *args):
