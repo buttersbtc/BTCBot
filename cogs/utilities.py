@@ -62,14 +62,14 @@ class Utilities(commands.Cog):
 			await ctx.message.delete()
 
 
-	@commands.command()
+	@commands.command(aliases=["new", "welcome"])
 	async def newuser(self, ctx):
 		if ctx.message.reference is not None:
 			reply = await ctx.channel.fetch_message(ctx.message.reference.message_id)
 			user = ", " + reply.author.mention
 		else:
 			user = ""
-		await ctx.channel.send("Welcome to our community Bitcoin chat" + user + "! Please review the #rules while you're here; primarily no altcoin, stock, or off topic discussion. If you’re new to bitcoin, please check out https://lopp.net/bitcoin.html, a community curated list of educational resources, tools, and information.")
+		await ctx.channel.send("Welcome to our community Bitcoin chat" + user + "! Please review the <#" + os.getenv('RULES_CHANNEL') + "> while you're here; primarily no altcoin, stock, or off topic discussion. If you’re new to bitcoin, please check out https://lopp.net/bitcoin.html, a community curated list of educational resources, tools, and information.")
 
 	@commands.command()
 	async def exchanges(self, ctx, *args):
@@ -78,7 +78,7 @@ class Utilities(commands.Cog):
 			"bahrain": "Rain",
 			"indonesia": "Indodax",
 			"israel": "Bits of Gold",
-			"japan": "Bitbank, BitFlyer ,BtcBox",
+			"japan": "Bitbank, BitFlyer, BtcBox",
 			"kuwait": "Rain",
 			"malaysia": "Luno",
 			"oman": "Rain",
