@@ -236,7 +236,7 @@ class General(commands.Cog):
 			if _args[1] == unit[0]:
 				arg1Formatted = unit[2]
 
-		message_string = _args[0] + " " + arg1Formatted + " is equal to:"
+		message_string = "**" + _args[0] + " " + arg1Formatted + "** is equal to:"
 		_args.remove(_args[1])
 		for currency in data_rates['data']:
 			if currency['symbol'].upper() == "BTC":
@@ -254,16 +254,16 @@ class General(commands.Cog):
 		for item in ITEM_DICT:
 			if item.upper() == sourceCurrency.upper():
 				sourceCurrencyRate = ITEM_DICT[item]["cost"]
-				message_string = _args[0] + " " + ITEM_DICT[item]["name"] + " " + ITEM_DICT[item]["emoji"] + " is equal to:"
+				message_string = "**" +_args[0] + " " + ITEM_DICT[item]["name"] + "** " + ITEM_DICT[item]["emoji"] + " is equal to:"
 			elif item.upper() in _args:
 				comparisons.append([ITEM_DICT[item]["name"] + " " + ITEM_DICT[item]["emoji"], ITEM_DICT[item]["cost"]])
 
 		for comparison in comparisons:
 			val = sourceCurrencyRate * float(_args[0]) / comparison[1]
 			if val > 0.01:
-				message_string += " " + '{:,.2f}'.format(val) + " " + comparison[0] + ","
+				message_string += " **" + '{:,.2f}'.format(val) + " " + comparison[0] + "**,"
 			else:
-				message_string += " " + '{:,.8f}'.format(val) + " " + comparison[0] + ","
+				message_string += " **" + '{:,.8f}'.format(val) + " " + comparison[0] + "**,"
 
 		message_string = message_string[:len(message_string)-1]
 
