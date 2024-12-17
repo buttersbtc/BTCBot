@@ -112,16 +112,18 @@ def get_bitcoin_ath(currency) -> tuple[None, str] | tuple[str, None]:
         response.raise_for_status()
         bitcoin_ath = float(response.json()[0]["ath"])
         currency_symbol, _, _ = get_currency_rates(currency)
-        if currency== "usd":
-            bitcoin_ath = f"{currency_symbol} {bitcoin_ath}"
+        bitcoin_ath = "{:,.2f}".format(bitcoin_ath)
+        if currency == "usd":
+            bitcoin_ath = f"{currency_symbol}{bitcoin_ath}"
         else:
-            bitcoin_ath = f"{bitcoin_ath} {currency_symbol}"
+            bitcoin_ath = f"{bitcoin_ath}{currency_symbol}"
     except requests.RequestException as e:
         error = f"Failed to fetch price with error"
         return None, error
     return bitcoin_ath, error
 
-def get_chart(name, timespan = "10weeks"):
+
+def get_chart(name, timespan="10weeks"):
     error = None
     file = None
     try:
