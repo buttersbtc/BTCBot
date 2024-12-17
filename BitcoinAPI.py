@@ -113,10 +113,9 @@ def get_bitcoin_ath(currency) -> tuple[None, str] | tuple[str, None]:
         bitcoin_ath = float(response.json()[0]["ath"])
         currency_symbol, _, _ = get_currency_rates(currency)
         bitcoin_ath = "{:,.2f}".format(bitcoin_ath)
-        if currency == "usd":
-            bitcoin_ath = f"{currency_symbol}{bitcoin_ath}"
-        else:
-            bitcoin_ath = f"{bitcoin_ath}{currency_symbol}"
+        if currency_symbol == None:
+            currency_symbol = "";
+        bitcoin_ath = f"{currency_symbol}{bitcoin_ath} {currency.upper()}"
     except requests.RequestException as e:
         error = f"Failed to fetch price with error"
         return None, error
