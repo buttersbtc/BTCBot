@@ -759,7 +759,7 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 			await ctx.send("No permission to use the edititem command.")
 			return
 		if len(args) < 3:
-			await ctx.send("The edititem command requires 3 to 5 parameters: the calling code of the item (3 characters please), the full name of the item (in quotes), the price of the item in USD, an emoji for the item without colons : bracing it just the keyword (optional), and whether the item should be default priced as a single item or not (optional). Example: `"+os.getenv('BOT_PREFIX')+"additem mac \"McDonalds Big Mac\" 5.71 hamburger single`")
+			await ctx.send("The edititem command requires 3 to 5 parameters: the calling code of the item (3 characters please), the full name of the item (in quotes), the price of the item in USD, an emoji for the item without colons : bracing it just the keyword (optional), and whether the item should be default priced as a single item or not (optional). Example: `"+os.getenv('BOT_PREFIX')+"edititem mac \"McDonalds Big Mac\" 5.71 hamburger single`")
 			return
 		if len(args[0]) > 4 or len(args[0]) < 3:
 			await ctx.send("Please use a calling code that is 3-4 characters.")
@@ -789,14 +789,14 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 		write_items(ITEM_DICT)
 
 		await ctx.send("Successfully edited item: " + args[1] + " with value $" + args[2])
-		
+
 	@commands.command()
 	async def editprice(self, ctx, *args):
 		if not (hasattr(ctx.message.author, 'roles') and any(str(role.id) in os.getenv('EDIT_DATA_ROLES') for role in ctx.message.author.roles)):
 			await ctx.send("No permission to use the editprice command.")
 			return
 		if len(args) != 2:
-			await ctx.send("The editprice command requires 2 parameters, the item code to edit and the price to change it to. ex. `editprice mac 3.99`")
+			await ctx.send("The editprice command requires 2 parameters, the item code to edit and the price to change it to. ex. `"+os.getenv('BOT_PREFIX')+"editprice mac 3.99`")
 			return
 		if not args[0].lower() in ITEM_DICT:
 			await ctx.send("The calling code " + args[0] + " doesnt exist yet. Either use the `additem` command or choose an existing calling code.")
