@@ -58,7 +58,6 @@ def get_currency_rates(currency: str) -> tuple[None, None, str] | tuple[str, str
         response.raise_for_status()
         rates = response.json()
         for rate in rates["data"]:
-            print(rate["type"])
             if rate["symbol"] == currency and (rate["type"] == "fiat" or rate["symbol"] == "BTC"):
                 currency_symbol = rate["currencySymbol"]
                 rateUsd = rate["rateUsd"]

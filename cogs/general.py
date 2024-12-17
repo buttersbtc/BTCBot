@@ -267,7 +267,7 @@ class General(commands.Cog):
 
 		message_string = message_string[:len(message_string)-1]
 
-		if len(comparisons) == 0:
+		if len(comparisons) == 0 or sourceCurrencyRate == 0:
 			message_string = "Unable to find the requested currencies for conversion."
 
 		await ctx.send(message_string)
