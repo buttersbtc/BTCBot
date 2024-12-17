@@ -52,12 +52,14 @@ def get_currency_rates(currency: str) -> tuple[None, None, str] | tuple[str, str
     currency_symbol = None
     rateUsd = None
     currency = currency.upper()
+
     try:
         response = requests.get(coincap_rates, timeout=TIMEOUT)
         response.raise_for_status()
         rates = response.json()
         for rate in rates["data"]:
-            if rate["symbol"] == currency:
+            print(rate["type"])
+            if rate["symbol"] == currency and (rate["type"] == "fiat" or rate["symbol"] == "BTC"):
                 currency_symbol = rate["currencySymbol"]
                 rateUsd = rate["rateUsd"]
                 break
