@@ -16,12 +16,27 @@ class General(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot
 		self.fact_generator = self.get_fact()
+		self.filter = []
+		self.generate_filter()
+
+	def generate_filter(self):
+		rates = requests.get("https://api.coincap.io/v2/rates", timeout=10)
+		data = json.loads(rates.text)["data"]
+		for currency in data:
+			if currency["type"] == "fiat":
+				self.filter.append(currency["symbol"].lower())
+		self.filter.sort()
 
 	async def on_ready(self):
 		print("General commands loaded")
 
 	# Price - All currencies enabled by the APi are automatically supported. Add a currency formatting string to change the way a given currency is displayed
 	#To add a new item to the price call make a new entry in the itemDic with the cost and formatStr, the key being the string  used to call that item
+
+	@commands.command()
+	async def currencies(self, ctx, *args):
+
+		return await ctx.channel.send(f"Supported currencies: {self.filter}")
 	@commands.command()
 	async def price(self, ctx, *args):
 		if len(args) == 0:
@@ -31,6 +46,8 @@ class General(commands.Cog):
 			arg = args[0]
 
 		arg = arg.lower()
+		if arg not in self.filter:
+			return await ctx.channel.send("Currency not supported. Only ISO 4217 currencies are supported.")
 
 		if arg == "help":
 			await ctx.channel.send("**Currency Examples**: !p gbp, !p cad, !p xau")
@@ -125,6 +142,8 @@ class General(commands.Cog):
 			return
 
 		arg = args[1].lower()
+		if arg not in self.filter:
+			return await ctx.channel.send("Currency not supported. Only ISO 4217 currencies are supported.")
 		wage = float(args[0])
 		format_string = "**1 Bitcoin** costs **{:,.0f}** hours"
 
@@ -146,10 +165,13 @@ class General(commands.Cog):
 	# Fetches Bitcoin all time high (ATH) price
 	@commands.command()
 	async def ath(self, ctx, *args):
-		if(len(args) == 0):
+		if len(args) == 0:
 			ath, error = api.get_bitcoin_ath("usd")
 		else:
-			ath, error = api.get_bitcoin_ath(args[0].lower())
+			arg = args[0].lower()
+			if arg not in self.filter:
+				return await ctx.channel.send("Currency not supported. Only ISO 4217 currencies are supported.")
+			ath, error = api.get_bitcoin_ath(arg)
 		if error:
 			return await ctx.send(error)
 
