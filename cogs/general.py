@@ -147,14 +147,17 @@ class General(commands.Cog):
 	@commands.command()
 	async def ath(self, ctx, *args):
 		if len(args) == 0:
-			ath, error = api.get_bitcoin_ath("usd")
+			ath_str, ath, error = api.get_bitcoin_ath("usd")
+		elif len(args) == 1 and args[0].lower() in ITEM_DICT:
+			ath_str, ath, error = api.get_bitcoin_ath("usd")
+			ath_str = "{:,.2f}".format(ath / ITEM_DICT[args[0].lower()]["cost"]) + ITEM_DICT[args[0].lower()]["emoji"] + " " + ITEM_DICT[args[0].lower()]["name"]
 		else:
 			arg = args[0].lower()
-			ath, error = api.get_bitcoin_ath(arg)
+			ath_str, ath, error = api.get_bitcoin_ath(arg)
 		if error:
 			return await ctx.send(error)
 
-		message_string = f"**Bitcoin ATH** is currently **{ath}**"
+		message_string = f"**Bitcoin ATH** is currently **{ath_str}**"
 		await ctx.send(message_string)
 
 	@staticmethod

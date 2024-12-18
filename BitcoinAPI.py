@@ -95,7 +95,7 @@ def get_current_price_in_currency(currency: str) -> tuple[None, None, str] | tup
     return price_in_currency, currency_symbol, None
 
 
-def get_bitcoin_ath(currency) -> tuple[None, str] | tuple[str, None]:
+def get_bitcoin_ath(currency) -> tuple[None, None, str] | tuple[str, float, None]:
     """
     Retrieve the all-time high price of Bitcoin from the CoinGecko API.
     This function sends a GET request to the CoinGecko API to fetch the all-time
@@ -111,16 +111,16 @@ def get_bitcoin_ath(currency) -> tuple[None, str] | tuple[str, None]:
         coingecko = f"https://api.coingecko.com/api/v3/coins/markets?vs_currency={currency}&ids=bitcoin&order=market_cap_desc&per_page=100&page=1&sparkline=false"
         response = requests.get(coingecko, timeout=TIMEOUT)
         response.raise_for_status()
-        bitcoin_ath = float(response.json()[0]["ath"])
+        bitcoin_ath_float = float(response.json()[0]["ath"])
         currency_symbol, _, _ = get_currency_rates(currency)
-        bitcoin_ath = "{:,.2f}".format(bitcoin_ath)
+        bitcoin_ath = "{:,.2f}".format(bitcoin_ath_float)
         if currency_symbol == None:
             currency_symbol = "";
         bitcoin_ath = f"{currency_symbol}{bitcoin_ath} {currency.upper()}"
     except requests.RequestException as e:
         error = f"Failed to fetch price with error"
-        return None, error
-    return bitcoin_ath, error
+        return None, None, error
+    return bitcoin_ath, bitcoin_ath_float, error
 
 
 def get_chart(name, timespan="10weeks"):
