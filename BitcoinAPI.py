@@ -6,8 +6,11 @@ from chart import chart
 import discord
 
 TIMEOUT = 10
-coincap_rates = "https://api.coincap.io/v2/rates/"
-coincap_btc = "https://api.coincap.io/v2/assets/bitcoin"
+COINCAP_RATES = "https://api.coincap.io/v2/rates/"
+COINCAP_BTC = "https://api.coincap.io/v2/assets/bitcoin"
+MEMPOOL_POOL_HASHRATES = "https://mempool.space/api/v1/mining/hashrate/pools/"
+
+
 
 
 def get_current_price() -> tuple[None, str] | tuple[float, None]:
@@ -23,7 +26,7 @@ def get_current_price() -> tuple[None, str] | tuple[float, None]:
     """
     error = None
     try:
-        response = requests.get(coincap_btc, timeout=TIMEOUT)
+        response = requests.get(COINCAP_BTC, timeout=TIMEOUT)
         response.raise_for_status()
         bitcoin_price = float(response.json()["data"]["priceUsd"])
     except requests.RequestException as e:
@@ -54,7 +57,7 @@ def get_currency_rates(currency: str) -> tuple[None, None, str] | tuple[str, str
     currency = currency.upper()
 
     try:
-        response = requests.get(coincap_rates, timeout=TIMEOUT)
+        response = requests.get(COINCAP_RATES, timeout=TIMEOUT)
         response.raise_for_status()
         rates = response.json()
         for rate in rates["data"]:
@@ -114,13 +117,27 @@ def get_bitcoin_ath(currency) -> tuple[None, None, str] | tuple[str, float, None
         bitcoin_ath_float = float(response.json()[0]["ath"])
         currency_symbol, _, _ = get_currency_rates(currency)
         bitcoin_ath = "{:,.2f}".format(bitcoin_ath_float)
-        if currency_symbol == None:
-            currency_symbol = "";
+        if currency_symbol is None:
+            currency_symbol = ""
         bitcoin_ath = f"{currency_symbol}{bitcoin_ath} {currency.upper()}"
-    except requests.RequestException as e:
+    except requests.RequestException as _:
         error = f"Failed to fetch price with error"
         return None, None, error
     return bitcoin_ath, bitcoin_ath_float, error
+
+
+def get_mining_pool_hashrates(time_period="1m") -> tuple[None, str] | tuple[str, None]:
+    allowed_period = ["1m", "3m", "6m", "1y", "2y", "3y"]
+    if time_period not in allowed_period:
+        return None, "Invalid time period. Allowed values are: " + ", ".join(allowed_period)
+
+    try:
+        response = requests.get(f"{MEMPOOL_POOL_HASHRATES}{time_period}", timeout=TIMEOUT)
+        response.raise_for_status()
+        pool_hashrates = response.json()
+    except requests.RequestException as _:
+        return None, f"Failed to fetch mining pool hashrates with error."
+    return pool_hashrates, None
 
 
 def get_chart(name, timespan="10weeks"):
