@@ -14,6 +14,7 @@ from decimal import Decimal
 import time
 import ipc
 from constants import ITEM_DICT, write_items
+import BitcoinAPI
 
 
 class Utilities(commands.Cog):
@@ -519,16 +520,14 @@ Very Low Priority (144 blocks+/1d+) = {vlow} sat/vbyte
 	async def halvening(self, ctx, *args):
 		await Utilities(self).halving(self, ctx, args)
 
-	def get_hashrate(self):
-		api = "https://mempool.space/api/v1/mining/hashrate/current"
-		r = requests.get(api)
-		data = json.loads(r.text)
-		return Decimal(data["currentHashrate"])
-
 	@commands.command()
 	async def hashrate(self, ctx, *args):
-		#                                                   kilo   mega   giga   tera   peta   exa
-		network_hashrate = Utilities(self).get_hashrate() / 1000 / 1000 / 1000 / 1000 / 1000 / 1000
+
+		network_hashrate, error = BitcoinAPI.get_hashrate()
+		if error:
+			return await ctx.send("Failed to get the hashrate.")
+		#                            		  kilo   mega   giga   tera   peta   exa
+		network_hashrate = network_hashrate / 1000 / 1000 / 1000 / 1000 / 1000 / 1000
 		message_string = "The current network hashrate is {} EH/s.".format(floatFormat(round(network_hashrate, 2)))
 		await ctx.send(message_string)
 

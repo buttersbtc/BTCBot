@@ -160,6 +160,28 @@ class General(commands.Cog):
 		message_string = f"**Bitcoin ATH** is currently **{ath_str}**"
 		await ctx.send(message_string)
 
+	@commands.command()
+	async def difficulty(self, ctx, *args):
+		difficulty, _, error = api.get_mempool_difficulty()
+		if error:
+			return await ctx.send("Failed to fetch mempool difficulty")
+		await ctx.send(f"**Current difficulty** is **{difficulty}**")
+
+	@commands.command()
+	async def block(self, ctx, *args):
+		available_commands = ["next"]
+		if len(args) == 0 or args[0] not in available_commands:
+			return await ctx.send(f"Usage: !block <argument>, available arguments: {', '.join(available_commands)}")
+		if args[0] == "next":
+			difficulty, _, error = api.get_mempool_difficulty()
+			if error:
+				return await ctx.send(error)
+			hashrate, error = api.get_hashrate()
+			if error:
+				return await ctx.send(error)
+			next_block = (difficulty * 2**32) / int(hashrate)
+			await ctx.send(f"**Next block is estimated to be mined in {int(next_block)}s**")
+
 	@staticmethod
 	def get_fact():
 		while True:
