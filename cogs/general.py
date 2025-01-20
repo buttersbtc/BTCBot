@@ -1,6 +1,10 @@
 import hashlib
+import io
 import math
 import random
+
+from discord import File
+from matplotlib import pyplot as plt
 
 import BitcoinAPI as api
 from constants import ITEM_DICT, CURRENCY_FORMAT_DICT, BITCOIN_IN_SATS, FUN_FACTS, REMOVE_HELP, CHART_TYPES
@@ -31,7 +35,7 @@ class General(commands.Cog):
 			arg = args[0]
 
 		arg = arg.lower()
-		
+
 		if arg == "help":
 			await ctx.channel.send("**Currency Examples**: !p gbp, !p cad, !p xau")
 			keys = ""
@@ -116,6 +120,40 @@ class General(commands.Cog):
 	async def cat(self, ctx):
 		message_string = "**:black_cat:** stop trying to price cats!"
 		await ctx.send(message_string)
+
+	@commands.command()
+	async def poolchart(self, ctx, *args):
+		if len(args) == 0:
+			return await ctx.send(("To use poolchart use the format: `!poolchart <timeperiod>`."
+									" Allowed timeperiod: 1m, 3m, 6m, 1y, 2y, 3y"))
+
+		pool_hashrates, error = api.get_mining_pool_hashrates(args[0].lower())
+		if error:
+			return await ctx.send(error)
+		pool_names = []
+		pool_share = []
+		other_pool_share = 0
+		for pool in pool_hashrates:
+			if(pool["poolName"]) in pool_names:
+				break
+			if pool["share"] < 0.03:
+				other_pool_share += pool["share"]
+				continue
+			pool_names.append(pool["poolName"])
+			pool_share.append(pool["share"])
+		pool_names.append("Other")
+		pool_share.append(other_pool_share)
+
+		plt.figure(figsize=(6, 6))
+		plt.pie(pool_share, labels=pool_names, autopct="%1.1f%%")
+		plt.title(f"Mining Pool Hashrate Distribution - {args[0].upper()}")
+
+		buf = io.BytesIO()
+		plt.savefig(buf, format='png')
+		buf.seek(0)
+		plt.close()
+
+		await ctx.send(file=File(buf, filename='pool_chart.png'))
 
 	# Fetches hours worked for a bitcoin at a rate.
 	@commands.command()
