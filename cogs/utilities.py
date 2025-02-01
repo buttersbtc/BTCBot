@@ -426,6 +426,12 @@ The tip of the mempool ({range01}MB) ranges between {range0bottomMB} sat/vbyte a
 			else:
 				pendingVsize+=vsize
 
+		for bracket in brackets:
+			if len(bracket) == 2:
+				bracket.append(0)
+			if len(bracket) == 3:
+				bracket.append(0)
+
 		high = '{:,.0f}'.format(brackets[0][3])
 		medium = '{:,.0f}'.format((brackets[1][3] + brackets[1][2]) / 2)
 		low = '{:,.0f}'.format(brackets[2][2])
