@@ -219,9 +219,11 @@ class General(commands.Cog):
 		sourceCurrencyRate = 0
 		comparisons = []
 		_args = []
-		btcUnits = [["MSAT",100000000, "msat"], ["SAT",100000000, "sat"], ["SATS", 100000000, "sats"], ["ΜBTC", 1000000, "μBTC"], ["UBTC", 1000000, "μBTC"], ["MBTC", 1000, "mBTC"], ["CBTC", 100, "cBTC"], ["DBTC", 10, "dBTC"], ["BTC", 1, "BTC"]]
+		btcUnits = [["MSAT",100000000, "msat"], ["SAT",100000000, "sat"], ["SATS", 100000000, "sats"], ["UBTC", 1000000, "μBTC"], ["MBTC", 1000, "mBTC"], ["CBTC", 100, "cBTC"], ["DBTC", 10, "dBTC"], ["BTC", 1, "BTC"]]
 		bitcoinRate = 0
 		btcUnitConversions = []
+		#Chucklefucks at coincap can't keep their api sanatized, USD and possibly other currencies with multiple entries.
+		alreadyAppended = []
 
 		for arg in args:
 			for unit in btcUnits:
@@ -246,8 +248,9 @@ class General(commands.Cog):
 				bitcoinRate = float(currency['rateUsd'])
 			if currency['symbol'].upper() == sourceCurrency.upper():
 				sourceCurrencyRate = float(currency['rateUsd'])
-			if currency['symbol'].upper() in _args and currency['symbol'].upper() != "BTC":
+			if currency['symbol'].upper() in _args and currency['symbol'].upper() != "BTC" and currency['symbol'].upper() not in alreadyAppended:
 				comparisons.append([currency['symbol'], float(currency['rateUsd'])])
+				alreadyAppended.append(currency['symbol'])
 
 		for unit in btcUnits:
 			if unit[0] == sourceCurrency:
