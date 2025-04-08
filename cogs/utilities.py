@@ -70,7 +70,7 @@ class Utilities(commands.Cog):
 			user = ", " + reply.author.mention
 		else:
 			user = ""
-		await ctx.channel.send("Welcome to our community Bitcoin chat" + user + "! Please review the <#" + os.getenv('RULES_CHANNEL') + "> while you're here; primarily no altcoin, stock, or off topic discussion. If you’re new to bitcoin, please check out https://lopp.net/bitcoin.html, a community curated list of educational resources, tools, and information.")
+		await ctx.channel.send("Welcome to our community Bitcoin chat" + user + "! Please review the <#" + os.getenv('RULES_CHANNEL') + "> while you're here; primarily no altcoin, stock, or off topic discussion. If you’re new to bitcoin, please check out https://lopp.net/bitcoin.html or https://learnmeabitcoin.com, a community curated list of educational resources, tools, and information.")
 
 	@commands.command(aliases=["x", "ex", "exchange"])
 	async def exchanges(self, ctx, *args):
