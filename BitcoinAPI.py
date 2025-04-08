@@ -1,3 +1,4 @@
+from _pydecimal import Decimal
 from typing import Tuple
 
 import requests
@@ -8,8 +9,8 @@ import discord
 TIMEOUT = 10
 coincap_rates = "https://api.coincap.io/v2/rates/"
 coincap_btc = "https://api.coincap.io/v2/assets/bitcoin"
-
-
+MEMPOOL_DIFFICULTY = "https://mempool.space/api/v1/mining/difficulty-adjustments/1m"
+MEMPOOL_HASHRATE = "https://mempool.space/api/v1/mining/hashrate/current"
 def get_current_price() -> tuple[None, str] | tuple[float, None]:
     """
     Retrieve the current price of Bitcoin from the CoinCap API.
@@ -121,6 +122,29 @@ def get_bitcoin_ath(currency) -> tuple[None, None, str] | tuple[str, float, None
         error = f"Failed to fetch price with error"
         return None, None, error
     return bitcoin_ath, bitcoin_ath_float, error
+
+
+def get_mempool_difficulty() -> tuple[None, None, str] | tuple[int, float, None]:
+    try:
+        response = requests.get(MEMPOOL_DIFFICULTY, timeout=TIMEOUT)
+        response.raise_for_status()
+        difficulty_data = response.json()[0]
+    except requests.RequestException as _:
+        error = f"Failed to fetch mempool difficulty with error"
+        return None, None, error
+    return difficulty_data[2], difficulty_data[3], None
+
+
+def get_hashrate() -> tuple[None, str] | tuple[Decimal, None]:
+
+    try:
+        response = requests.get(MEMPOOL_HASHRATE)
+        response.raise_for_status()
+        data = response.json()
+    except requests.RequestException as _:
+        error = f"Failed to fetch mempool hashrate with error"
+        return None, error
+    return Decimal(data["currentHashrate"]), None
 
 
 def get_chart(name, timespan="10weeks"):
